@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_half"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_notice_title"
+            android:text="안전운전 하세요."
+            android:textSize="20dp"
+            android:textColor="@color/colorGray01"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="start|bottom"
+            style="@style/TextViewStyle_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ibtn_notice_expand"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/gl_half"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_notice_date"
+            android:text="2019.01.07"
+            android:textSize="14dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            style="@style/TextViewStyle_regular"
+            android:gravity="start|top"
+            android:textColor="@color/colorGray04"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_notice_title"
+            app:layout_constraintTop_toBottomOf="@+id/gl_half"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/ibtn_notice_expand"
+            android:src="@drawable/hs_dropdown_arrow_down"
+            android:scaleType="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_notice_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="56dp"
+            android:layout_height="0dp"/>
+
+        <View
+            android:id="@+id/view_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/colorWhite10"
+            android:layout_width="0dp"
+            android:layout_height="2dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

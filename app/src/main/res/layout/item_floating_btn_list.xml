@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_popup_list_floating_btn_item"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="@drawable/selector_bg_item_navi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_popup_list_header">
+
+        <androidx.appcompat.widget.AppCompatCheckedTextView
+            android:id="@+id/ctv_popup_floating_btn_name"
+            style="@style/PopupNaviTextStyle1"
+            android:text="@string/setting_floating_btn_boarding_alighting"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:checkMark="@drawable/selector_bg_setting_checkbox"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <View
+            android:id="@+id/v_popup_floating_btn_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack10"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_popup_list_floating_btn_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

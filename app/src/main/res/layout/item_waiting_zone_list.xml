@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_wz_item"
+        android:layout_width="match_parent"
+        android:layout_height="86dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/selector_bg_wz_item">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wz_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/selector_tc_wz_name"
+            android:textSize="20dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="판교 현대백화점"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@+id/tv_wz_waiting_order"
+            app:layout_constraintEnd_toStartOf="@+id/gl_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_wz_waiting_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/selector_tc_wz_count"
+            android:gravity="start|center_vertical"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gl_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wz_name"
+            android:text="12대"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_button"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="84dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!--대기요청-->
+        <Button
+            android:id="@+id/btn_wz_request"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/wz_btn_request"
+            android:textSize="18dp"
+            android:textColor="@color/selector_tc_common_yel_yel01"
+            android:background="@drawable/selector_bg_bottom_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/gl_button"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--대기취소-->
+        <Button
+            android:id="@+id/btn_wz_cancel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/common_cancel"
+            android:textSize="18dp"
+            android:textColor="@color/selector_tc_common_yel_yel01"
+            android:background="@drawable/selector_bg_bottom_btn"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/gl_button"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

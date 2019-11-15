@@ -1,0 +1,103 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.29.0'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'houston'
+            keyPassword 'houston1234!@#$'
+            storeFile file('/Users/sbkwon/Work/workspace/00_Thinkware/11_aintel/com.anyall-taxi.driver.aos/doc/houstonReleaseKey')
+            storePassword 'houston1234!@#$'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.thinkware.houston.driver.aos"
+        minSdkVersion 19
+        targetSdkVersion 28
+        multiDexEnabled true
+        versionName new Date().format("yyyyMMdd") + "01"
+        versionCode Integer.parseInt(versionName)
+        buildConfigField("long", "TIMESTAMP", System.currentTimeMillis() + "L");
+        archivesBaseName = "com.thinkware.houston.driver.aos-" + versionName
+
+        // + "_" + versionCode + "_" + new Date().format("yyyyMMdd_HHmmss")
+    }
+    flavorDimensions "default"
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    dataBinding {
+        enabled = true
+    }
+    aaptOptions {
+        noCompress "wav"
+    }
+}
+
+dependencies {
+    def lifecycle_version = '2.2.0-alpha01'
+    def room_version = '2.1.0'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-js-rhino:1.5.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation files('libs/com.skt.Tmap_1.55.jar')
+    implementation 'com.kakao.sdk:kakaonavi:1.14.0'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.7@aar') {
+        transitive = true;
+    }
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    //room
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+//    annotationProcessor 'com.android.databinding:compiler:3.1.4'
+
+}

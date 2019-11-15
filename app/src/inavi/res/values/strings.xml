@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<string name="app_name">충주사랑콜(애니올택시)</string>-->
+    <string name="app_name">아이나비콜-기사용</string>
+    <string name="main_title">아이나비콜</string>
+    <string name="kakao_app_key">994c26692c93c4fabb8f0311336b0887</string>
+</resources>

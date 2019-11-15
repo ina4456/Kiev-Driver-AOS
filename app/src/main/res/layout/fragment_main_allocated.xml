@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.view.Gravity"/>
+        <variable
+            name="isDeparture"
+            type="boolean"/>
+        <variable
+            name="viewModel"
+            type="com.thinkware.houston.driver.aos.viewmodel.MainViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <ImageView
+            android:id="@+id/iv_call_state"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/hs_main_tag"
+            android:scaleType="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_call_state"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@color/colorGray03"
+            android:text="@string/alloc_step_allocated_call"
+            android:background="@null"
+            app:layout_constraintTop_toTopOf="@+id/iv_call_state"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_here"
+            tools:text="@string/alloc_passenger_location"
+            android:gravity="center"
+            android:textSize="22dp"
+            android:textColor="@color/colorYellow"
+            android:background="@android:color/transparent"
+            android:layout_marginEnd="2dp"
+            android:drawableStart="@drawable/hs_main_pin_icon"
+            android:drawablePadding="6dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_target_poi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!--현재 타겟-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_target_poi"
+            style="@style/AllocationPoiTextStyle"
+            android:textColor="@color/colorYellow"
+            app:layout_constraintBottom_toTopOf="@+id/tv_target_sub_poi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_here"
+            tools:text="삼환하이펙스\n두줄줄주루줄"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_target_sub_poi"
+            style="@style/AllocationSubPoiTextStyle"
+            tools:text="분당구 삼평동"
+            android:textColor="@color/colorYellow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_target_poi"
+            app:layout_constraintBottom_toTopOf="@+id/btn_routing"/>
+
+
+        <!--정렬기준-->
+        <View
+            android:id="@+id/gl_half"
+            android:layout_width="0dp"
+            android:layout_height="0.1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_button"/>
+
+
+        <!--메시지, 길안내, 전화-->
+        <ImageButton
+            android:id="@+id/btn_message"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="@+id/btn_routing"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_routing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_routing"
+            android:layout_marginEnd="6dp"
+            android:src="@null"
+            android:background="@drawable/selector_bg_main_message_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageButton
+            android:id="@+id/btn_routing"
+            app:layout_constraintStart_toEndOf="@+id/btn_message"
+            app:layout_constraintEnd_toStartOf="@+id/btn_call"
+            app:layout_constraintTop_toBottomOf="@+id/gl_half"
+            android:layout_marginTop="-0.1dp"
+            android:background="@drawable/selector_bg_route_passenger_btn"
+            android:scaleType="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageButton
+            android:id="@+id/btn_call"
+            app:layout_constraintTop_toTopOf="@+id/btn_routing"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_routing"
+            app:layout_constraintStart_toEndOf="@+id/btn_routing"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="6dp"
+            android:src="@null"
+            android:background="@drawable/selector_bg_main_call_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <!--다음/이전 타겟-->
+        <View
+            android:id="@+id/view_divider_dep_des"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_routing"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorWhite10"
+            android:layout_width="0dp"
+            android:layout_height="2dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_prev_next_target_type"
+            tools:text="@string/alloc_destination"
+            android:textColor="@color/colorGray03"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_prev_or_next_target"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_dep_des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_prev_or_next_target"
+            tools:text="판교 현대백화점\n두줄테스트....."
+            android:textColor="@color/colorGray03"
+            android:textSize="26dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            style="@style/TextViewStyle_bold"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_prev_next_target_type"
+            app:layout_constraintBottom_toTopOf="@+id/gl_bottom_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            />
+
+
+        <!--손님 탑승 전-->
+        <Button
+            android:id="@+id/btn_cancel_boarding"
+            android:text="@string/alloc_btn_cancel_boarding"
+            style="@style/MainBottomLeftButtonStyle"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_boarding"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:id="@+id/btn_boarding"
+            android:text="@string/main_btn_boarding2"
+            style="@style/MainBottomRightButtonStyle"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel_boarding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!--<androidx.constraintlayout.widget.Group
+            android:id="@+id/group_views_related_before_boarding"
+            app:constraint_referenced_ids="btn_message,btn_call,btn_cancel_boarding,btn_boarding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>-->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_bottom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85636115" />
+
+        <!--손님 탑승 후-->
+        <Button
+            tools:visibility="visible"
+            android:id="@+id/btn_alighting"
+            android:text="@string/main_btn_alighting"
+            style="@style/MainBottomButtonStyle"
+            app:layout_constraintTop_toBottomOf="@+id/gl_bottom_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            tools:visibility="visible"
+            android:id="@+id/tv_boarding_without_destination"
+            android:text="@string/main_state_boarding_msg"
+            android:textColor="@color/colorBlue01"
+            android:background="@android:color/transparent"
+            style="@style/MainStateTextStyle"
+            app:layout_constraintTop_toBottomOf="@+id/gl_top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

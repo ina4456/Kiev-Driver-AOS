@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="bottom_btn_height">52dp</dimen>
+    <dimen name="main_bottom_btn_height">90dp</dimen>
+    <dimen name="main_bottom_left_btn_width">130dp</dimen>
+    <dimen name="main_poi_name_text_size">38dp</dimen>
+    <dimen name="main_sub_poi_name_text_size">24dp</dimen>
+    <dimen name="main_status_vacancy_text_size">44dp</dimen>
+    <dimen name="main_status_boarding_resting_text_size">48dp</dimen>
+    <dimen name="floating_size">58dp</dimen>
+    <dimen name="popup_normal_width">296dp</dimen>
+    <dimen name="popup_notice_width">328dp</dimen>
+</resources>

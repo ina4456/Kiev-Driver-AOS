@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:background">@color/colorGray11</item>
+        <item name="android:textViewStyle">@style/TextViewStyle_medium</item>
+        <item name="android:buttonStyle">@style/ButtonStyle_medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <!--폰트 적용-->
+    <style name="EditTextStyle_medium" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/noto_sans_medium</item>
+    </style>
+
+    <style name="TextViewStyle_medium" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/noto_sans_medium</item>
+    </style>
+
+    <style name="TextViewStyle_regular" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="fontFamily">@font/noto_sans_regular</item>
+    </style>
+
+    <style name="TextViewStyle_bold" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/noto_sans_bold</item>
+    </style>
+
+    <style name="ButtonStyle_medium" parent="android:Widget.Button">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/noto_sans_medium</item>
+    </style>
+
+    <style name="ButtonStyle_regular" parent="android:Widget.Button">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="fontFamily">@font/noto_sans_regular</item>
+    </style>
+
+    <style name="ButtonStyle_bold" parent="android:Widget.Button">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/noto_sans_bold</item>
+    </style>
+
+
+    <!--공통 툴바 테마-->
+    <style name="ToolbarTheme" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/colorBlack</item>
+        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
+        <item name="titleTextAppearance">@style/TextViewStyle_medium</item>
+    </style>
+
+    <!--공통 툴바 타이틀-->
+    <style name="ToolbarTitleStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textSize">20dp</item>
+        <item name="titleTextColor">@color/colorGray01</item>
+        <item name="android:textColorPrimary">@color/colorGray01</item>
+        <item name="navigationIcon">@drawable/selector_bg_toolbar_back_btn</item>
+    </style>
+
+    <!--공통 하단 버튼-->
+    <style name="BottomButtonStyle">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/selector_tc_common_yel_yel02</item>
+        <item name="android:background">@drawable/selector_bg_bottom_btn</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">@dimen/bottom_btn_height</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <!--공통-스크롤뷰-->
+    <style name="ScrollbarStyle">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">insideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@drawable/selector_bg_scrollbars_thumb</item>
+        <!--<item name="android:scrollbarTrackVertical">@drawable/scrollbar_vertical_track</item>-->
+        <item name="android:scrollbarSize">16dp</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <!--<item name="android:scrollbarFadeDuration">2000</item>-->
+        <!--<item name="android:scrollbarDefaultDelayBeforeFade">1000</item>-->
+    </style>
+
+    <!--공통-에디트텍스트-->
+    <style name="EditTextTheme">
+        <item name="colorControlNormal">@color/colorGray07</item>
+        <item name="colorControlActivated">@color/colorYellow</item>
+        <item name="colorControlHighlight">@color/colorYellow</item>
+    </style>
+    <style name="EditTextStyle" parent="EditTextStyle_medium">
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:letterSpacing">0.2</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColorHint">@color/colorGray07</item>
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="android:theme">@style/EditTextTheme</item>
+    </style>
+
+    <!--RatingBar-->
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorGray07</item>
+        <item name="colorControlActivated">@color/colorYellow</item>
+    </style>
+
+    <!--팝업-->
+    <style name="DialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="ProgressDialogStyle" parent="@style/ThemeOverlay.AppCompat.Dialog">
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/colorAccent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
+
+    <!--=======================================================================================================-->
+    <!--화면별 스타일-->
+    <!--=======================================================================================================-->
+
+    <!--스플래시-->
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@drawable/layer_list_background_splash</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+    <!--메인화면 상태 텍스트-->
+    <style name="MainStateTextStyle" parent="TextViewStyle_bold">
+        <item name="android:textSize">@dimen/main_status_boarding_resting_text_size</item>
+        <item name="layout_constraintVertical_chainStyle">packed</item>
+        <item name="android:lineSpacingMultiplier">0.7</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">top|center</item>
+        <item name="android:paddingBottom">20dp</item>
+<!--        <item name="android:lineSpacingExtra">0dp</item>-->
+<!--        <item name="android:layout_gravity">fill</item>-->
+<!--        <item name="android:includeFontPadding">false</item>-->
+<!--        <item name="android:baselineAligned">false</item>-->
+<!--        <item name="android:layout_marginBottom">10dp</item>-->
+    </style>
+
+    <!--메인화면 하단 버튼-->
+    <style name="MainBottomButtonStyle" parent="ButtonStyle_bold">
+        <item name="android:textSize">28dp</item>
+        <item name="android:textColor">@color/selector_tc_main_bottom_btn</item>
+        <item name="android:background">@drawable/selector_bg_main_bottom_btn</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">@dimen/main_bottom_btn_height</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+    <style name="MainBottomLeftButtonStyle" parent="MainBottomButtonStyle">
+        <item name="android:textColor">@color/selector_tc_common_yel_yel01</item>
+        <item name="android:background">@drawable/selector_bg_main_bottom_left_btn</item>
+        <item name="android:layout_width">@dimen/main_bottom_left_btn_width</item>
+    </style>
+    <style name="MainBottomRightButtonStyle" parent="MainBottomButtonStyle">
+        <item name="android:textColor">@color/selector_tc_common_black_black30</item>
+        <item name="android:background">@drawable/selector_bg_main_bottom_right_btn</item>
+    </style>
+
+
+    <!--배차 관련 화면-->
+    <style name="AllocationPoiTextStyle" parent="TextViewStyle_bold">
+        <item name="android:textSize">@dimen/main_poi_name_text_size</item>
+        <item name="android:textColor">@color/colorGray03</item>
+        <item name="android:gravity">center</item>
+<!--        <item name="android:layout_marginTop">16dp</item>-->
+<!--        <item name="android:layout_marginBottom">8dp</item>-->
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lineSpacingMultiplier">0.7</item>
+    </style>
+        <!--<item name="android:lineSpacingExtra">-16dp</item>-->
+    <style name="AllocationSubPoiTextStyle" parent="TextViewStyle_medium">
+        <item name="android:textSize">@dimen/main_sub_poi_name_text_size</item>
+        <item name="android:textColor">@color/colorGray03</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingMultiplier">0.7</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+    <!--내비게이션뷰 메뉴-->
+    <style name="NavMenuContainerStyle">
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/selector_bg_nav_menu_btn</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+    <style name="NavMenuTextStyle">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+    </style>
+
+
+
+    <!--운행이력-->
+    <!--운행이력 박스 배경-->
+    <style name="CallHistoryBoxStyle">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+    <!--운행이력 박스 타이틀-->
+    <style name="CallHistoryBoxTitleStyle">
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+    <!--운행이력 박스 항목 라벨-->
+    <style name="CallHistoryBoxLabelStyle">
+        <item name="android:textColor">@color/colorGray04</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--운행이력 박스 항목 횟수-->
+    <style name="CallHistoryBoxCountStyle">
+        <item name="android:textSize">32dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--운행이력 박스 타이틀 구분선-->
+    <style name="CallHistoryBoxDividerStyle">
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">#1A000000</item>
+    </style>
+    <!--운행이력 박스 회수 구분선-->
+    <style name="CallHistoryBoxImageDividerStyle">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="layout_constraintHeight_max">50dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:src">@drawable/hs_menu_d_dot</item>
+    </style>
+    <!--운행이력 디테일 리스트 상단 횟수-->
+    <style name="CallHistoryDetailListTopCountStyle">
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+
+    <!--내정보-->
+    <style name="MyInfoLabelStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/colorGray05</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+    <style name="MyInfoDataStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+    <style name="MyInfoDividerStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/colorWhite10</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+
+    <!--권한-->
+    <style name="PermissionIconStyle">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <!--<item name="android:padding">10dp</item>-->
+    </style>
+    <style name="PermissionTitleStyle" parent="TextViewStyle_regular">
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">22dp</item>
+    </style>
+    <style name="PermissionMsgStyle" parent="TextViewStyle_regular">
+        <item name="android:textColor">@color/colorGray05</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">58dp</item>
+    </style>
+
+
+    <!--환경설정-->
+    <style name="SettingTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="SettingCheckedTextStyle">
+        <item name="android:checkMark">@drawable/selector_bg_setting_checkbox</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:checkable">true</item>
+        <!--<item name="android:background">@drawable/selector_bg_setting_checkbox</item>-->
+    </style>
+    <style name="SettingLineStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorWhite10</item>
+    </style>
+    <style name="SettingArrowStyle">
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:gravity">end</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:src">@drawable/selector_bg_setting_arrow</item>
+    </style>
+
+
+    <!--팝업-->
+    <style name="Theme.AppCompat.Translucent">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="PopupBodyTextWithBtnStyle" parent="TextViewStyle_regular">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">188dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">28dp</item>
+        <item name="android:paddingBottom">28dp</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:background">@drawable/shape_bg_popup_top_radius_rect</item>
+        <!--<item name="android:background">@drawable/hs_popup_bg01</item>-->
+    </style>
+    <style name="PopupBodyTextWithNoBtnStyle" parent="TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:minHeight">188dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:background">@android:color/transparent</item>
+        <!--<item name="android:maxLines">5</item>-->
+        <!--<item name="android:background">@drawable/hs_popup_bg03</item>-->
+    </style>
+    <style name="PopupOneBtnStyle" parent="ButtonStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/colorGray12</item>
+        <item name="android:text">@string/common_cancel</item>
+        <item name="android:background">@drawable/selector_bg_popup_one_btn</item>
+    </style>
+    <style name="PopupTwoBtnStyle" parent="ButtonStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">22dp</item>
+    </style>
+    <style name="PopupTwoBtnStyleNegative" parent="PopupTwoBtnStyle">
+        <item name="android:background">@drawable/selector_bg_popup_left_negative_btn</item>
+        <item name="android:textColor">@color/colorGray01</item>
+    </style>
+    <style name="PopupTwoBtnStylePositive" parent="PopupTwoBtnStyle">
+        <item name="android:background">@drawable/selector_bg_popup_right_positive_btn</item>
+        <item name="android:textColor">@color/colorGray12</item>
+    </style>
+
+    <style name="PopupNaviHeaderTextStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">76dp</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorGray04</item>
+    </style>
+    <style name="PopupNaviTextStyle1" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">62dp</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/selector_tc_popup_navi</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="PopupNaviTextStyle2" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">62dp</item>
+        <item name="android:gravity">center|end</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorGray04</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="PopupNoticeHeaderTextStyle" parent="TextViewStyle_medium">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">29dp</item>
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="PopupNoticeBodyTextStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:maxLines">16</item>
+        <item name="android:textColor">@color/colorGray03</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="PopupServiceSubTitleTextStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">38dp</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorGray04</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:background">@color/colorGray08</item>
+    </style>
+    <style name="PopupServiceTextStyle" parent="@style/TextViewStyle_regular">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">@color/colorGray01</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:background">@color/colorGray07</item>
+    </style>
+
+
+</resources>

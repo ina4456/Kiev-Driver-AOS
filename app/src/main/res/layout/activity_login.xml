@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGray11"
+        android:focusableInTouchMode="true">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_login"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"
+            android:fitsSystemWindows="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_welcome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="66dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
+                    android:lineSpacingExtra="-6dp"
+                    android:text="@string/login_welcome"
+                    android:textColor="@color/colorGray03"
+                    android:textSize="34dp"
+                    app:layout_constraintEnd_toStartOf="@+id/cl_call_center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_call_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_welcome"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_welcome"
+                    app:layout_constraintTop_toTopOf="@+id/tv_welcome">
+
+                    <ImageView
+                        android:id="@+id/iv_call_center"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/selector_bg_call_center"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_call_center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_call_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:text="@string/common_call_center"
+                        android:textColor="@color/selector_tc_common_yel_yel02"
+                        android:textSize="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_call_center"
+                        app:layout_constraintStart_toStartOf="@+id/iv_call_center"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_call_center" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/btn_individual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:minWidth="100dp"
+                    android:background="@drawable/selector_popup_twobtn_02"
+                    android:gravity="center"
+                    android:text="@string/login_personal"
+                    android:textColor="@color/selector_tc_common_black_black30"
+                    app:layout_constraintBottom_toTopOf="@+id/et_phone_number"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_corporation"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_welcome"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/btn_corporation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_popup_twobtn_01"
+                    android:gravity="center"
+                    android:minWidth="100dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/login_corporation"
+                    android:textColor="@color/selector_tc_common_yel_yel01"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_individual"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_individual"
+                    app:layout_constraintTop_toTopOf="@+id/btn_individual" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_phone_number"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/login_hint_phone_number"
+                    android:inputType="phone"
+                    android:textColor="@color/selector_tc_common_yel_yel02"
+                    app:layout_constraintBottom_toTopOf="@+id/et_vehicle_number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_individual" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_vehicle_number"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/login_hint_vehicle_number"
+                    android:textColor="@color/selector_tc_common_yel_yel02"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_phone_number" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/BottomButtonStyle"
+            android:text="@string/login_btn"
+            app:layout_constraintTop_toBottomOf="@+id/sv_login"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/login_loading_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

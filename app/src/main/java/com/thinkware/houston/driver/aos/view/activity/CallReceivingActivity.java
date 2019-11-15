@@ -1,0 +1,394 @@
+package com.thinkware.houston.driver.aos.view.activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.text.Html;
+import android.view.View;
+
+import com.thinkware.houston.driver.aos.Constants;
+import com.thinkware.houston.driver.aos.R;
+import com.thinkware.houston.driver.aos.databinding.ActivityCallReceivingBinding;
+import com.thinkware.houston.driver.aos.model.Popup;
+import com.thinkware.houston.driver.aos.model.entity.Call;
+import com.thinkware.houston.driver.aos.model.entity.Configuration;
+import com.thinkware.houston.driver.aos.repository.remote.packets.Packets;
+import com.thinkware.houston.driver.aos.util.LogHelper;
+import com.thinkware.houston.driver.aos.util.WavResourcePlayer;
+import com.thinkware.houston.driver.aos.view.fragment.PopupDialogFragment;
+import com.thinkware.houston.driver.aos.viewmodel.MainViewModel;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import static android.util.TypedValue.COMPLEX_UNIT_DIP;
+
+public class CallReceivingActivity extends BaseActivity implements View.OnClickListener, PopupDialogFragment.PopupDialogListener {
+
+	public static final String DIALOG_TAG_ALLOCATED = "dialog_tag_allocated";
+	public static final String DIALOG_TAG_FAILURE = "dialog_tag_failure";
+	private static final String INTENT_KEY_IS_FROM_WAITING_CALL_LIST = "INTENT_KEY_IS_FROM_WAITING_CALL_LIST";
+
+	private MainViewModel mMainViewModel;
+	private ActivityCallReceivingBinding mBinding;
+	private static final int COUNT_DOWN_INTERVAL = 1000;
+	private CountDownTimer countDownTimer;
+	private boolean hasGotResponse = false;
+	private boolean needToRequestToRefuseWhenCloseActivity = true;
+
+	public static void startActivity(Context context, boolean isFromWaitingCallList) {
+		final Intent intent = new Intent(context, CallReceivingActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		intent.putExtra(INTENT_KEY_IS_FROM_WAITING_CALL_LIST, isFromWaitingCallList);
+		context.startActivity(intent);
+	}
+
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		LogHelper.e("onCreate()");
+
+		mMainViewModel = new ViewModelProvider(this, new MainViewModel.Factory(getApplication()))
+				.get(MainViewModel.class);
+		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_call_receiving);
+		mBinding.setLifecycleOwner(this);
+		mBinding.setViewModel(mMainViewModel);
+
+		initViews();
+		subscribeViewModel(mMainViewModel);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		LogHelper.e("onNewIntent()");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		LogHelper.e("onResume()");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		LogHelper.e("onPause()");
+
+		if(countDownTimer != null) {
+			countDownTimer.cancel();
+		}
+
+		mMainApplication.setCurrentActivity(null);
+
+		//홈 or 백 버튼을 눌러 콜 수신을 거부하여 onPause 가 호출될 경우.
+		if (needToRequestToRefuseWhenCloseActivity) {
+			LogHelper.e("onPause - needToRequestToRefuseWhenCloseActivity");
+			WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
+			this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+			this.resetCallInfo();
+			finish();
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		boolean wasBackground = mMainApplication.wasBackground();
+		//백그라운드 상태에서 진입 했을 경우, 백버튼 누를시 task 전체를 백그라운드로 이동.
+		//그 외의 경우 콜 수신 화면만 닫음.
+		if(wasBackground) {
+			moveTaskToBack(true);
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+//fixme
+//	@Override
+//	public void onBackPressed() {
+//		//super.onBackPressed();
+//		if (!isRequesting) {
+//			rejectCall(true);
+//		}
+//	}
+
+
+	private void initViews() {
+		mBinding.btnReject.setOnClickListener(this);
+		mBinding.btnRequest.setOnClickListener(this);
+
+		boolean isFromWaitingCallList = getIntent().getBooleanExtra(INTENT_KEY_IS_FROM_WAITING_CALL_LIST, false);
+		if (!isFromWaitingCallList) {
+			int displayTime = mMainViewModel.getTimeForDisplayingCallBroadcast();
+			LogHelper.e("displayTime : " + displayTime);
+			if (displayTime <= 0) {
+				displayTime = 5;
+			}
+			startCountDown(displayTime);
+		} else {
+			setViewsAsWaitingResponse();
+		}
+
+		//RatingBar
+		LayerDrawable stars = (LayerDrawable) mBinding.rbCallGrade.getProgressDrawable();
+		setRatingStarColor(stars.getDrawable(2), ContextCompat.getColor(this, R.color.colorYellow));
+		setRatingStarColor(stars.getDrawable(1), ContextCompat.getColor(this, R.color.colorYellow));
+		setRatingStarColor(stars.getDrawable(0), ContextCompat.getColor(this, R.color.colorGray07));
+	}
+
+	private void subscribeViewModel(MainViewModel mainViewModel) {
+		LiveData<Call> callInfo = mainViewModel.getCallInfo();
+		callInfo.observe(this, new Observer<Call>() {
+			@Override
+			public void onChanged(Call call) {
+				LogHelper.e("onChanged()");
+				if (call != null) {
+					LogHelper.e("onChanged-Call : " + call.toString());
+					CallReceivingActivity.super.finishLoadingProgress();
+					int status = call.getCallStatus();
+					switch (status) {
+						case Constants.CALL_STATUS_ALLOCATED:
+							LogHelper.e("onChanged-Call : CALL_STATUS_ALLOCATED");
+							needToRequestToRefuseWhenCloseActivity = false;
+							finish();
+							callInfo.removeObserver(this);
+							break;
+
+						case Constants.CALL_STATUS_ALLOCATION_FAILED:
+							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATION_FAILED");
+							showFailurePopup();
+							needToRequestToRefuseWhenCloseActivity = false;
+							resetCallInfo();
+							finishActivity();
+							callInfo.removeObserver(this);
+							break;
+
+						case Constants.CALL_STATUS_ALLOCATED_WHILE_GETON:
+							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATED_WHILE_GETON");
+							needToRequestToRefuseWhenCloseActivity = false;
+							resetCallInfo();
+							finishActivity();
+							callInfo.removeObserver(this);
+							break;
+
+						case Constants.CALL_STATUS_BOARDED:
+						case Constants.CALL_STATUS_DRIVING:
+						case Constants.CALL_STATUS_VACANCY:
+							//배차 방송 수신 중에 미터기 조작이 된다면, 수신된 배차 방송을 거절 처리하고 닫는다.
+							LogHelper.i("onChanged-Call : status : " +status);
+							WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_126);
+							needToRequestToRefuseWhenCloseActivity = false;
+							requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+							if (status == Constants.CALL_STATUS_VACANCY) {
+								mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_VACANCY);
+							} else {
+								mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_BOARDED);
+							}
+
+							finish();
+							callInfo.removeObserver(this);
+
+							break;
+
+
+						default:
+							LogHelper.i("onChanged-Call : default");
+
+							//initViews();
+							break;
+					}
+
+					//거리 표시
+					int distance = mainViewModel.getDistance(call.getDepartureLat(), call.getDepartureLong());
+					LogHelper.e("distance : " + distance);
+					mBinding.tvDistance.setText(String.valueOf(distance));
+
+					//콜 등급 표시
+					//테스트 call.setCallClass(new Ranom().nextInt(5));
+					if (call.getCallClass() == 0) {
+						mBinding.rbCallGrade.setVisibility(View.GONE);
+					} else {
+						mBinding.rbCallGrade.setRating(call.getCallClass());
+					}
+				}
+			}
+		});
+
+		LiveData<Configuration> config = mainViewModel.getConfiguration();
+		config.observe(this, new Observer<Configuration>() {
+			@Override
+			public void onChanged(Configuration configuration) {
+				LogHelper.e("onChanged()-Configuration");
+				float poiNameTextSize = getResources().getDimension(R.dimen.main_poi_name_text_size);
+				float subPoiNameTextSize = getResources().getDimension(R.dimen.main_sub_poi_name_text_size);
+				mBinding.tvDeparturePoi.setTextSize(COMPLEX_UNIT_DIP, configuration.getFontSizeFromSetting(poiNameTextSize));
+				mBinding.tvDepartureAddr.setTextSize(COMPLEX_UNIT_DIP, configuration.getFontSizeFromSetting(subPoiNameTextSize));
+				mBinding.tvDestinationPoi.setTextSize(COMPLEX_UNIT_DIP, configuration.getFontSizeFromSetting(poiNameTextSize));
+				mBinding.tvDestinationAddr.setTextSize(COMPLEX_UNIT_DIP, configuration.getFontSizeFromSetting(subPoiNameTextSize));
+			}
+		});
+	}
+
+	private void setRatingStarColor(Drawable drawable, @ColorInt int color) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			DrawableCompat.setTint(drawable, color);
+		} else {
+			drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+		}
+	}
+
+	private void finishActivity() {
+		needToRequestToRefuseWhenCloseActivity = false;
+		boolean wasBackground = mMainApplication.wasBackground();
+		if (wasBackground) {
+			moveTaskToBack(true);
+			finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	private void startCountDown(int dismissSecond){
+		countDownTimer = new CountDownTimer((dismissSecond + 1) * COUNT_DOWN_INTERVAL, COUNT_DOWN_INTERVAL) {
+			@Override
+			public void onTick(long l) {
+				setTextWithCount((int)(l/1000));
+			}
+			@Override
+			public void onFinish() {
+				LogHelper.e("onFinish()");
+				needToRequestToRefuseWhenCloseActivity = false;
+				requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+				resetCallInfo();
+				finishActivity();
+			}
+		};
+		countDownTimer.start();
+	}
+
+	private void setTextWithCount(int count) {
+		String label = String.format(getString(R.string.alloc_btn_reject_call_with_count), count);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			mBinding.btnReject.setText(Html.fromHtml(label, Html.FROM_HTML_MODE_LEGACY));
+		} else {
+			mBinding.btnReject.setText(Html.fromHtml(label));
+		}
+	}
+
+	private void setViewsAsWaitingResponse() {
+		mBinding.tvCallState.setText(R.string.alloc_step_requesting_call);
+		mBinding.btnRequest.setEnabled(false);
+		mBinding.btnReject.setEnabled(false);
+		mBinding.btnReject.setText(getString(R.string.alloc_btn_reject_call));
+		if (countDownTimer != null) {
+			countDownTimer.cancel();
+		}
+	}
+
+	private void resetCallInfo() {
+		LogHelper.d("resetCallInfo()");
+		mMainViewModel.resetCallInfoForUi();
+	}
+
+	private void requestAcceptOrRefuse(Packets.OrderDecisionType decisionType) {
+		mMainViewModel.requestAcceptOrRefuse(decisionType);
+		if (decisionType == Packets.OrderDecisionType.Reject)
+			mMainViewModel.clearTempCallInfo();
+	}
+
+	private void showAllocatedPopup() {
+		Popup popup = new Popup
+				.Builder(Popup.TYPE_ONE_BTN_NORMAL, DIALOG_TAG_ALLOCATED)
+				.setContent(getString(R.string.alloc_routing_to_passenger))
+				.setBtnLabel(getString(R.string.common_confirm), null)
+				.setDismissSecond(3)
+				.build();
+		showPopupDialog(popup);
+	}
+
+//	@Override
+//	public void onDismissPopupDialog(String tag, Intent intent) {
+//		LogHelper.e("onDismissPopupDialog() : " + tag);
+//		switch (tag) {
+//			case DIALOG_TAG_FAILURE:
+//				finish();
+//				break;
+//
+//			case DIALOG_TAG_ALLOCATED:
+//				// TODO: 2019. 3. 8. 길안내 시작
+//				WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_128);
+//				mMainViewModel.executeNavigation(this);
+//				finish();
+//				super.setCurrentActivity(null);
+//				break;
+//
+//			default:
+//				break;
+//		}
+//	}
+
+	@Override
+	public void onDismissPopupDialog(String tag, Intent intent) {
+		LogHelper.e("onDismissPopupDialog() / tag : " + tag);
+		//배차 요청 실패
+		if (tag.equals(Constants.DIALOG_TAG_ALLOCATION_FAILURE)) {
+			resetCallInfo();
+			finishActivity();
+		}
+	}
+
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+			//배차 거절
+			case R.id.btn_reject:
+				WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
+				this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+				this.resetCallInfo();
+				this.finishActivity();
+				break;
+
+			//배차 요청
+			case R.id.btn_request:
+				super.startLoadingProgress();
+				setViewsAsWaitingResponse();
+				WavResourcePlayer.getInstance(this).play(R.raw.voice_124);
+				this.requestAcceptOrRefuse(Packets.OrderDecisionType.Request);
+				needToRequestToRefuseWhenCloseActivity = false;
+
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						if (hasGotResponse) {
+							showFailurePopup();
+						}
+					}
+				}, 15000);
+
+				break;
+		}
+	}
+
+	private void showFailurePopup() {
+		Popup popup = new Popup
+				.Builder(Popup.TYPE_ONE_BTN_NORMAL, DIALOG_TAG_FAILURE)
+				.setContent(getString(R.string.alloc_msg_failed_call))
+				.setBtnLabel(getString(R.string.common_confirm), null)
+				.setDismissSecond(3)
+				.build();
+		showPopupDialog(popup);
+	}
+
+}

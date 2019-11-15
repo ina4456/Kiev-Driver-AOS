@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_boarding_or_alighting"
+            style="@style/ButtonStyle_medium"
+            android:layout_width="@dimen/floating_size"
+            android:layout_height="@dimen/floating_size"
+            android:background="@drawable/selector_bg_floating_btn_boarding"
+            android:gravity="center"
+            android:text="@string/common_boarding"
+            android:textColor="@color/colorYellow03"
+            android:textSize="18dp"
+            tools:visibility="visible"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_floating_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <!--tools:text="@string/floating_btn_boarding"-->
+
+        <ImageButton
+            android:id="@+id/btn_floating_main"
+            android:layout_width="@dimen/floating_size"
+            android:layout_height="@dimen/floating_size"
+            android:background="@drawable/selector_bg_floating_btn_app"
+            tools:visibility="visible"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_call_passenger"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_boarding_or_alighting"/>
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:layout_marginBottom="2dp"-->
+
+        <ImageButton
+            android:id="@+id/btn_call_passenger"
+            android:layout_width="@dimen/floating_size"
+            android:layout_height="@dimen/floating_size"
+            android:background="@drawable/selector_bg_floating_btn_call"
+            tools:visibility="visible"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_floating_main"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

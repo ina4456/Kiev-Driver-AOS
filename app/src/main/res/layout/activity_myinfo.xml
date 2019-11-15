@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.thinkware.houston.driver.aos.viewmodel.MyInfoViewModel"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/my_info_toolbar"
+            layout="@layout/view_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/sv_history"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/my_info_toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                
+                <!--이름-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_name_label"
+                    style="@style/MyInfoLabelStyle"
+                    android:text="@string/mi_name"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_name"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_name"
+                    style="@style/MyInfoDataStyle"
+                    tools:text="김띵크"
+                    android:text="@{viewModel.taxiInfo.getDriverName()}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/view_my_info_name_divider"/>
+                <View
+                    android:id="@+id/view_my_info_name_divider"
+                    style="@style/MyInfoDividerStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_name"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_driver_number_label"/>
+
+                
+                <!--기사번호-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_driver_number_label"
+                    style="@style/MyInfoLabelStyle"
+                    android:text="@string/mi_driver_number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_my_info_name_divider"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_driver_number"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_driver_number"
+                    style="@style/MyInfoDataStyle"
+                    tools:text="01012345678"
+                    android:text="@{viewModel.taxiInfo.getDriverPhoneNumber()}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_driver_number_label"
+                    app:layout_constraintBottom_toTopOf="@+id/view_my_info_driver_number_divider"/>
+                <View
+                    android:id="@+id/view_my_info_driver_number_divider"
+                    style="@style/MyInfoDividerStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_driver_number"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_company_label"/>
+
+                
+                <!--소속회사-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_company_label"
+                    style="@style/MyInfoLabelStyle"
+                    android:text="@string/mi_company"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_my_info_driver_number_divider"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_company"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_company"
+                    style="@style/MyInfoDataStyle"
+                    tools:text="팅크웨어"
+                    android:text="@{viewModel.taxiInfo.getCompanyName()}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_company_label"
+                    app:layout_constraintBottom_toTopOf="@+id/view_my_info_company_divider"/>
+                <View
+                    android:id="@+id/view_my_info_company_divider"
+                    style="@style/MyInfoDividerStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_company"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_vehicle_number_label"/>
+
+
+                <!--영업지역-->
+               <!-- <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_business_area_label"
+                    style="@style/MyInfoLabelStyle"
+                    android:text="@string/mi_business_area"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_my_info_company_divider"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_business_area"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_business_area"
+                    style="@style/MyInfoDataStyle"
+                    tools:text="성남시"
+                    android:text="@{viewModel.taxiInfo.getBusinessArea()}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_business_area_label"
+                    app:layout_constraintBottom_toTopOf="@+id/view_my_info_business_area_divider"/>
+                <View
+                    android:id="@+id/view_my_info_business_area_divider"
+                    style="@style/MyInfoDividerStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_business_area"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_vehicle_number_label"/>
+-->
+
+                <!--차량번호-->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_vehicle_number_label"
+                    style="@style/MyInfoLabelStyle"
+                    android:text="@string/mi_vehicle_number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_my_info_company_divider"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_my_info_vehicle_number"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_my_info_vehicle_number"
+                    style="@style/MyInfoDataStyle"
+                    tools:text="12사1234"
+                    android:text="@{Integer.toString(viewModel.configuration.getCarId())}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ibtn_my_info_vehicle_number_change"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_vehicle_number_label"
+                    app:layout_constraintBottom_toTopOf="@+id/view_my_info_vehicle_number_divider"/>
+                <View
+                    android:id="@+id/view_my_info_vehicle_number_divider"
+                    style="@style/MyInfoDividerStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_info_vehicle_number"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <ImageButton
+                    android:id="@+id/ibtn_my_info_vehicle_number_change"
+                    android:src="@drawable/selector_bg_myinfo_vehicle_num_change_btn"
+                    android:background="@null"
+                    app:layout_constraintStart_toEndOf="@+id/tv_my_info_vehicle_number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_my_info_vehicle_number_label"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_my_info_vehicle_number"
+                    android:layout_width="54dp"
+                    android:layout_height="0dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_bg_popup_radius_rect_gray_08">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_popup_notice_header"
+            style="@style/PopupNoticeHeaderTextStyle"
+            android:text="@string/d_menu_notice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <View
+            android:id="@+id/v_popup_notice_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack10"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_popup_notice_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_popup_notice_body"
+            style="@style/PopupNoticeBodyTextStyle"
+            app:layout_constraintBottom_toTopOf="@+id/btn_popup_notice_negative"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popup_notice_header"
+            tools:text="2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n2019년도 공지사항 전달 드립니다.\n"/>
+
+        <Button
+            android:id="@+id/btn_popup_notice_negative"
+            style="@style/PopupTwoBtnStyleNegative"
+            android:text="@string/common_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_popup_notice_positive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popup_notice_body"
+            />
+
+        <Button
+            android:id="@+id/btn_popup_notice_positive"
+            style="@style/PopupTwoBtnStylePositive"
+            android:text="@string/common_read_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_popup_notice_negative"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popup_notice_body"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

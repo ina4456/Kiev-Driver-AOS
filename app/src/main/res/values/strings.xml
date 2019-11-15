@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--공통-->
+    <string name="app_name">아이나비콜</string>
+    <string name="kakao_app_key">994c26692c93c4fabb8f0311336b0887</string>
+
+
+
+    <string name="common_boarding">탑승</string>
+    <string name="common_alighting">하차</string>
+    <string name="common_complete">완료</string>
+    <string name="common_call_center">콜 센터</string>
+    <string name="common_confirm">확인</string>
+    <string name="common_confirm_app_close"><![CDATA[확인 <font color=\'#808080\'>앱종료</font>]]></string>
+    <string name="common_confirm_with_count">확인 (%d초)</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_close">닫기</string>
+    <string name="common_back">돌아가기</string>
+    <string name="common_change">변경</string>
+    <string name="common_location">위치</string>
+    <string name="common_call">전화</string>
+    <string name="common_sms">SMS</string>
+    <string name="common_message">메시지</string>
+    <string name="common_read_more">더보기</string>
+    <string name="common_nav_open">open</string>
+    <string name="common_nav_close">close</string>
+
+
+    <!--권한-->
+    <string name="permission_msg">%s 운행을 위해\n아래 기능을 사용할 수 있도록\n동의해 주세요.</string>
+    <string name="permission_msg_common">필수 권한 허용을 하셔야 어플리케이션 이용이 가능합니다.</string>
+    <string name="permission_location_msg">콜수신을 위해 기사님의 위치를 파악합니다.</string>
+    <string name="permission_call_msg">전화번호로 앱에 로그인하고, 손님에게 전화를 겁니다.</string>
+    <string name="permission_sms_msg">손님에게 문자 메시지를 보냅니다.</string>
+    <string name="permission_battery_msg">앱을 사용 중에는 백그라운드에서 실행 될 수 있고, 배터리를 제한없이 사용합니다.</string>
+    <string name="permission_overlay_msg">다른 앱 사용 중에도 콜을 수신합니다.</string>
+    <string name="permission_battery">배터리 사용량 최적화 중지</string>
+    <string name="permission_overlay">다른 앱 위에 표시</string>
+    <string name="permission_overlay_reject_msg">설정에서 \'다른 앱 위에 표시\' 기능을 허용해 주세요.</string>
+    <string name="permission_finish_application">앱 종료</string>
+    <string name="permission_finish_application_msg">필수 권한이 허용되지 않아 앱을 이용할 수 없습니다.</string>
+
+
+    <!--로그인-->
+    <string name="login_welcome">기사님\n환영합니다.</string>
+    <string name="login_hint_phone_number">휴대폰 번호 입력</string>
+    <string name="login_hint_vehicle_number">차량 번호 입력</string>
+    <string name="login_btn">로그인</string>
+    <string name="login_failed_common">로그인에 실패하였습니다. 다시 시도해 주세요.</string>
+    <string name="login_failed_re_enter_phone_number">휴대폰 번호를 다시 입력해 주세요.</string>
+    <string name="login_failed_not_register_phone_number">등록되지 않은 휴대폰 번호입니다. 확인 후 다시 시도해 주세요.</string>
+    <string name="login_failed_not_register_vehicle_number">등록되지 않은 차량 번호입니다. 확인 후 다시 시도해 주세요.</string>
+    <string name="login_failed_server_connection_failed">서버 접속에 실패하였습니다. 확인 후 다시 시도해 주세요.</string>
+    <string name="login_longing">로그인 중...</string>
+    <string name="login_personal">개인</string>
+    <string name="login_corporation">법인</string>
+    <string name="login_corporation_with_name">법인 %s</string>
+    <string name="logout_btn">로그아웃</string>인
+    <string name="logout_confirm_msg">로그아웃 하시겠습니까?</string>
+    <!-- 인증 실패 -->
+    <string name="fail_cert">인증실패</string>
+    <string name="fail_panelty">기사패널티 인증실패!</string>
+    <string name="fail_vacation">휴무 조 인증실패!</string>
+    <string name="fail_meter_device">미터기 서비스 초기화실패</string>
+    <string name="fail_vacancy_device">빈차등 서비스 초기화실패</string>
+    <string name="fail_emergency_device">Emergency 서비스 초기화실패</string>
+
+
+    <!--메인-->
+    <string name="main_state_vacancy_msg">콜 대기중 입니다.</string>
+    <string name="main_state_boarding_msg">손님이 탑승 중입니다.</string>
+    <string name="main_state_resting_msg">휴식 중입니다.</string>
+    <string name="main_state_resting_msg2">콜을 받지 않습니다.</string>
+    <string name="main_btn_boarding">손님탑승</string>
+    <string name="main_btn_boarding2">손님승차</string>
+    <string name="main_btn_alighting">손님하차</string>
+    <string name="main_btn_resting">휴식하기</string>
+    <string name="main_btn_receive_call">콜 받기</string>
+    <string name="main_btn_waiting_zone">대기장소</string>
+    <string name="main_btn_waiting_call_list">콜 목록</string>
+    <string name="main_btn_finish">영업종료</string>
+    <string name="main_btn_finish_msg">오늘도 고생 많으셨습니다. 영업을 종료하시겠습니까?</string>
+
+
+    <!--배차-->
+    <string name="alloc_step_receive_call">콜 수신</string>
+    <string name="alloc_step_requesting_call">배차대기 중</string>
+    <string name="alloc_step_allocated_call">배차완료</string>
+    <string name="alloc_step_boarded">탑승완료</string>
+    <string name="alloc_distance_from">여기서</string>
+    <string name="alloc_passenger_location">손님위치</string>
+    <string name="alloc_departure">출발지</string>
+    <string name="alloc_destination">목적지</string>
+    <string name="alloc_no_departure">출발지 정보 없음</string>
+    <string name="alloc_no_destination">목적지 정보 없음</string>
+    <string name="alloc_btn_request_allocation">배차요청</string>
+    <string name="alloc_btn_reject_call">거절</string>
+    <string name="alloc_btn_reject_call_with_count"><![CDATA[거절 <font color=\'#ffffff\'>%d</font>]]></string>
+    <string name="alloc_btn_call">전화하기</string>
+    <string name="alloc_msg_complete">기사님 고생하셨습니다.\n콜 대기 화면으로 이동합니다.</string>
+    <string name="alloc_msg_failed_call">배차에 실패하였습니다.\n콜 대기 화면으로 이동합니다.</string>
+    <string name="alloc_btn_cancel_boarding">탑승실패</string>
+    <string name="alloc_cancel_reason_passenger">손님이 취소</string>
+    <string name="alloc_cancel_reason_no_show">손님과 통화 불가</string>
+    <string name="alloc_cancel_reason_using_other_car">손님이 다른 차량 이용</string>
+    <string name="alloc_cancel_reason_etc">기타 영업 장애</string>
+    <string-array name="alloc_cancel_reason_list">
+        <item>@string/alloc_cancel_reason_passenger</item>
+        <item>@string/alloc_cancel_reason_no_show</item>
+        <item>@string/alloc_cancel_reason_using_other_car</item>
+        <item>@string/alloc_cancel_reason_etc</item>
+    </string-array>
+    <string name="alloc_routing_to_passenger">배차 되었습니다. 손님이 계신 곳으로 길안내를 시작합니다.</string>
+    <string name="alloc_routing_to_destination">목적지로 길안내를 시작합니다.</string>
+    <string name="alloc_logout_while_boarded">현재 손님이 탑승 중입니다. 하차 상태로 변경하고 %s하시겠습니까?</string>
+    <string name="alloc_logout_while_allocated">현재 배차 상태입니다. %s 하시려면 먼저 운행을 취소해 주세요.</string>
+
+    <string name="alloc_action_exit">영업을 종료</string>
+    <string name="alloc_action_logout">로그아웃</string>
+
+    <!--대기장소-->
+    <string name="wz_btn_request">대기요청</string>
+    <string name="wz_btn_waiting_count">%d대</string>
+    <string name="wz_btn_waiting_and_order_count">%d대 중 %d번째</string>
+    <string name="wz_msg_no_waiting_zone">주변에 대기장소가 없습니다.</string>
+    <string name="wz_msg_exit_waiting_zone">차량 위치가 변경되어 설정된 대기장소를 해제합니다.</string>
+
+
+    <!--메뉴-->
+    <string name="d_menu_driver_name">%s 기사님</string>
+    <string name="d_menu_my_info">내정보</string>
+    <string name="d_menu_notice">공지사항</string>
+    <string name="d_menu_call_center_msg">콜센터 메시지</string>
+    <string name="d_menu_call_history">운행이력</string>
+    <string name="d_menu_setting">설정</string>
+    <string name="d_menu_call_center_call">콜 센터에 전화하기</string>
+
+
+    <!--공지사항, 메시지-->
+    <string name="notice_no_notice">공지사항이 없습니다.</string>
+    <string name="notice_no_message">메시지가 없습니다.</string>
+
+    <!--운행이력-->
+    <string name="ch_today">오늘</string>
+    <string name="ch_recent_7_days">최근 7일</string>
+    <string name="ch_this_month">이번달</string>
+    <string name="ch_last_month">지난달</string>
+    <string name="ch_working_days">영업</string>
+    <string name="ch_run_count">운행</string>
+    <string name="ch_count">%d회</string>
+    <string name="ch_day">%d일</string>
+    <string name="ch_count_def">0회</string>
+    <string name="ch_day_def">0일</string>
+    <string name="ch_detail_complete_s">완료</string>
+    <string name="ch_detail_cancel_s">취소</string>
+    <string name="ch_detail_complete">운행완료</string>
+    <string name="ch_detail_cancel">운행취소</string>
+    <string name="ch_call_passenger">손님에게 전화</string>
+    <string name="ch_call_type_all">전체</string>
+    <string name="ch_call_type_normal">일반콜</string>
+    <string name="ch_call_type_business">업무콜</string>
+
+
+    <!--내정보-->
+    <string name="mi_name">이름</string>
+    <string name="mi_driver_number">기사번호</string>
+    <string name="mi_company">소속회사</string>
+    <string name="mi_business_area">영업지역</string>
+    <string name="mi_vehicle_number">차량번호</string>
+    <string name="mi_walkie_talkie_number">무전기번호</string>
+    <string name="mi_msg_change_vehicle_number">차량번호가 변경되면 다시 로그인해야 합니다.</string>
+    <string name="mi_msg_change_vehicle_number_msg_cancel_back">차량번호를 변경하지 않고 이전화면으로 돌아갑니다.</string>
+    <string name="mi_msg_change_vehicle_number_msg_login_again">차량번호를 변경하였습니다. 다시 로그인해 주세요.</string>
+    <string name="mi_msg_change_vehicle_number_msg_empty">차량번호를 정확하게 입력해 주세요.</string>
+
+
+    <!--설정-->
+    <string name="setting_send_auto_msg_allocation">배차 메시지 자동 전송</string>
+    <string name="setting_speaker_phone">스피커폰으로 통화</string>
+    <string name="setting_auto_routing_to_passenger">배차 완료 시 손님 위치로 자동 길안내</string>
+    <string name="setting_auto_routing_to_destination">손님 탑승 시 목적지로 자동 길안내</string>
+
+    <string name="setting_navigation">내비게이션</string>
+    <string name="setting_navigation_install">설치</string>
+    <string name="setting_navigation_non_install">미설치</string>
+    <string name="setting_navigation_tmap">티맵</string>
+    <string name="setting_navigation_kakao">카카오내비</string>
+    <string name="setting_navigation_onenavi">원내비</string>
+    <string-array name="setting_navigation_list">
+        <item>@string/setting_navigation_onenavi</item>
+        <item>@string/setting_navigation_tmap</item>
+        <item>@string/setting_navigation_kakao</item>
+    </string-array>
+    <string name="setting_navigation_install_msg">길안내를 위해 내비게이션을\n설치합니다.</string>
+    <string name="setting_navigation_install_move_msg">%s 설치 화면으로 이동합니다.</string>
+    <string name="setting_navigation_app_install">%s 설치</string>
+    <string name="setting_navigation_not_installed_msg">내비게이션이 설치되지 않아 길안내를 할 수 없습니다.</string>
+
+    <string name="setting_floating_btn">단축 버튼</string>
+    <string name="setting_floating_btn_msg">다른 앱을 사용하는 동안에도\n콜 관련 버튼을 표시합니다.</string>
+    <string name="setting_floating_btn_not_use">사용안함</string>
+    <string name="setting_floating_btn_using_all">모두 사용</string>
+    <string name="setting_floating_btn_boarding_alighting">탑승/하차</string>
+    <string name="setting_floating_btn_entering_main">앱 바로가기</string>
+    <string name="setting_floating_btn_entering_main_short">앱</string>
+    <string name="setting_floating_btn_call">전화</string>
+    <string-array name="setting_floating_btn_list">
+        <item>@string/setting_floating_btn_boarding_alighting</item>
+        <item>@string/setting_floating_btn_entering_main</item>
+        <item>@string/setting_floating_btn_call</item>
+    </string-array>
+
+    <string name="setting_font_size">글자 크기</string>
+    <string name="setting_font_size_small">작게</string>
+    <string name="setting_font_size_normal">보통</string>
+    <string name="setting_font_size_large">크게</string>
+    <string-array name="setting_font_size_list">
+        <item>@string/setting_font_size_small</item>
+        <item>@string/setting_font_size_normal</item>
+        <item>@string/setting_font_size_large</item>
+    </string-array>
+
+    <string name="setting_service_info">서비스</string>
+    <string name="setting_service_info_app_version">앱 버전</string>
+    <string name="setting_service_info_url">접속 서버 및 포트 정보</string>
+    <string name="setting_service_info_call_center">콜센터 정보</string>
+    <string-array name="setting_service_info_list">
+        <item>@string/setting_service_info_app_version</item>
+        <item>@string/setting_service_info_url</item>
+        <item>@string/setting_service_info_call_center</item>
+    </string-array>
+
+
+    <!--메시지-->
+    <string name="msg_send_succeed">메시지를 전송하였습니다.</string>
+    <string name="msg_send_failure">메시지 전송에 실패하였습니다.</string>
+    <string name="msg_9min"><![CDATA[<font color=\'#dcb969\'>9</font>분 이내로 도착합니다.]]></string>
+    <string name="msg_7min"><![CDATA[<font color=\'#dcb969\'>7</font>분 이내로 도착합니다.]]></string>
+    <string name="msg_5min"><![CDATA[<font color=\'#dcb969\'>5</font>분 이내로 도착합니다.]]></string>
+    <string name="msg_soon"><![CDATA[잠시 후 도착합니다. \n차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
+    <string name="msg_arrival"><![CDATA[도착했습니다. \n차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
+    <string-array name="msg_static_list">
+        <item>@string/msg_9min</item>
+        <item>@string/msg_7min</item>
+        <item>@string/msg_5min</item>
+        <item>@string/msg_soon</item>
+        <item>@string/msg_arrival</item>
+    </string-array>
+
+
+    <!--플로팅-->
+    <string name="floating_btn_boarding">탑승</string>
+    <string name="floating_btn_alighting">하차</string>
+
+
+
+    <string-array name="sn_corporation_list">
+        <item>합동운수</item>
+        <item>세화운수</item>
+        <item>성진택시</item>
+        <item>낙원택시</item>
+        <item>남성운수</item>
+        <item>대림운수</item>
+        <item>대성운수</item>
+        <item>대아운수</item>
+        <item>대일실업</item>
+        <item>범일운수</item>
+        <item>상하운수</item>
+        <item>성남운수</item>
+        <item>성아운수</item>
+        <item>성일운수</item>
+        <item>세연운수</item>
+        <item>영일운수</item>
+        <item>원광운수</item>
+        <item>익수기업</item>
+        <item>진흥운수</item>
+        <item>청송기업</item>
+        <item>한성운수</item>
+        <item>분당택시</item>
+    </string-array>
+</resources>

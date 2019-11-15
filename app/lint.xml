@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <issue id="HandlerLeak" severity="ignore" />
+    <issue id="NewApi" severity="ignore" />
+    <issue id="ParserError" severity="ignore" />
+    <issue id="SdCardPath">
+        <ignore path="src\mcall\drv\staticvalue\StaticValue.java" />
+    </issue>
+    <issue id="ShowToast" severity="ignore" />
+    <issue id="UseSparseArrays" severity="ignore" />
+</lint>

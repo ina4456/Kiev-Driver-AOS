@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <include
+            android:id="@+id/notice_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            layout="@layout/view_toolbar"/>
+
+        <!--todo 스크롤바 상태에 따른 이미지 변경 추후 적용 필요-->
+        <!--todo 오른쪽 패딩 추가 및 divider 제외 적용 필요-->
+        <ExpandableListView
+            android:id="@+id/elv_notice"
+            android:background="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:listSelector="@android:color/transparent"
+            android:groupIndicator="@null"
+            android:childIndicator="@null"
+            android:childDivider="@null"
+            android:divider="@null"
+            tools:listitem="@layout/item_notice_group"
+            style="@style/ScrollbarStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notice_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <!--android:transcriptMode="alwaysScroll"-->
+        <!--android:indicatorLeft="14dp"-->
+        <!--android:indicatorRight="28dp"-->
+        <!--android:drawSelectorOnTop="true"-->
+        <!--android:groupIndicator="@drawable/selector_bg_notice_expand_toggle_button"-->
+
+        <include
+            android:id="@+id/view_empty_msg"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notice_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            layout="@layout/view_empty_msg"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingTop="56dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<!--
+        &lt;!&ndash;=================================================&ndash;&gt;
+        &lt;!&ndash;빈차 상태&ndash;&gt;
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_vacancy"
+            app:constraint_referenced_ids="btn_boarding,btn_resting,tv_vacancy,btn_waiting_zone,btn_waiting_call_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_vacancy"
+            android:text="@string/main_state_vacancy_msg"
+            android:textColor="@color/colorGray03"
+            style="@style/MainStateTextStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_waiting_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_waiting_zone"
+            android:text="@string/main_btn_waiting_zone"
+            android:textSize="16dp"
+            android:textColor="@color/selector_tc_main_middle_btn"
+            android:background="@drawable/selector_bg_main_middle_btn"
+            android:gravity="center"
+            android:minWidth="100dp"
+            android:layout_marginBottom="22dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_vacancy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_waiting_call_list"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"/>
+        <Button
+            android:id="@+id/btn_waiting_call_list"
+            android:text="@string/main_btn_waiting_call_list"
+            android:textSize="16dp"
+            android:textColor="@color/selector_tc_main_middle_btn"
+            android:background="@drawable/selector_bg_main_middle_btn"
+            android:gravity="center"
+            android:minWidth="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_waiting_zone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_boarding"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"/>
+        <Button
+            android:id="@+id/btn_boarding"
+            android:text="@string/main_btn_boarding"
+            style="@style/MainBottomLeftButtonStyle"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_resting"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:id="@+id/btn_resting"
+            android:text="@string/main_btn_resting"
+            style="@style/MainBottomRightButtonStyle"
+            app:layout_constraintStart_toEndOf="@+id/btn_boarding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+        &lt;!&ndash;=================================================&ndash;&gt;
+        &lt;!&ndash;휴식 상태&ndash;&gt;
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_resting"
+            app:constraint_referenced_ids="btn_receive_call,tv_resting,tv_resting2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            tools:visibility="gone"
+            android:id="@+id/tv_resting"
+            android:text="@string/main_state_resting_msg"
+            android:textColor="@color/colorGreen01"
+            style="@style/MainStateTextStyle"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_resting2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/tv_resting2"
+            android:text="@string/main_state_resting_msg2"
+            android:textColor="@color/colorGray04"
+            android:textSize="18dp"
+            style="@style/TextViewStyle_bold"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resting"
+            app:layout_constraintBottom_toTopOf="@+id/btn_receive_call"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            tools:visibility="gone"
+            android:id="@+id/btn_receive_call"
+            android:text="@string/main_btn_receive_call"
+            style="@style/MainBottomButtonStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+        &lt;!&ndash;=================================================&ndash;&gt;
+        &lt;!&ndash;손님 탑승 상태&ndash;&gt;
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_boarding"
+            app:constraint_referenced_ids="btn_alighting,tv_boarding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            tools:visibility="gone"
+            android:id="@+id/tv_boarding"
+            android:text="@string/main_state_boarding_msg"
+            android:textColor="@color/colorBlue01"
+            android:textSize="36dp"
+            style="@style/MainStateTextStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_resting2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            tools:visibility="gone"
+            android:id="@+id/btn_alighting"
+            android:text="@string/main_btn_alighting"
+            style="@style/MainBottomButtonStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        <Button
+            android:id="@+id/btn_test_call_receiving"
+            android:text="콜수신 테스트"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_waiting_call_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+

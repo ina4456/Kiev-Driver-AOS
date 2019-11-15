@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGray11">
+
+        <!--타이틀-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_msg"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/permission_msg"
+            android:textColor="@color/colorYellow"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--라인-->
+        <View
+            android:id="@+id/v_permission_line"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/colorWhite10"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_permission_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!--위치-->
+        <ImageView
+            android:id="@+id/iv_permission_location"
+            style="@style/PermissionIconStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/hs_login_agree_ic01"
+            app:layout_constraintEnd_toStartOf="@+id/tv_permission_location_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_permission_line"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_location_title"
+            style="@style/PermissionTitleStyle"
+            android:text="@string/common_location"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_location_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_location"
+            app:layout_constraintTop_toTopOf="@+id/iv_permission_location"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_location_msg"
+            style="@style/PermissionMsgStyle"
+            android:text="@string/permission_location_msg"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_call_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_location"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_location_title"/>
+
+
+        <!--전화-->
+        <ImageView
+            android:id="@+id/iv_permission_call"
+            style="@style/PermissionIconStyle"
+            android:src="@drawable/hs_login_agree_ic02"
+            app:layout_constraintEnd_toStartOf="@+id/tv_permission_call_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_location_msg"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_call_title"
+            style="@style/PermissionTitleStyle"
+            android:text="@string/common_call"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_call_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_call"
+            app:layout_constraintTop_toTopOf="@+id/iv_permission_call"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_call_msg"
+            style="@style/PermissionMsgStyle"
+            android:text="@string/permission_call_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_call"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_call_title"/>
+
+
+        <!--SMS-->
+        <ImageView
+            android:id="@+id/iv_permission_sms"
+            style="@style/PermissionIconStyle"
+            android:src="@drawable/hs_login_agree_ic03"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/tv_permission_sms_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_call_msg"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_sms_title"
+            style="@style/PermissionTitleStyle"
+            android:text="@string/common_sms"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_sms_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_sms"
+            app:layout_constraintTop_toTopOf="@+id/iv_permission_sms"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_sms_msg"
+            style="@style/PermissionMsgStyle"
+            android:text="@string/permission_sms_msg"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_sms"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_sms_title"/>
+
+
+        <!--battery-->
+        <ImageView
+            android:id="@+id/iv_permission_battery"
+            style="@style/PermissionIconStyle"
+            android:src="@drawable/hs_login_agree_ic04"
+            app:layout_constraintEnd_toStartOf="@+id/tv_permission_battery_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_sms_msg"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_battery_title"
+            style="@style/PermissionTitleStyle"
+            android:text="@string/permission_battery"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_battery_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_battery"
+            app:layout_constraintTop_toTopOf="@+id/iv_permission_battery"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_battery_msg"
+            style="@style/PermissionMsgStyle"
+            android:text="@string/permission_battery_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_battery"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_battery_title"/>
+
+
+        <!--overlay-->
+        <ImageView
+            android:id="@+id/iv_permission_overlay"
+            style="@style/PermissionIconStyle"
+            android:src="@drawable/hs_login_agree_ic05"
+            app:layout_constraintEnd_toStartOf="@+id/tv_permission_overlay_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_battery_msg"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_overlay_title"
+            style="@style/PermissionTitleStyle"
+            android:text="@string/permission_overlay"
+            app:layout_constraintBottom_toTopOf="@+id/tv_permission_overlay_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_overlay"
+            app:layout_constraintTop_toTopOf="@+id/iv_permission_overlay"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_overlay_msg"
+            style="@style/PermissionMsgStyle"
+            android:text="@string/permission_overlay_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_permission_overlay"
+            app:layout_constraintTop_toBottomOf="@+id/tv_permission_overlay_title"/>
+
+
+        <Button
+            android:id="@+id/btn_confirm"
+            style="@style/BottomButtonStyle"
+            android:text="@string/common_confirm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

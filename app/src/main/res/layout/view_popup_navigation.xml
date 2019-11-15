@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/shape_bg_popup_top_radius_rect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_popup_list_header"
+            style="@style/PopupNaviHeaderTextStyle"
+            android:background="@drawable/shape_bg_popup_top_radius_rect_gray08"
+            android:text="@string/setting_navigation_install_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_navigation_list"
+            android:background="@drawable/shape_bg_popup_top_radius_rect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popup_list_header"
+            app:layout_constraintBottom_toTopOf="@+id/btn_navi_popup_negative"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_navigation_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_navi_popup_negative"
+            style="@style/PopupOneBtnStyle"
+            app:layout_constraintTop_toBottomOf="@+id/rv_navigation_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <!--
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cl_popup_list_item1"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/selector_bg_item_navi"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_popup_list_header">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item1"
+                        style="@style/PopupNaviTextStyle1"
+                        android:text="@string/setting_navigation_onenavi"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_popup_list_item1_2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item1_2"
+                        style="@style/PopupNaviTextStyle2"
+                        android:text="@string/setting_navigation_non_install"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_popup_list_item1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+                </android.support.constraint.ConstraintLayout>
+
+                <View
+                    android:id="@+id/v_popup_list_line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorBlack10"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_popup_list_item1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cl_popup_list_item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/selector_bg_item_navi"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_popup_list_item1">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item2"
+                        style="@style/PopupNaviTextStyle1"
+                        android:text="@string/setting_navigation_tmap"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_popup_list_item2_2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item2_2"
+                        style="@style/PopupNaviTextStyle2"
+                        android:text="@string/setting_navigation_non_install"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_popup_list_item2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+                </android.support.constraint.ConstraintLayout>
+
+                <View
+                    android:id="@+id/v_popup_list_line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorBlack10"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_popup_list_item2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cl_popup_list_item3"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/selector_bg_item_navi"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_navi_popup_negative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_popup_list_item2">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item3"
+                        style="@style/PopupNaviTextStyle1"
+                        android:text="@string/setting_navigation_kakao"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_popup_list_item3_2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_popup_list_item3_2"
+                        style="@style/PopupNaviTextStyle2"
+                        android:text="@string/setting_navigation_non_install"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_popup_list_item3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+                </android.support.constraint.ConstraintLayout>
+        -->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

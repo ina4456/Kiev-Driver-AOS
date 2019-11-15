@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.Gravity"/>
+        <variable
+            name="viewModel"
+            type="com.thinkware.houston.driver.aos.viewmodel.MainViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_call_state"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/hs_main_tag"
+            android:scaleType="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_call_state"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@color/colorGray03"
+            android:text="@string/alloc_step_receive_call"
+            android:background="@null"
+            app:layout_constraintTop_toTopOf="@+id/iv_call_state"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <!--            android:progressTint="@color/colorYellow"-->
+<!--        android:theme="@style/RatingBar"-->
+        <RatingBar
+            android:id="@+id/rb_call_grade"
+            style="?android:attr/ratingBarStyleSmall"
+
+            app:layout_constraintTop_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_here"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:numStars="5"
+            android:max="5"
+            android:isIndicator="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!--여기서-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_here"
+            android:text="@string/alloc_distance_from"
+            android:textSize="18dp"
+            android:textColor="@color/colorGray03"
+            android:gravity="center_vertical|end"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_distance"
+            app:layout_constraintBottom_toTopOf="@+id/tv_departure_poi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_distance"
+            tools:text="500m"
+            android:text="@{viewModel.callInfo.getCallDistanceToDeparture()}"
+            android:textSize="18dp"
+            android:textColor="@color/colorGray01"
+            android:gravity="center_vertical|start"
+            android:layout_marginStart="2dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_here"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_here"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_here"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <!--도착지-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_departure_poi"
+            tools:text="삼환하이펙스 A동\n두줄두줄두줄두줄"
+            android:text="@{viewModel.callInfo.getDeparturePoi()}"
+            style="@style/AllocationPoiTextStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_departure_addr"
+            app:layout_constraintTop_toBottomOf="@+id/tv_here"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_departure_addr"
+            tools:text="분당구 삼평동"
+            android:text="@{viewModel.callInfo.getDepartureAddr()}"
+            style="@style/AllocationSubPoiTextStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_departure_poi"
+            app:layout_constraintBottom_toTopOf="@+id/gl_half"/>
+
+
+
+        <!--정렬기준-->
+        <View
+            android:id="@+id/gl_half"
+            android:layout_width="0dp"
+            android:layout_height="0.1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_call_state"
+            app:layout_constraintBottom_toTopOf="@+id/btn_reject"/>
+        <ImageView
+            android:id="@+id/iv_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gl_half"
+            android:src="@drawable/hs_main_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+
+<!--        android:text="@{viewModel.callInfo.getDestinationPoi()}"-->
+<!--        android:text="@{viewModel.callInfo.getDestinationPoi() ?? viewModel.callInfo.getDestinationAddr() ?? @string/alloc_no_destination}"-->
+
+<!--        {TextUtils.isEmpty-->
+        <!--목적지-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_destination_poi"
+            tools:text="판교 현대백화점"
+            android:text="@{viewModel.callInfo.getDestinationPoi() == null ? (viewModel.callInfo.getDestinationAddr() ?? @string/alloc_no_destination) : TextUtils.isEmpty(viewModel.callInfo.getDestinationPoi()) ? @string/alloc_no_destination : viewModel.callInfo.getDestinationPoi()}"
+            android:textColor="@color/colorYellow"
+            android:layout_marginTop="0dp"
+            style="@style/AllocationPoiTextStyle"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_destination_addr"
+            app:layout_constraintTop_toBottomOf="@+id/gl_half"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_destination_addr"
+            tools:text="분당구 백현동"
+            android:text="@{viewModel.callInfo.getDestinationAddr()}"
+            android:textColor="@color/colorYellow"
+            style="@style/AllocationSubPoiTextStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_destination_poi"
+            app:layout_constraintBottom_toTopOf="@+id/btn_reject"/>
+
+
+        <Button
+            android:id="@+id/btn_reject"
+            android:text="@string/alloc_btn_reject_call"
+            style="@style/MainBottomLeftButtonStyle"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_request"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:id="@+id/btn_request"
+            android:text="@string/alloc_btn_request_allocation"
+            style="@style/MainBottomRightButtonStyle"
+            app:layout_constraintStart_toEndOf="@+id/btn_reject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

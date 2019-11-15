@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+        android:drawable="@color/colorYellow" />
+    <item android:state_enabled="false"
+        android:drawable="@color/colorYellow05"  />
+    <item android:drawable="@color/colorYellow05"/>
+
+
+    <!--<item android:state_pressed="true"-->
+          <!--android:drawable="@drawable/hs_popup_btn01_p" />-->
+    <!--<item android:state_enabled="false"-->
+          <!--android:drawable="@drawable/hs_popup_btn01_n" />-->
+    <!--<item android:drawable="@drawable/hs_popup_btn01_n"/>-->
+</selector>

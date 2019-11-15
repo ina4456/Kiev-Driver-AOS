@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.thinkware.houston.driver.aos"
+    android:installLocation="preferExternal">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /><!-- 내 핸드폰 번호를 가져오기 위함 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!--&lt;!&ndash; 대기모드로 들어가지 않기 위함 &ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK"/>-->
+    <!--&lt;!&ndash; 화면 잠금 기능을 제어하기 위함  &ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />-->
+    <!--&lt;!&ndash; sdcard에 저장하기 위한 권한 &ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+
+
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
+
+    <application
+        android:name="com.thinkware.houston.driver.aos.MainApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--액티비티-->
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.PermissionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.CallReceivingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.WaitingZoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.WaitingCallListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.NoticeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.CallHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.CallHistoryDetailListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.MyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.MyInfoChangeVehicleNumberActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.navigationdrawer.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.BaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.thinkware.houston.driver.aos.view.activity.PopupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
+        <!--서비스-->
+        <service
+            android:name="com.thinkware.houston.driver.aos.service.ScenarioService"
+            android:stopWithTask="true"/>
+        <service
+            android:name="com.thinkware.houston.driver.aos.service.FloatingViewService"
+            android:stopWithTask="true"/>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f53bafcf4e5711a4ae8e1c570a4ad14546936b43" />
+    </application>
+
+</manifest>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.thinkware.houston.driver.aos.viewmodel.MyInfoViewModel"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/colorGray11"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/my_info_change_vehicle_number_toolbar"
+            layout="@layout/view_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_vehicle_number"
+            android:layout_marginTop="47dp"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/login_hint_vehicle_number"
+            style="@style/EditTextStyle"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:text="@{Integer.toString(viewModel.configuration.getCarId())}"
+            android:selection="@{Integer.toString(viewModel.configuration.getCarId()).length()}"
+            app:layout_constraintTop_toBottomOf="@+id/my_info_change_vehicle_number_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/selector_tc_common_yel_yel02"
+            android:layout_width="0dp"
+            android:layout_height="52dp"/>
+
+<!--        android:text="@{myInfoViewModel.driver.getTaxiPlateNumber()}"-->
+<!--        android:selection="@{Integer.toString(myInfoViewModel.driver.getTaxiPlateNumber().length())}"-->
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_vehicle_number_comment"
+            android:text="@string/mi_msg_change_vehicle_number"
+            android:textColor="@color/colorGray05"
+            android:textSize="16dp"
+            android:gravity="start|center_vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            style="@style/TextViewStyle_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_vehicle_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_change"
+            android:text="@string/common_change"
+            style="@style/BottomButtonStyle"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

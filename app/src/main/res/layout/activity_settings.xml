@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.thinkware.houston.driver.aos.viewmodel.ConfigViewModel"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/setting_toolbar"
+            layout="@layout/view_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.core.widget.NestedScrollView
+            app:layout_constraintTop_toBottomOf="@+id/setting_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--배차 메시지 자동전송-->
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/tv_msg_auto_send"
+                    style="@style/SettingCheckedTextStyle"
+                    android:text="@string/setting_send_auto_msg_allocation"
+                    android:checked="@{viewModel.configuration.isUseAutoSendSmsWhenGotCall()}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <View
+                    android:id="@+id/v_msg_auto_send_line"
+                    style="@style/SettingLineStyle"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_msg_auto_send"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+                <!--스피커폰으로 통화-->
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/tv_speaker_phone"
+                    style="@style/SettingCheckedTextStyle"
+                    android:text="@string/setting_speaker_phone"
+                    android:checked="@{viewModel.configuration.isUseSpeakerPhone()}"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_msg_auto_send"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <View
+                    android:id="@+id/v_speaker_phone_line"
+                    style="@style/SettingLineStyle"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_speaker_phone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+                <!--배차완료시 손님 위치로 자동 길안내 -->
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/tv_auto_routing_to_passenger"
+                    style="@style/SettingCheckedTextStyle"
+                    android:text="@string/setting_auto_routing_to_passenger"
+                    android:checked="@{viewModel.configuration.isUseAutoRouteToPassenger()}"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_speaker_phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <View
+                    android:id="@+id/v_auto_routing_to_passenger_line"
+                    style="@style/SettingLineStyle"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_auto_routing_to_passenger"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+                <!--손님 탑승 시 목적지로 자동 길안내 -->
+                <androidx.appcompat.widget.AppCompatCheckedTextView
+                    android:id="@+id/tv_auto_routing_to_destination"
+                    style="@style/SettingCheckedTextStyle"
+                    android:text="@string/setting_auto_routing_to_destination"
+                    android:checked="@{viewModel.configuration.isUseAutoRouteToDestination()}"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_auto_routing_to_passenger"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <View
+                    android:id="@+id/v_auto_routing_to_destination_line"
+                    style="@style/SettingLineStyle"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_auto_routing_to_destination"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+                <!--내비게이션-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_setting_navigation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_auto_routing_to_destination"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_navigation"
+                        style="@style/SettingTextStyle"
+                        android:text="@string/setting_navigation"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_setting_navigation_install"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_navigation_install"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:gravity="end|center_vertical"
+                        android:paddingRight="8dp"
+                        android:textColor="@color/colorGray04"
+                        android:textSize="16dp"
+                        android:text="@string/setting_navigation_non_install"
+                        app:layout_constraintStart_toEndOf="@+id/tv_setting_navigation"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_setting_navigation_type"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <View
+                        android:id="@+id/v_setting_navigation_install_line"
+                        android:layout_width="1dp"
+                        android:layout_height="16dp"
+                        android:layout_marginRight="8dp"
+                        android:gravity="center_vertical"
+                        android:background="@color/colorWhite10"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_setting_navigation_type"
+                        app:layout_constraintStart_toEndOf="@+id/tv_setting_navigation_install"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_navigation_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:gravity="end|center_vertical"
+                        android:paddingRight="8dp"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="16dp"
+                        android:text="@{viewModel.configuration.getNavigation()}"
+                        tools:text="@string/setting_navigation_tmap"
+                        app:layout_constraintStart_toEndOf="@+id/tv_setting_navigation_install"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_navigation"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_navigation"
+                        style="@style/SettingArrowStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <View
+                        android:id="@+id/v_setting_navigation"
+                        style="@style/SettingLineStyle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                <!--단축버튼-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_setting_floating_btn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_setting_navigation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_floating_btn"
+                        style="@style/SettingTextStyle"
+                        android:text="@string/setting_floating_btn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_setting_floating_btn_type"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_floating_btn_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:gravity="end|center_vertical"
+                        android:paddingRight="8dp"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="16dp"
+                        tools:text="@string/setting_floating_btn_using_all"
+                        app:layout_constraintStart_toEndOf="@+id/tv_setting_floating_btn"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_floating_btn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_floating_btn"
+                        style="@style/SettingArrowStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <View
+                        android:id="@+id/v_setting_floating_btn"
+                        style="@style/SettingLineStyle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <!--글자크기-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_setting_font_size"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_setting_floating_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_font_size"
+                        style="@style/SettingTextStyle"
+                        android:text="@string/setting_font_size"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_setting_font_size_selected"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_font_size_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:gravity="end|center_vertical"
+                        android:paddingRight="8dp"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="16dp"
+                        tools:text="@string/setting_font_size_normal"
+                        app:layout_constraintStart_toEndOf="@+id/tv_setting_font_size"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_font_size"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_font_size"
+                        style="@style/SettingArrowStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <View
+                        android:id="@+id/v_setting_font_size"
+                        style="@style/SettingLineStyle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                <!--서비스-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_setting_service_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_setting_font_size"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_setting_service_info"
+                        style="@style/SettingTextStyle"
+                        android:text="@string/setting_service_info"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_service_info"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_service_info"
+                        style="@style/SettingArrowStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <View
+                        android:id="@+id/v_setting_service_info"
+                        style="@style/SettingLineStyle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

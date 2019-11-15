@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/shape_bg_popup_bottom_right_radius_positive_btn_p"
+          android:state_pressed="true"/>
+    <item android:drawable="@drawable/shape_bg_popup_bottom_right_radius_positive_btn_n"
+          android:state_enabled="false"/>
+    <item android:drawable="@drawable/shape_bg_popup_bottom_right_radius_positive_btn_n"/>
+</selector>
+

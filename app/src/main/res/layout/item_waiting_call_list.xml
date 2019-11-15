@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_wc_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/selector_bg_wz_item">
+
+        <View
+            android:id="@+id/view_vertical_line"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:background="@color/colorGray08"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/iv_destination_icon"
+            app:layout_constraintEnd_toEndOf="@+id/iv_departure_icon"
+            app:layout_constraintStart_toStartOf="@+id/iv_departure_icon"
+            app:layout_constraintTop_toBottomOf="@+id/iv_departure_icon"/>
+
+        <!--출발지 라벨, 내용-->
+        <ImageView
+            android:id="@+id/iv_departure_icon"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:src="@drawable/hs_d_dot_start"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_departure"
+            app:layout_constraintEnd_toStartOf="@+id/tv_departure"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_departure"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_departure"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:lineSpacingExtra="-4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/colorGray01"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_destination"
+            app:layout_constraintEnd_toStartOf="@+id/gl_button"
+            app:layout_constraintStart_toEndOf="@+id/iv_departure_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="분당구 삼평동 팅크웨어"/>
+
+
+        <!--도착지 라벨, 내용-->
+        <ImageView
+            android:id="@+id/iv_destination_icon"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:src="@drawable/hs_d_dot_end"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_destination"
+            app:layout_constraintEnd_toStartOf="@+id/tv_destination"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_destination"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_destination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:lineSpacingExtra="-4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/colorGray01"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/gl_button"
+            app:layout_constraintStart_toEndOf="@+id/iv_destination_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_departure"
+            tools:text="분당구 삼평동 팅크웨어\n이이이이이이이이이이이이이"/>
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_button"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="84dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <!--배차요청-->
+        <Button
+            android:id="@+id/btn_wc_request"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/alloc_btn_request_allocation"
+            android:textSize="18dp"
+            android:textColor="@color/selector_tc_common_yel_yel01"
+            android:background="@drawable/selector_bg_bottom_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/gl_button"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

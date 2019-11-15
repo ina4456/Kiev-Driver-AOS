@@ -353,9 +353,9 @@ public class Packets {
 				return 20;
 
 			case REQUEST_MY_INFO: // 내정보 요청
-				return 100;
+				return 36;
 			case RESPONSE_MY_INFO: // 내정보 요청 응답
-				return 20;
+				return 64;
 
 
 			default:

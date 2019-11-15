@@ -1224,7 +1224,10 @@ public class ScenarioService extends LifecycleService {
 
 				case Packets.RESPONSE_SEND_SMS: {
 					LogHelper.e("RESPONSE_SEND_SMS!!!!!");
+				}
 
+				case Packets.RESPONSE_MY_INFO: {
+					LogHelper.e("RESPONSE_MY_INFO!!!!!");
 				}
 				break;
 			}

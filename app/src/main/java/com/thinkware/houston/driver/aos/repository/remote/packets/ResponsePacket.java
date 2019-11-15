@@ -8,8 +8,10 @@ import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.Ord
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseAccountPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseAckPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
+import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSendingPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
+import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaStatePacket;
 import com.thinkware.houston.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
@@ -75,6 +77,13 @@ public class ResponsePacket {
 				return new ResponseRestPacket(bytes);
 			case Packets.RESPONSE_WAIT_AREA_STATE:
 				return new ResponseWaitAreaStatePacket(bytes);
+
+
+			/*신규 패킷 추가*/
+			case Packets.RESPONSE_SEND_SMS:
+				return new ResponseSMSPacket(bytes);
+			case Packets.RESPONSE_MY_INFO:
+				return new ResponseMyInfoPacket(bytes);
 
 			default:
 				return new ResponsePacket(bytes);

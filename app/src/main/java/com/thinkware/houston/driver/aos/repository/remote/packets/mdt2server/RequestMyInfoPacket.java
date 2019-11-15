@@ -2,94 +2,64 @@ package com.thinkware.houston.driver.aos.repository.remote.packets.mdt2server;
 
 import com.thinkware.houston.driver.aos.repository.remote.packets.Packets;
 import com.thinkware.houston.driver.aos.repository.remote.packets.RequestPacket;
+import com.thinkware.houston.driver.aos.util.EncryptUtil;
 
 /**
- * SMS 전송 요청 (GT-5813) 102 Byte
+ * SMS 전송 요청 (GT-1E11) 38 Byte
  * MDT -> Server
  */
 public class RequestMyInfoPacket extends RequestPacket {
 
-    private int serviceNumber; // 서비스번호 (1)
-    private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
-	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
-	private int callNumber; // 콜번호 (2)
-	private String content; // 내용 (80)
+	private int corporationCode; // 법인코드 (2)
+	private int carId; // Car ID (2)
+	private String phoneNumber; // Phone Number (30)
 
-    public RequestMyInfoPacket() {
-	    super(Packets.REQUEST_SEND_SMS);
 
-    }
+	public RequestMyInfoPacket() {
+		super(Packets.REQUEST_MY_INFO);
 
-    public int getServiceNumber() {
-        return serviceNumber;
-    }
-
-    public void setServiceNumber(int serviceNumber) {
-        this.serviceNumber = serviceNumber;
-    }
-
-    public int getCorporationCode() {
-        return corporationCode;
-    }
-
-    public void setCorporationCode(int corporationCode) {
-        this.corporationCode = corporationCode;
-    }
-
-    public int getCarId() {
-        return carId;
-    }
-
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
-
-	public String getCallReceiptDate() {
-		return callReceiptDate;
 	}
 
-	public void setCallReceiptDate(String callReceiptDate) {
-		this.callReceiptDate = callReceiptDate;
+	public int getCorporationCode() {
+		return corporationCode;
 	}
 
-	public int getCallNumber() {
-		return callNumber;
+	public void setCorporationCode(int corporationCode) {
+		this.corporationCode = corporationCode;
 	}
 
-	public void setCallNumber(int callNumber) {
-		this.callNumber = callNumber;
+	public int getCarId() {
+		return carId;
 	}
 
-	public String getContent() {
-		return content;
+	public void setCarId(int carId) {
+		this.carId = carId;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override
-    public byte[] toBytes() {
-        super.toBytes();
-        writeInt(serviceNumber, 1);
-        writeInt(corporationCode, 2);
-        writeInt(carId, 2);
-		writeString(callReceiptDate, 11);
-		writeInt(callNumber, 2);
-        writeString(content, 80);
-        return buffers;
-    }
+	public byte[] toBytes() {
+		super.toBytes();
+		writeInt(corporationCode, 2);
+		writeInt(carId, 2);
+		writeString(EncryptUtil.encodeStr(phoneNumber), 30);
+		return buffers;
+	}
 
-    @Override
-    public String toString() {
-        return "서비스요청 (0x" + Integer.toHexString(messageType) + ") " +
-		        "serviceNumber=" + serviceNumber +
-		        ", corporationCode=" + corporationCode +
-		        ", carId=" + carId +
-		        ", callReceiptDate='" + callReceiptDate + '\'' +
-		        ", callNumber=" + callNumber +
-		        ", content='" + content + '\'' +
-		        '}';
-    }
+	@Override
+	public String toString() {
+		return "서비스요청 (0x" + Integer.toHexString(messageType) + ") " +
+				"corporationCode=" + corporationCode +
+				", carId=" + carId +
+				", phoneNumber='" + phoneNumber + '\'' +
+				'}';
+	}
+
 }

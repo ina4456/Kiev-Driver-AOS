@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.thinkware.houston.driver.aos.viewmodel.MyInfoViewModel"/>
+            type="com.kiev.driver.aos.viewmodel.MyInfoViewModel"/>
     </data>
 
 

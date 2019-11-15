@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.thinkware.houston.driver.aos.viewmodel.ConfigViewModel"/>
+            type="com.kiev.driver.aos.viewmodel.ConfigViewModel"/>
     </data>
 
 

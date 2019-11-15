@@ -30,14 +30,14 @@ android {
     }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.thinkware.houston.driver.aos"
+        applicationId "com.kiev.driver.aos"
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
         versionName new Date().format("yyyyMMdd") + "01"
         versionCode Integer.parseInt(versionName)
         buildConfigField("long", "TIMESTAMP", System.currentTimeMillis() + "L");
-        archivesBaseName = "com.thinkware.houston.driver.aos-" + versionName
+        archivesBaseName = "com.kiev.driver.aos-" + versionName
 
         // + "_" + versionCode + "_" + new Date().format("yyyyMMdd_HHmmss")
     }

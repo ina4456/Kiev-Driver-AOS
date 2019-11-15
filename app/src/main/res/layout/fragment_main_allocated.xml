@@ -11,7 +11,7 @@
             type="boolean"/>
         <variable
             name="viewModel"
-            type="com.thinkware.houston.driver.aos.viewmodel.MainViewModel"/>
+            type="com.kiev.driver.aos.viewmodel.MainViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

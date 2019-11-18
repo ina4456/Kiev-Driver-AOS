@@ -28,9 +28,11 @@ public class NetworkManager {
     // fields
     //---------------------------------------------------------------------------------
     public static final String IP_COMMER = "58.180.28.213";
+//    public static final String IP_DEV = "192.168.0.34";
     public static final String IP_DEV = "183.99.72.173";
     public static final String IP_LIVE_PACKET = "58.180.28.212";
     public static final int PORT_DEV = 3000;
+//    public static final int PORT_DEV = 8080;
 
 
     private static NetworkManager instance;
@@ -158,8 +160,11 @@ public class NetworkManager {
 				    || !connector.isConnected()) {
 			    //|| !isAvailableNetwork(context)) {
 			    disconnect();
-			    ip = mConfiguration.getCallServerIp();
-			    port = mConfiguration.getCallServerPort();
+			    // FIXME: 2019-11-15 test
+			    ip = IP_DEV;
+			    port = PORT_DEV;
+//			    ip = mConfiguration.getCallServerIp();
+//			    port = mConfiguration.getCallServerPort();
 			    connect(ip, port);
 		    }
 		    if (connector != null) {
@@ -194,6 +199,7 @@ public class NetworkManager {
                     || !connector.isConnected()) {
                     //|| !isAvailableNetwork(context)) {
                 disconnect();
+	            // FIXME: 2019-11-15 test
 	            ip = mConfiguration.getCallServerIp();
 	            port = mConfiguration.getCallServerPort();
                 connect(ip, port);

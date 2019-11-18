@@ -79,4 +79,5 @@ public class Constants {
 	// TODO: 2019. 3. 11. 프로젝트 구조 잡고, 사이트별 Constants 정의 필요
 	public static final String CALL_CENTER_PHONE_NUMBER = "010505569802";
 	public static final String SERVER_URL = "houston.thinkware.co.kr:29522";
+	public static final String TMAP_API_KEY = "c091d13f-9d61-46c9-b22e-0c09b77334f3";
 }

@@ -36,6 +36,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestCallerInf
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestEmergencyPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessagePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestNoticePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestOrderRealtimePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestRestPacket;
@@ -51,8 +52,10 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.NoticesPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoProcPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSendingPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
@@ -755,6 +758,15 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
+	public void requestMyInfo() {
+		RequestMyInfoPacket packet = new RequestMyInfoPacket();
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+		LogHelper.e("packet : " + packet.toString());
+		request(packet);
+	}
+
 
 	/**
 	 * 배차 데이터를 아래의 순서로 업데이트 한다.
@@ -1223,11 +1235,13 @@ public class ScenarioService extends LifecycleService {
 
 
 				case Packets.RESPONSE_SEND_SMS: {
-					LogHelper.e("RESPONSE_SEND_SMS!!!!!");
+					ResponseSMSPacket resPacket = (ResponseSMSPacket) response;
+					LogHelper.e("RESPONSE_SEND_SMS : " + resPacket);
 				}
 
 				case Packets.RESPONSE_MY_INFO: {
-					LogHelper.e("RESPONSE_MY_INFO!!!!!");
+					ResponseMyInfoPacket resPacket = (ResponseMyInfoPacket) response;
+					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
 				}
 				break;
 			}

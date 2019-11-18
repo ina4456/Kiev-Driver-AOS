@@ -311,6 +311,9 @@ public class Repository {
 		mScenarioService.requestToSendSMS(msg, savedCall);
 	}
 
+	public void requestMyInfo() {
+		mScenarioService.requestMyInfo();
+	}
 
 	public int getDistance(double latitude, double longitude) {
 		return (int) mScenarioService.getGpsHelper().getDistance((float)latitude, (float)longitude);

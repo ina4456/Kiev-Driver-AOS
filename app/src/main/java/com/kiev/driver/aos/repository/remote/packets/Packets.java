@@ -32,8 +32,8 @@ public class Packets {
 	public static final int REQUEST_CALL_INFO = 0x1A11; // 배차정보요청 (추가 2017. 12. 19 - 권석범)
 	public static final int REQUEST_CALL_INFO_DES = 0x1A21; // 배차정보요청 (목적지 추가)
 
-	public static final int REQUEST_SEND_SMS = 0x1813; // SMS 전송 요청
-	public static final int REQUEST_MY_INFO = 0x1E11; // 내 정보 요청
+	public static final int REQUEST_SEND_SMS = 0x5813; // SMS 전송 요청
+	public static final int REQUEST_MY_INFO = 0x5E11; // 내 정보 요청
 
 
 
@@ -61,8 +61,8 @@ public class Packets {
 	public static final int CALLER_INFO_RESEND = 0x1A12; // 고객정보재전송
 	public static final int RESPONSE_REST = 0x1B12; // 휴식/운행응답
 
-	public static final int RESPONSE_SEND_SMS = 0x1814; // SMS 전송 요청 응답
-	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답
+	public static final int RESPONSE_SEND_SMS = 0x5814; // SMS 전송 요청 응답
+	public static final int RESPONSE_MY_INFO = 0x5E12; // 내 정보 요청 응답
 
 
 	//----------------------------------------------------------------------------------------

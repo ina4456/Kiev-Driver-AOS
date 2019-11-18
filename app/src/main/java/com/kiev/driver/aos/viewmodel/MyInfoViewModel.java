@@ -63,6 +63,11 @@ public class MyInfoViewModel extends AndroidViewModel {
 		}
 	}
 
+	public void requestMyInfo() {
+		LogHelper.e("requestMyInfo()");
+		mRepository.requestMyInfo();
+	}
+
 	/**
 	 * A creator is used to inject the product ID into the ViewModel
 	 * <p>

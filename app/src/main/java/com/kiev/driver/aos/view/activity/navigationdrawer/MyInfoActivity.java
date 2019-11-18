@@ -41,6 +41,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
 
 		subscribeViewModel(mViewModel);
 		initToolbar();
+		mViewModel.requestMyInfo();
 	}
 
 	private void subscribeViewModel(MyInfoViewModel myInfoViewModel) {

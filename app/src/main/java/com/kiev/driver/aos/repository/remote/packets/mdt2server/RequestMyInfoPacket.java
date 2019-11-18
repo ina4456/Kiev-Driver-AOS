@@ -55,7 +55,7 @@ public class RequestMyInfoPacket extends RequestPacket {
 
 	@Override
 	public String toString() {
-		return "서비스요청 (0x" + Integer.toHexString(messageType) + ") " +
+		return "내정보요청 (0x" + Integer.toHexString(messageType) + ") " +
 				"corporationCode=" + corporationCode +
 				", carId=" + carId +
 				", phoneNumber='" + phoneNumber + '\'' +

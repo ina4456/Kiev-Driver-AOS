@@ -269,6 +269,10 @@ public class MainViewModel extends AndroidViewModel {
 		return mRepository.requestToSendSMS(msg);
 	}
 
+	public void requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+		mRepository.requestWaitingCallList(waitCallListType, startIndex);
+	}
+
 	public void clearTempCallInfo() {
 		mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Temp);
 	}

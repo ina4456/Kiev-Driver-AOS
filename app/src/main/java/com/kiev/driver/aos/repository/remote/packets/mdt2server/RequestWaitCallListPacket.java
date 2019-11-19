@@ -2,104 +2,108 @@ package com.kiev.driver.aos.repository.remote.packets.mdt2server;
 
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기지역요청 (GT-1511) 22 Byte
+ * 대기지역요청 (GT-1D11) 77 Byte
  * MDT -> Server
  */
 public class RequestWaitCallListPacket extends RequestPacket {
 
-    private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-    private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
-    private float longitude; // 경도 (4)
-    private float latitude; // 위도 (4)
-    private Packets.BoardType taxiState; // 택시상태 (1)
+	private Packets.WaitCallListType waitCallListType; // 대기콜리스트타입 (1)
+	private int startIndex; // 시작인덱스 (1)
+	private int requestCount; // 요청개수 (1)
+    private float longitude; // 경도 (30)
+    private float latitude; // 위도 (30)
 
     public RequestWaitCallListPacket() {
-        super(Packets.REQUEST_WAIT_AREA);
+        super(Packets.REQUEST_WAIT_CALL_LIST);
     }
 
-    public int getServiceNumber() {
-        return serviceNumber;
-    }
+	public int getCorporationCode() {
+		return corporationCode;
+	}
 
-    public void setServiceNumber(int serviceNumber) {
-        this.serviceNumber = serviceNumber;
-    }
+	public void setCorporationCode(int corporationCode) {
+		this.corporationCode = corporationCode;
+	}
 
-    public int getCorporationCode() {
-        return corporationCode;
-    }
+	public int getCarId() {
+		return carId;
+	}
 
-    public void setCorporationCode(int corporationCode) {
-        this.corporationCode = corporationCode;
-    }
+	public void setCarId(int carId) {
+		this.carId = carId;
+	}
 
-    public int getCarId() {
-        return carId;
-    }
+	public Packets.WaitCallListType getWaitCallListType() {
+		return waitCallListType;
+	}
 
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
+	public void setWaitCallListType(Packets.WaitCallListType waitCallListType) {
+		this.waitCallListType = waitCallListType;
+	}
 
-    public String getGpsTime() {
-        return gpsTime;
-    }
+	public int getStartIndex() {
+		return startIndex;
+	}
 
-    public void setGpsTime(String gpsTime) {
-        this.gpsTime = gpsTime;
-    }
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
 
-    public float getLongitude() {
-        return longitude;
-    }
+	public int getRequestCount() {
+		return requestCount;
+	}
 
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
+	public void setRequestCount(int requestCount) {
+		this.requestCount = requestCount;
+	}
 
-    public float getLatitude() {
-        return latitude;
-    }
+	public float getLongitude() {
+		return longitude;
+	}
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
+	}
 
-    public Packets.BoardType getTaxiState() {
-        return taxiState;
-    }
+	public float getLatitude() {
+		return latitude;
+	}
 
-    public void setTaxiState(Packets.BoardType taxiState) {
-        this.taxiState = taxiState;
-    }
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
 
-    @Override
+	@Override
     public byte[] toBytes() {
         super.toBytes();
-        writeInt(serviceNumber, 1);
+
         writeInt(corporationCode, 2);
         writeInt(carId, 2);
-        writeDateTime(gpsTime, 6);
-        writeFloat(longitude, 4);
-        writeFloat(latitude, 4);
-        writeInt(taxiState.value, 1);
+		writeInt(waitCallListType.value, 1);
+		writeInt(startIndex, 1);
+		writeInt(requestCount, 1);
+		writeString(EncryptUtil.encodeStr(""+ longitude), 30);
+		writeString(EncryptUtil.encodeStr(""+ latitude), 30);
+
         return buffers;
     }
 
     @Override
     public String toString() {
-        return "대기지역요청 (0x" + Integer.toHexString(messageType) + ") " +
-                "serviceNumber=" + serviceNumber +
-                ", corporationCode=" + corporationCode +
-                ", carId=" + carId +
-                ", gpsTime='" + gpsTime + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                ", taxiState=" + taxiState;
+        return "대기콜 리스트 요청 (0x" + Integer.toHexString(messageType) + ") " +
+		        "corporationCode=" + corporationCode +
+		        ", carId=" + carId +
+		        ", waitCallListType=" + waitCallListType +
+		        ", startIndex=" + startIndex +
+		        ", requestCount=" + requestCount +
+		        ", longitude=" + longitude +
+		        ", latitude=" + latitude +
+		        '}';
     }
 }
+

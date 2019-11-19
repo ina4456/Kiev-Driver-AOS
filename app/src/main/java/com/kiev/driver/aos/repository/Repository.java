@@ -339,6 +339,11 @@ public class Repository {
 		return data;
 	}
 
+
+	public void requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+		mScenarioService.requestWaitCallList(waitCallListType, startIndex);
+	}
+
 	public int getDistance(double latitude, double longitude) {
 		return (int) mScenarioService.getGpsHelper().getDistance((float)latitude, (float)longitude);
 	}

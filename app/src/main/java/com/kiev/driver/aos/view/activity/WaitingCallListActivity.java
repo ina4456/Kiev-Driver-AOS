@@ -9,6 +9,7 @@ import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingCallListBinding;
 import com.kiev.driver.aos.model.entity.Call;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingCallListAdapter;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
@@ -78,6 +79,9 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	}
 
 	private void initRecyclerView() {
+		LogHelper.e("initRecyclerView()");
+		mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 0);
+
 		/**
 		 * 테스트 데이터
 		 */

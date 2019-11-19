@@ -34,6 +34,9 @@ public class Packets {
 
 	public static final int REQUEST_SEND_SMS = 0x1813; // SMS 전송 요청
 	public static final int REQUEST_MY_INFO = 0x1E11; // 내 정보 요청
+	public static final int REQUEST_WAIT_CALL_LIST = 0x1D11; // 대기콜 리스트 요청
+
+
 
 
 
@@ -62,7 +65,8 @@ public class Packets {
 	public static final int RESPONSE_REST = 0x1B12; // 휴식/운행응답
 
 	public static final int RESPONSE_SEND_SMS = 0x1814; // SMS 전송 요청 응답
-	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답
+	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답청
+	public static final int RESPONSE_WAIT_CALL_LIST = 0x1D12; // 내 정보 요청 응답
 
 
 	//----------------------------------------------------------------------------------------
@@ -255,6 +259,18 @@ public class Packets {
 		}
 	}
 
+	// 대기콜 리스트 구분
+	public enum WaitCallListType {
+		RequestFirstTime(0x00), // 최초요청
+		RequestAgain(0x01); // 재요청
+
+		public int value;
+
+		WaitCallListType(int value) {
+			this.value = value;
+		}
+	}
+
 	//----------------------------------------------------------------------------------------
 	// Packet Size
 	//----------------------------------------------------------------------------------------
@@ -357,6 +373,10 @@ public class Packets {
 			case RESPONSE_MY_INFO: // 내정보 요청 응답
 				return 94;
 
+			case REQUEST_WAIT_CALL_LIST: // 대기콜 요청
+				return 69;
+			case RESPONSE_WAIT_CALL_LIST: // 대기콜 요청 응답
+				return 658;
 
 			default:
 				return 0;

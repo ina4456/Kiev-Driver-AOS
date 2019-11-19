@@ -44,6 +44,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPa
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitDecisionPacket;
@@ -778,6 +779,20 @@ public class ScenarioService extends LifecycleService {
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
 		LogHelper.e("packet : " + packet.toString());
+		request(packet);
+	}
+
+	public void requestWaitCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+		RequestWaitCallListPacket packet = new RequestWaitCallListPacket();
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setWaitCallListType(waitCallListType);
+		packet.setStartIndex(startIndex);
+		packet.setRequestCount(20);
+		packet.setLongitude(gpsHelper.getLongitude());
+		packet.setLatitude(gpsHelper.getLatitude());
+		LogHelper.e("packet : " + packet.toString());
+
 		request(packet);
 	}
 

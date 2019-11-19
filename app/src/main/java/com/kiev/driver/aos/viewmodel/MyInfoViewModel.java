@@ -22,6 +22,7 @@ public class MyInfoViewModel extends AndroidViewModel {
 	private final LiveData<Taxi> mTaxiInfo;
 	private final LiveData<Call> mCallInfo;
 	private final LiveData<Configuration> mConfiguration;
+	private MutableLiveData<ResponseMyInfoPacket> mMyInfo;
 	private Repository mRepository;
 
 
@@ -32,6 +33,8 @@ public class MyInfoViewModel extends AndroidViewModel {
 		mTaxiInfo = repository.getTaxiInfoLive();
 		mCallInfo = repository.getCallInfoLive();
 		mConfiguration = repository.getConfigLive();
+		mMyInfo = mRepository.requestMyInfo();
+
 	}
 
 	/**
@@ -45,6 +48,10 @@ public class MyInfoViewModel extends AndroidViewModel {
 	}
 	public LiveData<Configuration> getConfiguration() {
 		return mConfiguration;
+	}
+
+	public MutableLiveData<ResponseMyInfoPacket> getMyInfo() {
+		return mMyInfo;
 	}
 
 	public void changeVehicleNumber(String vehicleNumber) {
@@ -65,10 +72,6 @@ public class MyInfoViewModel extends AndroidViewModel {
 		}
 	}
 
-	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
-		LogHelper.e("requestMyInfo()");
-		return mRepository.requestMyInfo();
-	}
 
 	/**
 	 * A creator is used to inject the product ID into the ViewModel

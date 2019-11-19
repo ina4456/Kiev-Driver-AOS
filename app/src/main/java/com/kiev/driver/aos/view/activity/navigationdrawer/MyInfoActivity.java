@@ -9,15 +9,12 @@ import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityMyinfoBinding;
 import com.kiev.driver.aos.model.entity.Call;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
-import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.viewmodel.MyInfoViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -52,17 +49,6 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
 			public void onChanged(Call call) {
 				boolean enable = call.getCallStatus() == Constants.CALL_STATUS_VACANCY;
 				mBinding.ibtnMyInfoVehicleNumberChange.setEnabled(enable);
-			}
-		});
-
-		MutableLiveData<ResponseMyInfoPacket> responseMyInfoData = myInfoViewModel.requestMyInfo();
-		responseMyInfoData.observe(this, new Observer<ResponseMyInfoPacket>() {
-			@Override
-			public void onChanged(ResponseMyInfoPacket responseMyInfoPacket) {
-				responseMyInfoData.removeObserver(this);
-
-				LogHelper.e("reponseMyInfo : " + responseMyInfoPacket);
-
 			}
 		});
 	}

@@ -16,6 +16,7 @@ import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.NavigationExecutor;
@@ -27,6 +28,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -263,8 +265,8 @@ public class MainViewModel extends AndroidViewModel {
 		mRepository.resetCallInfo(status);
 	}
 
-	public void requestToSendSMS(String msg) {
-		mRepository.requsetToSendSMS(msg);
+	public MutableLiveData<ResponseSMSPacket> requestToSendSMS(String msg) {
+		return mRepository.requestToSendSMS(msg);
 	}
 
 	public void clearTempCallInfo() {

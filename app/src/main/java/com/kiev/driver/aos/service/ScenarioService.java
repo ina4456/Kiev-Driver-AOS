@@ -121,6 +121,16 @@ public class ScenarioService extends LifecycleService {
 		return mServiceResultPacket;
 	}
 
+	private MutableLiveData<ResponseSMSPacket> mResponseSMSPacket;
+	public MutableLiveData<ResponseSMSPacket> getResponseSMSPacket () {
+		return mResponseSMSPacket;
+	}
+
+	private MutableLiveData<ResponseMyInfoPacket> mResponseMyInfo;
+	public MutableLiveData<ResponseMyInfoPacket> getResponseMyInfo () {
+		return mResponseMyInfo;
+	}
+
 	public Packets.BoardType getBoardType() {
 		return boardType;
 	}
@@ -390,7 +400,7 @@ public class ScenarioService extends LifecycleService {
 
 		pollingHandler.removeMessages(MSG_SERVICE_ACK);
 		if (withTimer) {
-			pollingHandler.sendEmptyMessageDelayed(MSG_SERVICE_ACK, 3000);
+			pollingHandler.sendEmptyMessageDelayed(MSG_SERVICE_ACK, 10000);
 		}
 	}
 
@@ -748,6 +758,8 @@ public class ScenarioService extends LifecycleService {
 	}
 
 	public void requestToSendSMS(String msg, Call call) {
+		mResponseSMSPacket = new MutableLiveData<>();
+
 		RequestSendSMSPacket packet = new RequestSendSMSPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -759,6 +771,8 @@ public class ScenarioService extends LifecycleService {
 	}
 
 	public void requestMyInfo() {
+		mResponseMyInfo = new MutableLiveData<>();
+
 		RequestMyInfoPacket packet = new RequestMyInfoPacket();
 		packet.setCarId(mConfiguration.getCarId());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -879,6 +893,8 @@ public class ScenarioService extends LifecycleService {
 
 					ServiceRequestResultPacket resPacket = (ServiceRequestResultPacket) response;
 					mServiceResultPacket.postValue(resPacket);
+					LogHelper.e("서비스 요청 응답 : " + resPacket);
+
 					// TODO: 2019-10-14 버전 차이 날 경우 시나리오 확인
 					/*if (resPacket.getProgramVersion() > getConfiguration.getAppVersion()) {
 						startService(new Intent("com.thinkware.florida.otaupdater.Updater"));
@@ -1237,11 +1253,14 @@ public class ScenarioService extends LifecycleService {
 				case Packets.RESPONSE_SEND_SMS: {
 					ResponseSMSPacket resPacket = (ResponseSMSPacket) response;
 					LogHelper.e("RESPONSE_SEND_SMS : " + resPacket);
+					mResponseSMSPacket.postValue(resPacket);
 				}
+				break;
 
 				case Packets.RESPONSE_MY_INFO: {
 					ResponseMyInfoPacket resPacket = (ResponseMyInfoPacket) response;
 					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
+					mResponseMyInfo.postValue(resPacket);
 				}
 				break;
 			}
@@ -1471,7 +1490,7 @@ public class ScenarioService extends LifecycleService {
 					}
 					break;
 				case MSG_SERVICE_ACK:
-					LogHelper.d(">> Failed to certify in 3 sec.");
+					LogHelper.d(">> Failed to certify in 10 sec.");
 					mServiceResultPacket.postValue(null); //new ServiceRequestResultPacket(null, null)
 					break;
 

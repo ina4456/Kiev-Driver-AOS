@@ -7,11 +7,13 @@ import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -63,9 +65,9 @@ public class MyInfoViewModel extends AndroidViewModel {
 		}
 	}
 
-	public void requestMyInfo() {
+	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
 		LogHelper.e("requestMyInfo()");
-		mRepository.requestMyInfo();
+		return mRepository.requestMyInfo();
 	}
 
 	/**

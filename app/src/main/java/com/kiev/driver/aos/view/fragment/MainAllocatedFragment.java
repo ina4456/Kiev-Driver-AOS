@@ -15,6 +15,7 @@ import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
@@ -27,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -533,20 +535,27 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 
 			//배차 메시지 전송
 			case DIALOG_TAG_SEND_SMS:
-				// TODO: 2019. 3. 8. 서버 SMS 전송 처리 및 실패 성공 여부에 따라 팝업창 표시
 				if (intent != null) {
 					String selectedItem = intent.getStringExtra(Constants.DIALOG_INTENT_KEY_SELECTED_ITEM);
 					selectedItem = selectedItem.replaceAll("\\<[^>]*>","");
 
 					LogHelper.e("selectedItem : " + selectedItem);
-					mMainViewModel.requestToSendSMS(selectedItem);
+					MutableLiveData<ResponseSMSPacket> response = mMainViewModel.requestToSendSMS(selectedItem);
+					response.observe(this, new Observer<ResponseSMSPacket>() {
+						@Override
+						public void onChanged(ResponseSMSPacket responseSMSPacket) {
+							LogHelper.e("responseSMSPacket : " + responseSMSPacket);
+							response.removeObserver(this);
 
-//
-//					String selectedItem = intent.getStringExtra(Constants.DIALOG_INTENT_KEY_SELECTED_ITEM);
-//					LogHelper.e("selectedItem : " + selectedItem);
-//					showNormalMsgPopup(DIALOG_TAG_NO_NEED_RESPONSE, getString(R.string.msg_send_succeed));
+							Popup completePopup = new Popup
+									.Builder(Popup.TYPE_NO_BTN, Constants.DIALOG_TAG_SEND_SMS)
+									.setContent(getString(responseSMSPacket.isSuccess() ? R.string.msg_send_succeed : R.string.msg_send_failure))
+									.setDismissSecond(2)
+									.build();
+							showPopupDialog(completePopup);
+						}
+					});
 				}
-				//showNormalMsgPopup(DIALOG_TAG_NO_NEED_RESPONSE, getString(R.string.msg_send_failure));
 				break;
 
 			//내비 설치

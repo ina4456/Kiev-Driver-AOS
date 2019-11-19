@@ -11,6 +11,8 @@ public class Constants {
 	public static final String DIALOG_TAG_COMPLETE_CALL = "dialog_tag_complete_call";
 	public static final String DIALOG_TAG_COMPLETE_CALL_THEN_FINISH_APP = "dialog_tag_complete_call_then_finish_app";
 	public static final String DIALOG_TAG_COMPLETE_CALL_THEN_LOGOUT = "dialog_tag_complete_call_then_logout";
+	public static final String DIALOG_TAG_SEND_SMS = "dialog_tag_send_sms";
+
 
 	public static final String DIALOG_TAG_NOTICE = "dialog_tag_notice";
 	public static final String DIALOG_TAG_ALLOCATION_FAILURE = "dialog_tag_allocation_failure";

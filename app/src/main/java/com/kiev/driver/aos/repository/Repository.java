@@ -11,6 +11,8 @@ import com.kiev.driver.aos.repository.local.AppDatabase;
 import com.kiev.driver.aos.repository.local.SharedPreferenceManager;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
@@ -306,13 +308,35 @@ public class Repository {
 		}
 	}
 
-	public void requsetToSendSMS(String msg) {
+	public MutableLiveData<ResponseSMSPacket> requestToSendSMS(String msg) {
 		Call savedCall = getCallInfo();
 		mScenarioService.requestToSendSMS(msg, savedCall);
+		final MutableLiveData<ResponseSMSPacket> data = mScenarioService.getResponseSMSPacket();
+		data.observeForever(new Observer<ResponseSMSPacket>() {
+			@Override
+			public void onChanged(ResponseSMSPacket responseSMSPacket) {
+				LogHelper.e("requestToSendSMS - onChanged");
+				data.postValue(responseSMSPacket);
+				data.removeObserver(this);
+			}
+		});
+
+		return data;
 	}
 
-	public void requestMyInfo() {
+	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
 		mScenarioService.requestMyInfo();
+		final MutableLiveData<ResponseMyInfoPacket> data = mScenarioService.getResponseMyInfo();
+		data.observeForever(new Observer<ResponseMyInfoPacket>() {
+			@Override
+			public void onChanged(ResponseMyInfoPacket responseMyInfoPacket) {
+				LogHelper.e("requestMyInfo - onChanged");
+				data.postValue(responseMyInfoPacket);
+				data.removeObserver(this);
+			}
+		});
+
+		return data;
 	}
 
 	public int getDistance(double latitude, double longitude) {

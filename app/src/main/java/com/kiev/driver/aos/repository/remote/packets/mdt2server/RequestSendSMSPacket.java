@@ -83,7 +83,7 @@ public class RequestSendSMSPacket extends RequestPacket {
 
     @Override
     public String toString() {
-        return "서비스요청 (0x" + Integer.toHexString(messageType) + ") " +
+        return "SMS 전송 요청 (0x" + Integer.toHexString(messageType) + ") " +
 		        "serviceNumber=" + serviceNumber +
 		        ", corporationCode=" + corporationCode +
 		        ", carId=" + carId +

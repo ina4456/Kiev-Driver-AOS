@@ -36,6 +36,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import static android.os.Build.VERSION_CODES.M;
+
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, TextWatcher,
 		PopupDialogFragment.PopupDialogListener {
@@ -77,7 +79,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 		setListeners();
 		setEnableLoginButton();
 
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+		if (Build.VERSION.SDK_INT < M) {
 			setScrollEdgeGlowColor(this, ContextCompat.getColor(this, R.color.colorYellow02));
 		}
 	}

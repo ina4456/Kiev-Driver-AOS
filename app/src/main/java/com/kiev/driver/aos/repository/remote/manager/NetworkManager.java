@@ -27,7 +27,7 @@ public class NetworkManager {
     //---------------------------------------------------------------------------------
     // fields
     //---------------------------------------------------------------------------------
-    public static final String IP_COMMER = "58.180.28.213";
+//    public static final String IP_COMMER = "58.180.28.213";
 //    public static final String IP_DEV = "192.168.0.34";
     public static final String IP_DEV = "183.99.72.173";
     public static final String IP_LIVE_PACKET = "58.180.28.212";

@@ -11,7 +11,7 @@ public class ResponseSMSPacket extends ResponsePacket {
 
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-	private String phoneNumber; // 운전자 전화번호 (13)
+	//private String phoneNumber; // 운전자 전화번호 (13)
 	private boolean isSuccess; // 성공여부 (1)
 
 
@@ -35,13 +35,13 @@ public class ResponseSMSPacket extends ResponsePacket {
 		this.carId = carId;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+//	public String getPhoneNumber() {
+//		return phoneNumber;
+//	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+//	public void setPhoneNumber(String phoneNumber) {
+//		this.phoneNumber = phoneNumber;
+//	}
 
 	public boolean isSuccess() {
 		return isSuccess;
@@ -56,7 +56,7 @@ public class ResponseSMSPacket extends ResponsePacket {
         super.parse(buffers);
         corporationCode = readInt(2);
         carId = readInt(2);
-	    phoneNumber = readString(13);
+//	    phoneNumber = readString(13);
 	    int isSuccess = readInt(1);
 	    this.isSuccess = isSuccess == 0x02;
     }
@@ -66,7 +66,7 @@ public class ResponseSMSPacket extends ResponsePacket {
         return "SMS 응답 (0x" + Integer.toHexString(messageType) + ") " +
 		        "corporationCode=" + corporationCode +
 		        ", carId=" + carId +
-		        ", phoneNumber='" + phoneNumber + '\'' +
+//		        ", phoneNumber='" + phoneNumber + '\'' +
 		        ", isSuccess=" + isSuccess +
 		        '}';
     }

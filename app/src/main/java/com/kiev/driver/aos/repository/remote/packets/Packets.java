@@ -376,7 +376,7 @@ public class Packets {
 			case REQUEST_WAIT_CALL_LIST: // 대기콜 요청
 				return 69;
 			case RESPONSE_WAIT_CALL_LIST: // 대기콜 요청 응답
-				return 658;
+				return 1113;
 
 			default:
 				return 0;

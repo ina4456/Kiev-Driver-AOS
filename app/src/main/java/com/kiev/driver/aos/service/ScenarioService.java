@@ -58,6 +58,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSe
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
@@ -1276,6 +1277,13 @@ public class ScenarioService extends LifecycleService {
 					ResponseMyInfoPacket resPacket = (ResponseMyInfoPacket) response;
 					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
 					mResponseMyInfo.postValue(resPacket);
+				}
+				break;
+
+
+				case Packets.RESPONSE_WAIT_CALL_LIST: {
+					ResponseWaitCallListPacket resPacket = (ResponseWaitCallListPacket) response;
+					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
 				}
 				break;
 			}

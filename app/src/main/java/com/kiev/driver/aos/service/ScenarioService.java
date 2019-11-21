@@ -42,9 +42,11 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestOrderReal
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallOrderPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitDecisionPacket;
@@ -58,7 +60,9 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSe
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
@@ -132,6 +136,24 @@ public class ScenarioService extends LifecycleService {
 	public MutableLiveData<ResponseMyInfoPacket> getResponseMyInfo () {
 		return mResponseMyInfo;
 	}
+
+	private MutableLiveData<ResponseWaitCallListPacket> mResponseWaitCallListPacket;
+	public MutableLiveData<ResponseWaitCallListPacket> getResponseWaitCallListPacket() {
+		return mResponseWaitCallListPacket;
+	}
+
+	private MutableLiveData<ResponseWaitCallOrderInfoPacket> mResponseWaitCallOrderInfoPacket;
+	public MutableLiveData<ResponseWaitCallOrderInfoPacket> getResponseWaitCallOrderInfoPacket() {
+		return mResponseWaitCallOrderInfoPacket;
+	}
+
+	private MutableLiveData<ResponseStatisticsPacket> mStatisticPacket;
+	public MutableLiveData<ResponseStatisticsPacket> getStatisticPacket() {
+		return mStatisticPacket;
+	}
+
+//	private MutableLiveData<ResponseWaitCallListPacket> mResponseWaitCallListPacket;
+
 
 	public Packets.BoardType getBoardType() {
 		return boardType;
@@ -779,11 +801,12 @@ public class ScenarioService extends LifecycleService {
 		packet.setCarId(mConfiguration.getCarId());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
-		LogHelper.e("packet : " + packet.toString());
 		request(packet);
 	}
 
 	public void requestWaitCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+		mResponseWaitCallListPacket = new MutableLiveData<>();
+
 		RequestWaitCallListPacket packet = new RequestWaitCallListPacket();
 		packet.setCarId(mConfiguration.getCarId());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -792,7 +815,37 @@ public class ScenarioService extends LifecycleService {
 		packet.setRequestCount(20);
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
-		LogHelper.e("packet : " + packet.toString());
+		request(packet);
+	}
+
+	public void requestWaitCallOrder(Call callInfo) {
+		mResponseWaitCallOrderInfoPacket = new MutableLiveData<>();
+
+		RequestWaitCallOrderPacket packet = new RequestWaitCallOrderPacket();
+		packet.setServiceNumber(mConfiguration.getServiceNumber());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+		packet.setCallReceiptDate(callInfo.getCallReceivedDate());
+		packet.setCallNumber(callInfo.getCallNumber());
+		packet.setOrderCount(callInfo.getCallOrderCount());
+		packet.setGpsTime(gpsHelper.getTime());
+		packet.setDirection(gpsHelper.getBearing());
+		packet.setLongitude(gpsHelper.getLongitude());
+		packet.setLatitude(gpsHelper.getLatitude());
+		packet.setSpeed(gpsHelper.getSpeed());
+		request(packet);
+	}
+
+	public void requestStatistics() {
+		mStatisticPacket = new MutableLiveData<>();
+
+		RequestStatisticsPacket packet = new RequestStatisticsPacket();
+		packet.setServiceNumber(mConfiguration.getServiceNumber());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+		packet.setMemo("");
 
 		request(packet);
 	}
@@ -1284,8 +1337,23 @@ public class ScenarioService extends LifecycleService {
 				case Packets.RESPONSE_WAIT_CALL_LIST: {
 					ResponseWaitCallListPacket resPacket = (ResponseWaitCallListPacket) response;
 					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
+					mResponseWaitCallListPacket.postValue(resPacket);
 				}
 				break;
+
+				case Packets.RESPONSE_WAIT_CALL_ORDER: {
+					ResponseWaitCallOrderInfoPacket resPacket = (ResponseWaitCallOrderInfoPacket) response;
+					LogHelper.e("RESPONSE_WAIT_CALL_ORDER : " + resPacket);
+					mResponseWaitCallOrderInfoPacket.postValue(resPacket);
+				}
+				break;
+
+				case Packets.RESPONSE_STATISTICS: {
+					ResponseStatisticsPacket resPacket = (ResponseStatisticsPacket) response;
+					LogHelper.e("RESPONSE_STATISTICS : " + resPacket);
+					mStatisticPacket.postValue(resPacket);
+
+				}
 			}
 		}
 	};

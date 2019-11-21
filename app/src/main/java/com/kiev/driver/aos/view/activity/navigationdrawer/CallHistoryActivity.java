@@ -8,13 +8,16 @@ import android.view.View;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityCallHistoryBinding;
 import com.kiev.driver.aos.view.activity.BaseActivity;
+import com.kiev.driver.aos.viewmodel.CallHistoryViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 public class CallHistoryActivity extends BaseActivity implements View.OnClickListener {
 
+	private CallHistoryViewModel mViewModel;
 	private ActivityCallHistoryBinding mBinding;
 
 	public static void startActivity(Context context) {
@@ -26,6 +29,11 @@ public class CallHistoryActivity extends BaseActivity implements View.OnClickLis
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_call_history);
+		mViewModel = new ViewModelProvider(this, new CallHistoryViewModel.Factory(getApplication()))
+				.get(CallHistoryViewModel.class);
+		mBinding.setLifecycleOwner(this);
+		mBinding.setViewModel(mViewModel);
+
 
 		initToolbar();
 		mBinding.clCallHistoryListToday.setOnClickListener(this);

@@ -32,7 +32,6 @@ public class NetworkManager {
     public static final String IP_DEV = "183.99.72.173";
     public static final String IP_LIVE_PACKET = "58.180.28.212";
     public static final int PORT_DEV = 3000;
-//    public static final int PORT_DEV = 8080;
 
 
     private static NetworkManager instance;

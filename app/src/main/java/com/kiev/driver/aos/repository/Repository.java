@@ -13,6 +13,9 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
@@ -340,9 +343,54 @@ public class Repository {
 	}
 
 
-	public void requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+	public MutableLiveData<ResponseWaitCallListPacket> requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
 		mScenarioService.requestWaitCallList(waitCallListType, startIndex);
+		final MutableLiveData<ResponseWaitCallListPacket> data = mScenarioService.getResponseWaitCallListPacket();
+		data.observeForever(new Observer<ResponseWaitCallListPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCallListPacket response) {
+				LogHelper.e("requestWaitingCallList - onChanged");
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+
+		return data;
 	}
+
+
+	public MutableLiveData<ResponseWaitCallOrderInfoPacket> requestWaitingCallOrder(Call call) {
+		mScenarioService.requestWaitCallOrder(call);
+
+		final MutableLiveData<ResponseWaitCallOrderInfoPacket> data = mScenarioService.getResponseWaitCallOrderInfoPacket();
+		data.observeForever(new Observer<ResponseWaitCallOrderInfoPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCallOrderInfoPacket response) {
+				LogHelper.e("requestWaitingCallList - onChanged");
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+
+		return data;
+	}
+
+	public MutableLiveData<ResponseStatisticsPacket> requestStatistics() {
+		mScenarioService.requestStatistics();
+
+		final MutableLiveData<ResponseStatisticsPacket> data = mScenarioService.getStatisticPacket();
+		data.observeForever(new Observer<ResponseStatisticsPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsPacket response) {
+				LogHelper.e("requestWaitingCallList - onChanged");
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+
+		return data;
+	}
+
 
 	public int getDistance(double latitude, double longitude) {
 		return (int) mScenarioService.getGpsHelper().getDistance((float)latitude, (float)longitude);

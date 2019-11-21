@@ -7,11 +7,11 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  * 콜정산정보 (GT-1614) 97 Byte
  * Server -> MDT
  */
-public class ResponseStatisticPacket extends ResponsePacket {
+public class ResponseStatisticsPacket extends ResponsePacket {
 
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-    private String phoneNumber; // Phone Number (13)
+    private String phoneNumber; // Phone Number (30)
 	
 	//오늘(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
 	private int todayTotalCnt;
@@ -47,7 +47,7 @@ public class ResponseStatisticPacket extends ResponsePacket {
 
     private String memo; // 비고 (30)
 
-    public ResponseStatisticPacket(byte[] bytes) {
+    public ResponseStatisticsPacket(byte[] bytes) {
         super(bytes);
     }
 

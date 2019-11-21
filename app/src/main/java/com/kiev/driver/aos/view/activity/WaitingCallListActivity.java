@@ -10,6 +10,8 @@ import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingCallListBinding;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingCallListAdapter;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -47,6 +50,7 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_waiting_call_list);
 
 		initToolbar();
+		requestWaitCallList();
 		initRecyclerView();
 		displayEmptyMsgTextView();
 	}
@@ -78,9 +82,17 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		}
 	}
 
+	private void requestWaitCallList() {
+		mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 0).observe(this, new Observer<ResponseWaitCallListPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCallListPacket response) {
+				LogHelper.e("responseWaitCallListPacket : " + response);
+			}
+		});
+	}
+
 	private void initRecyclerView() {
 		LogHelper.e("initRecyclerView()");
-		mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 0);
 
 		/**
 		 * 테스트 데이터
@@ -150,9 +162,18 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	}
 
 	@Override
-	public void onListItemSelected(Call item) {
-		LogHelper.e("selected Item : " + item.toString());
+	public void onListItemSelected(Call call) {
+		LogHelper.e("selected Item : " + call.toString());
 
-		CallReceivingActivity.startActivity(WaitingCallListActivity.this, true);
+		MutableLiveData<ResponseWaitCallOrderInfoPacket> liveData = mMainViewModel.requestWaitingCallOrder(call);
+		liveData.observe(this, new Observer<ResponseWaitCallOrderInfoPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCallOrderInfoPacket responseWaitCallOrderInfoPacket) {
+				LogHelper.e("responseWaitCallOrderInfoPacket : " + responseWaitCallOrderInfoPacket);
+				liveData.removeObserver(this);
+			}
+		});
+
+		//CallReceivingActivity.startActivity(WaitingCallListActivity.this, true);
 	}
 }

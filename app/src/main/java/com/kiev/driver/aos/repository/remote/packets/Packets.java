@@ -35,6 +35,8 @@ public class Packets {
 	public static final int REQUEST_SEND_SMS = 0x1813; // SMS 전송 요청
 	public static final int REQUEST_MY_INFO = 0x1E11; // 내 정보 요청
 	public static final int REQUEST_WAIT_CALL_LIST = 0x1D11; // 대기콜 리스트 요청
+	public static final int REQUEST_WAIT_CALL_ORDER = 0x1913; // 대기콜 배차 요청
+	public static final int REQUEST_STATISTICS = 0x1613; // 콜정산 통계 요청
 
 
 
@@ -67,6 +69,9 @@ public class Packets {
 	public static final int RESPONSE_SEND_SMS = 0x1814; // SMS 전송 요청 응답
 	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답청
 	public static final int RESPONSE_WAIT_CALL_LIST = 0x1D12; // 내 정보 요청 응답
+	public static final int RESPONSE_WAIT_CALL_ORDER = 0x1914; // 대기콜 배차 요청 응답
+	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청
+
 
 
 	//----------------------------------------------------------------------------------------
@@ -373,10 +378,21 @@ public class Packets {
 			case RESPONSE_MY_INFO: // 내정보 요청 응답
 				return 94;
 
-			case REQUEST_WAIT_CALL_LIST: // 대기콜 요청
+			case REQUEST_WAIT_CALL_LIST: // 대기콜 리스트 요청
 				return 69;
-			case RESPONSE_WAIT_CALL_LIST: // 대기콜 요청 응답
+			case RESPONSE_WAIT_CALL_LIST: // 대기콜 리스트 요청 응답
 				return 1113;
+
+			case REQUEST_WAIT_CALL_ORDER: // 대기콜 배차 요청
+				return 120;
+			case RESPONSE_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
+				return 353;
+
+			case REQUEST_STATISTICS: // 대기콜 배차 요청
+				return 67;
+			case RESPONSE_STATISTICS: // 대기콜 배차 요청 응답
+				return 114;
+
 
 			default:
 				return 0;

@@ -17,6 +17,8 @@ import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.NavigationExecutor;
@@ -269,8 +271,13 @@ public class MainViewModel extends AndroidViewModel {
 		return mRepository.requestToSendSMS(msg);
 	}
 
-	public void requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
-		mRepository.requestWaitingCallList(waitCallListType, startIndex);
+	public MutableLiveData<ResponseWaitCallListPacket> requestWaitingCallList(Packets.WaitCallListType waitCallListType, int startIndex) {
+		return mRepository.requestWaitingCallList(waitCallListType, startIndex);
+	}
+
+	public MutableLiveData<ResponseWaitCallOrderInfoPacket> requestWaitingCallOrder(Call call) {
+		return mRepository.requestWaitingCallOrder(call);
+
 	}
 
 	public void clearTempCallInfo() {

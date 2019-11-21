@@ -360,7 +360,7 @@ public class Repository {
 
 
 	public MutableLiveData<ResponseWaitCallOrderInfoPacket> requestWaitingCallOrder(Call call) {
-		mScenarioService.requestWaitCallOrder(call);
+		//mScenarioService.requestWaitCallOrder(call);
 
 		final MutableLiveData<ResponseWaitCallOrderInfoPacket> data = mScenarioService.getResponseWaitCallOrderInfoPacket();
 		data.observeForever(new Observer<ResponseWaitCallOrderInfoPacket>() {

@@ -818,7 +818,7 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
-	public void requestWaitCallOrder(Call callInfo) {
+	public void requestWaitCallOrder(Call callInfo, String distance) {
 		mResponseWaitCallOrderInfoPacket = new MutableLiveData<>();
 
 		RequestWaitCallOrderPacket packet = new RequestWaitCallOrderPacket();
@@ -834,6 +834,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
+		//packet.setDistance();
 		request(packet);
 	}
 

@@ -75,7 +75,7 @@ public class RequestStatisticsPacket extends RequestPacket {
 
 	@Override
 	public String toString() {
-		return "내정보요청 (0x" + Integer.toHexString(messageType) + ") " +
+		return "콜 정산 통계 요청 (0x" + Integer.toHexString(messageType) + ") " +
 				"serviceNumber=" + serviceNumber +
 			", corporationCode=" + corporationCode +
 			", carId=" + carId +

@@ -37,8 +37,6 @@ public class CallHistoryViewModel extends AndroidViewModel {
 		mTaxiInfo = repository.getTaxiInfoLive();
 		mCallInfo = repository.getCallInfoLive();
 		mConfiguration = repository.getConfigLive();
-		mMyInfo = mRepository.requestMyInfo();
-
 	}
 
 	/**

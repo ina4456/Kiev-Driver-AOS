@@ -78,7 +78,7 @@ public class Call implements Parcelable{
 	private boolean useWheelchair;
 
 	private boolean isReported; // 운행보고 여부 (Local에서만 사용하는 값이다.)
-	private float distance;
+	private int distance;
 
 
 	public Call() {
@@ -132,7 +132,6 @@ public class Call implements Parcelable{
 		parcel.writeInt(callNumber);
 		parcel.writeInt(callType);
 		parcel.writeByte((byte)(callIsTemp ? 1 : 0));
-		parcel.writeInt(callClass);
 		parcel.writeInt(callClass);
 
 	}
@@ -295,19 +294,20 @@ public class Call implements Parcelable{
 		this.callDistanceToDeparture = callDistanceToDeparture;
 	}
 
-	public float getDistance() {
+	public int getDistance() {
 		return distance;
 	}
 
-	public void setDistance(float distance) {
+	public void setDistance(int distance) {
 		this.distance = distance;
 		String distanceStr;
+		float distanceFloat = 0f;
 
 		if (distance < 1000) {
-			distanceStr = (int)distance + "m";
+			distanceStr = distance + "m";
 		} else {
-			distance = distance / 1000;
-			distanceStr = String.format("%.1f", distance);
+			distanceFloat = distance / 1000;
+			distanceStr = String.format("%.1f", distanceFloat);
 			distanceStr = distanceStr + "km";
 		}
 		this.setCallDistanceToDeparture(distanceStr);
@@ -372,6 +372,7 @@ public class Call implements Parcelable{
 				", callOrderCount=" + callOrderCount +
 				", callReceivedDate='" + callReceivedDate + '\'' +
 				", callStatus=" + callStatus +
+				", distance=" + distance +
 				", callDistanceToDeparture='" + callDistanceToDeparture + '\'' +
 				", waitingZoneId='" + waitingZoneId + '\'' +
 				", waitingZoneName='" + waitingZoneName + '\'' +

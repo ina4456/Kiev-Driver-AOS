@@ -384,7 +384,7 @@ public class Packets {
 				return 1113;
 
 			case REQUEST_WAIT_CALL_ORDER: // 대기콜 배차 요청
-				return 120;
+				return 124;
 			case RESPONSE_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
 				return 353;
 

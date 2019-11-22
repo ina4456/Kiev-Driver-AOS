@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * 대기콜 배차요청 (GT-1913) 120 Byte
+ * 대기콜 배차요청 (GT-1913) 126 Byte
  * MDT -> Server
  */
 public class RequestWaitCallOrderPacket extends RequestPacket {
@@ -155,13 +155,13 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
 
     @Override
     public String toString() {
-        return "실시간 위치 및 배차결정 (0x" + Integer.toHexString(messageType) + ") " +
+        return "대기콜 배차 요청 (0x" + Integer.toHexString(messageType) + ") " +
                 "serviceNumber=" + serviceNumber +
                 ", corporationCode=" + corporationCode +
                 ", carId=" + carId +
                 ", phoneNumber='" + phoneNumber +
                 ", callNumber=" + callNumber +
-                ", callReceiptDate='" + distance +
+                ", distance='" + distance +
                 ", callReceiptDate='" + callReceiptDate + '\'';
     }
 }

@@ -50,6 +50,7 @@ public class WaitingCallListAdapter extends RecyclerView.Adapter<WaitingCallList
 	}
 
 	public void refreshData(ArrayList<Call> runHistories) {
+		LogHelper.e("refreshData() : " + runHistories.size());
 		if (runHistories != null) {
 			mItems = runHistories;
 		} else {

@@ -10,6 +10,7 @@ import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingCallListBinding;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -52,7 +53,7 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		initToolbar();
 		requestWaitCallList();
 		initRecyclerView();
-		displayEmptyMsgTextView();
+		showListOrEmptyMsgView();
 	}
 
 	private void subscribeMainViewModel(MainViewModel mainViewModel) {
@@ -72,7 +73,6 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		setSupportActionBar(mBinding.wcToolbar.toolbar);
 		mBinding.wcToolbar.ibtnActionButton.setImageResource(R.drawable.selector_bg_common_refresh_btn);
 		mBinding.wcToolbar.ibtnActionButton.setOnClickListener(this);
-		mBinding.wcToolbar.toolbar.setOnClickListener(this);
 		ActionBar ab = getSupportActionBar();
 		if (ab != null) {
 			ab.setTitle(getString(R.string.main_btn_waiting_call_list));
@@ -83,62 +83,57 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	}
 
 	private void requestWaitCallList() {
-		mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 0).observe(this, new Observer<ResponseWaitCallListPacket>() {
+		MutableLiveData<ResponseWaitCallListPacket> liveData = mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 1);
+		liveData.observe(this, new Observer<ResponseWaitCallListPacket>() {
 			@Override
 			public void onChanged(ResponseWaitCallListPacket response) {
 				LogHelper.e("responseWaitCallListPacket : " + response);
+				liveData.removeObserver(this);
+
+				if (response != null) {
+					ArrayList<Call> waitingCallList = new ArrayList<>();
+					String[] callNumbers = response.getCallNumbers().split("\\|\\|");
+					String[] callReceiptDates = response.getCallReceiptDates().split("\\|\\|");
+					String[] callOrderCounts = response.getOrderCounts().split("\\|\\|");
+					String[] departures = response.getDepartures().split("\\|\\|");
+					String[] destinations = response.getDestinations().split("\\|\\|");
+					String[] distances = response.getDistances().split("\\|\\|");
+
+					LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
+							+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
+					 + " / destinations: " + destinations.length + " / distances : " + distances.length);
+
+					if (response.getWaitCallCount() > 0) {
+						for (int i = 0; i < RequestWaitCallListPacket.MAX_REQUEST_CNT ; i++) {
+							Call call = new Call();
+							call.setCallNumber(Integer.parseInt(callNumbers[i]));
+							call.setCallReceivedDate(callReceiptDates[i]);
+							call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
+							call.setDeparturePoi(departures[i]);
+							call.setDestinationPoi(destinations[i]);
+							call.setDistance(Integer.valueOf(distances[i]));
+
+							waitingCallList.add(call);
+						}
+
+//					for (Call call: waitingCallList) {
+//						LogHelper.e("call : " + call.toString());
+//					}
+
+
+						mWaitingCallListAdapter.refreshData(waitingCallList);
+						showListOrEmptyMsgView();
+					}
+
+				}
+
 			}
 		});
 	}
 
 	private void initRecyclerView() {
 		LogHelper.e("initRecyclerView()");
-
-		/**
-		 * 테스트 데이터
-		 */
-		ArrayList<Call> waitingCallArrayList = new ArrayList<>();
-		Call waitingCall = new Call();
-		waitingCall.setDeparturePoi("분당구 삼평동");
-		waitingCall.setDestinationPoi("판교 현대백화점");
-		waitingCall.setDepartureLat(37.392698);
-		waitingCall.setDepartureLong(127.112002);
-		waitingCall.setDestinationLat(37.350121);
-		waitingCall.setDestinationLong(127.108963);
-
-		Call waitingCall2 = new Call();
-		waitingCall2.setDeparturePoi("분당구 삼평동2222");
-		waitingCall2.setDepartureLat(37.392698);
-		waitingCall2.setDepartureLong(127.112002);
-		waitingCall2.setDestinationPoi("미금역 3번 출구");
-		waitingCall2.setDestinationAddr("분당구 미금동");
-		waitingCall2.setDestinationLat(37.350121);
-		waitingCall2.setDestinationLong(127.108963);
-
-
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		waitingCallArrayList.add(waitingCall2);
-		/**
-		 * 테스트 데이터
-		 */
-
-		mWaitingCallListAdapter = new WaitingCallListAdapter(this, waitingCallArrayList, this);
+		mWaitingCallListAdapter = new WaitingCallListAdapter(this, new ArrayList<>(), this);
 		mBinding.rvWaitingCall.setNestedScrollingEnabled(false);
 		mBinding.rvWaitingCall.setAdapter(mWaitingCallListAdapter);
 		mBinding.rvWaitingCall.setFocusable(false);
@@ -146,11 +141,15 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		mBinding.rvWaitingCall.scrollTo(0, 0);
 	}
 
-	private void displayEmptyMsgTextView() {
+	private void showListOrEmptyMsgView() {
 		if (mWaitingCallListAdapter != null) {
 			if (mWaitingCallListAdapter.getItemCount() <= 0) {
+				mBinding.viewEmptyMsg.tvEmptyMsg.setText(getString(R.string.wc_msg_no_waiting_call));
 				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.VISIBLE);
 				mBinding.rvWaitingCall.setVisibility(View.GONE);
+			} else {
+				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.GONE);
+				mBinding.rvWaitingCall.setVisibility(View.VISIBLE);
 			}
 		}
 	}

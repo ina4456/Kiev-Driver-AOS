@@ -131,8 +131,11 @@ public class LoginViewModel extends AndroidViewModel {
 
 	private ArrayList<SelectionItem> loadCorporationList() {
 		Context context = getApplication();
-		int corporationCode = mRepository.getConfig().getCorporationCode();
-		//LogHelper.e("corporationCode : " + corporationCode);
+		Configuration configuration = mRepository.getConfig();
+		int corporationCode = 10;
+		if  (configuration != null) {
+			corporationCode = mRepository.getConfig().getCorporationCode();
+		}
 
 		ArrayList<SelectionItem> items = new ArrayList<>();
 		List<String> corporationList = Arrays.asList(context.getResources().getStringArray(R.array.sn_corporation_list));

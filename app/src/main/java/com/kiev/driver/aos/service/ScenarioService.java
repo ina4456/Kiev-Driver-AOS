@@ -812,13 +812,13 @@ public class ScenarioService extends LifecycleService {
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setWaitCallListType(waitCallListType);
 		packet.setStartIndex(startIndex);
-		packet.setRequestCount(20);
+		packet.setRequestCount(10);
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		request(packet);
 	}
 
-	public void requestWaitCallOrder(Call callInfo, String distance) {
+	public void requestWaitCallOrder(Call callInfo) {
 		mResponseWaitCallOrderInfoPacket = new MutableLiveData<>();
 
 		RequestWaitCallOrderPacket packet = new RequestWaitCallOrderPacket();
@@ -834,7 +834,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
-		//packet.setDistance();
+		packet.setDistance(callInfo.getDistance());
 		request(packet);
 	}
 
@@ -899,7 +899,7 @@ public class ScenarioService extends LifecycleService {
 			//승차중 배차 데이터를 배차 상태로 UI에 표시한다.
 			Call call = new Call(_getOn);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+			call.setDistance((int)gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
 			mRepository.updateCallInfo(call);
 		}
 	}
@@ -916,7 +916,7 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.e("승차중 배차 존재, 배차 상태로 UI 변경");
 			Call call = new Call(normal);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+			call.setDistance((int)(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong())));
 			mRepository.updateCallInfo(call);
 		} else {
 			LogHelper.e(">> doesn't have passenger info.");
@@ -1082,7 +1082,7 @@ public class ScenarioService extends LifecycleService {
 								// FIXME: 2019-09-20 1차 테스트 완료, checkReservation 테스트 후 검증 필요
 								mCallInfo.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
 								Call call = new Call(orderInfoPacket);
-								call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
+								call.setDistance((int)gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 								mRepository.updateCallInfo(call);
 							}
 						}
@@ -1337,7 +1337,7 @@ public class ScenarioService extends LifecycleService {
 
 				case Packets.RESPONSE_WAIT_CALL_LIST: {
 					ResponseWaitCallListPacket resPacket = (ResponseWaitCallListPacket) response;
-					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
+					LogHelper.e("RESPONSE_WAIT_CALL_LIST : " + resPacket);
 					mResponseWaitCallListPacket.postValue(resPacket);
 				}
 				break;
@@ -1447,7 +1447,7 @@ public class ScenarioService extends LifecycleService {
 		Call call = new Call(packet);
 		if (callStatus != -1)
 			call.setCallStatus(callStatus);
-		call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+		call.setDistance((int)gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
 		mRepository.updateCallInfo(call);
 	}
 

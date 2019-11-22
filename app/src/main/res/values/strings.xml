@@ -127,6 +127,9 @@
     <string name="wz_msg_exit_waiting_zone">차량 위치가 변경되어 설정된 대기장소를 해제합니다.</string>
 
 
+    <!--대기장소-->
+    <string name="wc_msg_no_waiting_call">대기콜이 없습니다.</string>
+
     <!--메뉴-->
     <string name="d_menu_driver_name">%s 기사님</string>
     <string name="d_menu_my_info">내정보</string>

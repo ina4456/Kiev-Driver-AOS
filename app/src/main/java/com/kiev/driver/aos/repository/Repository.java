@@ -12,6 +12,7 @@ import com.kiev.driver.aos.repository.local.SharedPreferenceManager;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
@@ -416,7 +417,7 @@ public class Repository {
 
 	/**
 	 * =================================================================
-	 * 공지사항
+	 * 공지사항 or 메시지 (내부 저장 항목)
 	 * =================================================================
 	 */
 	public LiveData<Notice> getLatestNotice() {
@@ -433,6 +434,16 @@ public class Repository {
 		mAppExecutors.diskIO().execute(() -> {
 			mDatabase.noticeDao().insert(notice);
 		});
+	}
+
+	/**
+	 * =================================================================
+	 * 공지사항(서버 호출)
+	 * =================================================================
+	 */
+	public MutableLiveData<ResponseNoticeListPacket> getNoticeListFromServer() {
+		mScenarioService.requestNoticeList();
+		return mScenarioService.getNoticeListPacket();
 	}
 
 	/**

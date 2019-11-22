@@ -37,6 +37,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestConfigPac
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestEmergencyPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessagePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMyInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestNoticePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestOrderRealtimePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestRestPacket;
@@ -56,6 +57,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoProcPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSendingPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
@@ -145,6 +147,11 @@ public class ScenarioService extends LifecycleService {
 	private MutableLiveData<ResponseWaitCallOrderInfoPacket> mResponseWaitCallOrderInfoPacket;
 	public MutableLiveData<ResponseWaitCallOrderInfoPacket> getResponseWaitCallOrderInfoPacket() {
 		return mResponseWaitCallOrderInfoPacket;
+	}
+
+	private MutableLiveData<ResponseNoticeListPacket> mNoticeListPacket;
+	public MutableLiveData<ResponseNoticeListPacket> getNoticeListPacket() {
+		return mNoticeListPacket;
 	}
 
 	private MutableLiveData<ResponseStatisticsPacket> mStatisticPacket;
@@ -838,6 +845,18 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
+	public void requestNoticeList() {
+		mNoticeListPacket = new MutableLiveData<>();
+
+		RequestNoticeListPacket packet = new RequestNoticeListPacket();
+		packet.setTargetServer(mConfiguration.isCorporation() ? 2 : 1);
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setListType(0x01);
+
+		request(packet);
+	}
+
+
 	public void requestStatistics() {
 		mStatisticPacket = new MutableLiveData<>();
 
@@ -1149,7 +1168,7 @@ public class ScenarioService extends LifecycleService {
 					WavResourcePlayer.getInstance(context).play(R.raw.voice_142);
 
 					ResponseMessagePacket packet = (ResponseMessagePacket) response;
-					Notice message = new Notice("", packet.getMessage(), System.currentTimeMillis(), false);
+					Notice message = new Notice("", packet.getMessage(), String.valueOf(System.currentTimeMillis()), false);
 					mRepository.insertNotice(message);
 
 
@@ -1349,11 +1368,16 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
+				case Packets.RESPONSE_NOTICE_LIST: {
+					ResponseNoticeListPacket resPacket = (ResponseNoticeListPacket) response;
+					LogHelper.e("RESPONSE_NOTICE_LIST : " + resPacket);
+					mNoticeListPacket.postValue(resPacket);
+				}
+
 				case Packets.RESPONSE_STATISTICS: {
 					ResponseStatisticsPacket resPacket = (ResponseStatisticsPacket) response;
 					LogHelper.e("RESPONSE_STATISTICS : " + resPacket);
 					mStatisticPacket.postValue(resPacket);
-
 				}
 			}
 		}

@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityNoticeListBinding;
 import com.kiev.driver.aos.model.entity.Notice;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.view.adapter.NoticeAdapter;
@@ -20,6 +21,8 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -54,7 +57,7 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 
 		initToolbar(isNotice);
 		initializeView(isNotice);
-		subscribeViewModel();
+		subscribeViewModel(isNotice);
 
 	}
 
@@ -85,18 +88,69 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	// FIXME: 2019-09-03 인솔라인 날짜 데이터 형식 확정 후 수정 필요
-	private void subscribeViewModel() {
-		mNoticeViewModel.getNoticeList(isNotice).observe(this, new Observer<List<Notice>>() {
-			@Override
-			public void onChanged(List<Notice> notices) {
-				if (notices != null && notices.size() > 0) {
-					LogHelper.e("notice list : " + notices.size());
-					//setRecyclerView(new ArrayList(notices));
-					mAdapter.setGroupList(notices);
-					setEmptyMsgView();
+	private void subscribeViewModel(boolean isNotice) {
+
+		if (isNotice) {
+			MutableLiveData<ResponseNoticeListPacket> liveData = mNoticeViewModel.getNoticeListFromServer();
+			liveData.observe(this, new Observer<ResponseNoticeListPacket>() {
+				@Override
+				public void onChanged(ResponseNoticeListPacket responseNoticeListPacket) {
+					if (responseNoticeListPacket != null) {
+						liveData.removeObserver(this);
+						LogHelper.e("responseNoticeListPacket : " + responseNoticeListPacket);
+
+						ArrayList<Notice> noticeArrayList = new ArrayList<>();
+						noticeArrayList.add(getNoticeObjectFromPacket(
+								responseNoticeListPacket.getNoticeCode1(),
+								responseNoticeListPacket.getNoticeDate1(),
+								responseNoticeListPacket.getNoticeTitle1(),
+								responseNoticeListPacket.getNoticeContent1()
+						));
+						noticeArrayList.add(getNoticeObjectFromPacket(
+								responseNoticeListPacket.getNoticeCode2(),
+								responseNoticeListPacket.getNoticeDate2(),
+								responseNoticeListPacket.getNoticeTitle2(),
+								responseNoticeListPacket.getNoticeContent2()
+						));
+						noticeArrayList.add(getNoticeObjectFromPacket(
+								responseNoticeListPacket.getNoticeCode3(),
+								responseNoticeListPacket.getNoticeDate3(),
+								responseNoticeListPacket.getNoticeTitle3(),
+								responseNoticeListPacket.getNoticeContent3()
+						));
+						noticeArrayList.add(getNoticeObjectFromPacket(
+								responseNoticeListPacket.getNoticeCode4(),
+								responseNoticeListPacket.getNoticeDate4(),
+								responseNoticeListPacket.getNoticeTitle4(),
+								responseNoticeListPacket.getNoticeContent4()
+						));
+						noticeArrayList.add(getNoticeObjectFromPacket(
+								responseNoticeListPacket.getNoticeCode5(),
+								responseNoticeListPacket.getNoticeDate5(),
+								responseNoticeListPacket.getNoticeTitle5(),
+								responseNoticeListPacket.getNoticeContent5()
+						));
+
+						mAdapter.setGroupList(noticeArrayList);
+
+					}
 				}
-			}
-		});
+			});
+		} else {
+			LiveData<List<Notice>> liveData = mNoticeViewModel.getNoticeList(isNotice);
+			liveData.observe(this, new Observer<List<Notice>>() {
+				@Override
+				public void onChanged(List<Notice> notices) {
+					if (notices != null && notices.size() > 0) {
+						liveData.removeObserver(this);
+						LogHelper.e("notice list : " + notices.size());
+						//setRecyclerView(new ArrayList(notices));
+						mAdapter.setGroupList(notices);
+						setEmptyMsgView();
+					}
+				}
+			});
+		}
 	}
 
 
@@ -123,6 +177,16 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 				mBinding.elvNotice.setVisibility(View.VISIBLE);
 			}
 		}
+	}
+
+	private Notice getNoticeObjectFromPacket(int code, String date, String title, String content) {
+		Notice notice = new Notice();
+		notice.setId(code);
+		notice.setDate(date);
+		notice.setTitle(title);
+		notice.setContent(content);
+
+		return notice;
 	}
 
 	@Override

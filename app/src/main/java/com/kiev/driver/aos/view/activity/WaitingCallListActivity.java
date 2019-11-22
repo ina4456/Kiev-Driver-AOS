@@ -169,7 +169,6 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 							mWaitingCallListAdapter.addData(waitingCallList);
 						}
 
-
 						showListOrEmptyMsgView();
 					}
 				}

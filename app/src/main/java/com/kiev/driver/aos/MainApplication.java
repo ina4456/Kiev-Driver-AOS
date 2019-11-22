@@ -32,6 +32,7 @@ import io.fabric.sdk.android.Fabric;
 public class MainApplication extends MultiDexApplication implements Application.ActivityLifecycleCallbacks {
 
 	private static final int MSG_CODE_RESTART_SERVICE = 9999;
+	private static final int PROGRESS_DIALOG_DISPLAY_TIME_MAX = 10000;
 
 	private AppExecutors mAppExecutors;
 	private ArrayList<Activity> activities;
@@ -325,6 +326,13 @@ public class MainApplication extends MultiDexApplication implements Application.
 			progressDialog.setContentView(R.layout.view_loading_progress);
 			progressDialog.show();
 			setProgressMsg(message);
+
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					progressOff();
+				}
+			}, PROGRESS_DIALOG_DISPLAY_TIME_MAX);
 		}
 	}
 

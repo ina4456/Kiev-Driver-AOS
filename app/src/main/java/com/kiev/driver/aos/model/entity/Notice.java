@@ -16,7 +16,7 @@ public class Notice {
 	@ColumnInfo(name = "notice_content")
 	private String content;
 	@ColumnInfo(name = "notice_date")
-	private long date;
+	private String date;
 	@ColumnInfo(name = "notice_is_notice")
 	private boolean isNotice;
 	@ColumnInfo(name = "notice_is_read")
@@ -27,7 +27,7 @@ public class Notice {
 	}
 
 	@Ignore
-	public Notice(String title, String content, long date, boolean isNotice) {
+	public Notice(String title, String content, String date, boolean isNotice) {
 		this.title = title;
 		this.content = content;
 		this.date = date;
@@ -58,11 +58,11 @@ public class Notice {
 		this.content = content;
 	}
 
-	public long getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(long date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

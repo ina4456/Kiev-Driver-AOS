@@ -4,34 +4,25 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 공지사항요청 (GT-1113) 7 Byte
+ * 공지사항 리스트 요청 (GT-1137) 6 Byte
  * MDT -> Server
  */
 public class RequestNoticeListPacket extends RequestPacket {
 
-    private int serviceNumber; // 서비스번호 (1)
-    private int corporationCode; // 법인코드 (2)
+    private int targetServer; // 서버 구분 (1)
     private int carId; // Car ID (2)
+	private int listType; //리스트 구분 (1)
 
     public RequestNoticeListPacket() {
-        super(Packets.REQUEST_NOTICE);
+        super(Packets.REQUEST_NOTICE_LIST);
     }
 
-    public int getServiceNumber() {
-        return serviceNumber;
+    public int getTargetServer() {
+        return targetServer;
     }
 
-    public void setServiceNumber(int serviceNumber) {
-        this.serviceNumber = serviceNumber;
-    }
-
-    public int getCorporationCode() {
-        return corporationCode;
-    }
-
-    public void setCorporationCode(int corporationCode) {
-        this.corporationCode = corporationCode;
+    public void setTargetServer(int targetServer) {
+        this.targetServer = targetServer;
     }
 
     public int getCarId() {
@@ -42,20 +33,28 @@ public class RequestNoticeListPacket extends RequestPacket {
         this.carId = carId;
     }
 
-    @Override
+	public int getListType() {
+		return listType;
+	}
+
+	public void setListType(int listType) {
+		this.listType = listType;
+	}
+
+	@Override
     public byte[] toBytes() {
         super.toBytes();
-        writeInt(serviceNumber, 1);
-        writeInt(corporationCode, 2);
+        writeInt(targetServer, 1);
         writeInt(carId, 2);
+        writeInt(listType, 1);
         return buffers;
     }
 
     @Override
     public String toString() {
-        return "공지사항요청 (0x" + Integer.toHexString(messageType) + ") " +
-                "serviceNumber=" + serviceNumber +
-                ", corporationCode=" + corporationCode +
-                ", carId=" + carId;
+        return "공지사항 리스트 요청 (0x" + Integer.toHexString(messageType) + ") " +
+                "targetServer=" + targetServer +
+                ", carId=" + carId +
+                ", corporationCode=" + listType;
     }
 }

@@ -32,10 +32,12 @@ public class Packets {
 	public static final int REQUEST_CALL_INFO = 0x1A11; // 배차정보요청 (추가 2017. 12. 19 - 권석범)
 	public static final int REQUEST_CALL_INFO_DES = 0x1A21; // 배차정보요청 (목적지 추가)
 
+	//2019.11 신규 패킷 추가
 	public static final int REQUEST_SEND_SMS = 0x1813; // SMS 전송 요청
 	public static final int REQUEST_MY_INFO = 0x1E11; // 내 정보 요청
 	public static final int REQUEST_WAIT_CALL_LIST = 0x1D11; // 대기콜 리스트 요청
 	public static final int REQUEST_WAIT_CALL_ORDER = 0x1913; // 대기콜 배차 요청
+	public static final int REQUEST_NOTICE_LIST = 0x1137; // 공지사항 리스트 요청
 	public static final int REQUEST_STATISTICS = 0x1613; // 콜정산 통계 요청
 
 
@@ -66,10 +68,12 @@ public class Packets {
 	public static final int CALLER_INFO_RESEND = 0x1A12; // 고객정보재전송
 	public static final int RESPONSE_REST = 0x1B12; // 휴식/운행응답
 
+	//2019.11 신규 패킷 추가
 	public static final int RESPONSE_SEND_SMS = 0x1814; // SMS 전송 요청 응답
 	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답청
 	public static final int RESPONSE_WAIT_CALL_LIST = 0x1D12; // 내 정보 요청 응답
 	public static final int RESPONSE_WAIT_CALL_ORDER = 0x1914; // 대기콜 배차 요청 응답
+	public static final int RESPONSE_NOTICE_LIST = 0x1138; // 공지사항 리스트 요청 응답
 	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청
 
 
@@ -387,6 +391,11 @@ public class Packets {
 				return 124;
 			case RESPONSE_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
 				return 353;
+
+			case REQUEST_NOTICE_LIST:
+				return 6;
+			case RESPONSE_NOTICE_LIST:
+				return 1504;
 
 			case REQUEST_STATISTICS: // 대기콜 배차 요청
 				return 67;

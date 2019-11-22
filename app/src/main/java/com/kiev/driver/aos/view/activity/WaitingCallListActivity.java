@@ -10,7 +10,6 @@ import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingCallListBinding;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -19,17 +18,26 @@ import com.kiev.driver.aos.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import static com.kiev.driver.aos.repository.remote.packets.Packets.WaitCallListType.RequestFirstTime;
 
 
 // TODO: 2019. 3. 11. 배차 요청 후 실패 및 리스트 갱신에 대한 처리 필요
 
-public class WaitingCallListActivity extends BaseActivity implements View.OnClickListener, WaitingCallListAdapter.CallListCallback {
+public class WaitingCallListActivity extends BaseActivity implements View.OnClickListener
+		, WaitingCallListAdapter.CallListCallback {
+
+	private static final int START_INDEX = 1;
+	private boolean hasMoreData = false;
 
 	private ActivityWaitingCallListBinding mBinding;
 	private WaitingCallListAdapter mWaitingCallListAdapter;
@@ -51,7 +59,7 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_waiting_call_list);
 
 		initToolbar();
-		requestWaitCallList();
+		requestWaitCallList(START_INDEX);
 		initRecyclerView();
 		showListOrEmptyMsgView();
 	}
@@ -82,55 +90,6 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		}
 	}
 
-	private void requestWaitCallList() {
-		MutableLiveData<ResponseWaitCallListPacket> liveData = mMainViewModel.requestWaitingCallList(Packets.WaitCallListType.RequestFirstTime, 1);
-		liveData.observe(this, new Observer<ResponseWaitCallListPacket>() {
-			@Override
-			public void onChanged(ResponseWaitCallListPacket response) {
-				LogHelper.e("responseWaitCallListPacket : " + response);
-				liveData.removeObserver(this);
-
-				if (response != null) {
-					ArrayList<Call> waitingCallList = new ArrayList<>();
-					String[] callNumbers = response.getCallNumbers().split("\\|\\|");
-					String[] callReceiptDates = response.getCallReceiptDates().split("\\|\\|");
-					String[] callOrderCounts = response.getOrderCounts().split("\\|\\|");
-					String[] departures = response.getDepartures().split("\\|\\|");
-					String[] destinations = response.getDestinations().split("\\|\\|");
-					String[] distances = response.getDistances().split("\\|\\|");
-
-					LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
-							+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
-					 + " / destinations: " + destinations.length + " / distances : " + distances.length);
-
-					if (response.getWaitCallCount() > 0) {
-						for (int i = 0; i < RequestWaitCallListPacket.MAX_REQUEST_CNT ; i++) {
-							Call call = new Call();
-							call.setCallNumber(Integer.parseInt(callNumbers[i]));
-							call.setCallReceivedDate(callReceiptDates[i]);
-							call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
-							call.setDeparturePoi(departures[i]);
-							call.setDestinationPoi(destinations[i]);
-							call.setDistance(Integer.valueOf(distances[i]));
-
-							waitingCallList.add(call);
-						}
-
-//					for (Call call: waitingCallList) {
-//						LogHelper.e("call : " + call.toString());
-//					}
-
-
-						mWaitingCallListAdapter.refreshData(waitingCallList);
-						showListOrEmptyMsgView();
-					}
-
-				}
-
-			}
-		});
-	}
-
 	private void initRecyclerView() {
 		LogHelper.e("initRecyclerView()");
 		mWaitingCallListAdapter = new WaitingCallListAdapter(this, new ArrayList<>(), this);
@@ -139,7 +98,9 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		mBinding.rvWaitingCall.setFocusable(false);
 		mBinding.rvWaitingCall.setVerticalScrollBarEnabled(true);
 		mBinding.rvWaitingCall.scrollTo(0, 0);
+		mBinding.rvWaitingCall.addOnScrollListener(mScrollListener);
 	}
+
 
 	private void showListOrEmptyMsgView() {
 		if (mWaitingCallListAdapter != null) {
@@ -154,10 +115,74 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		}
 	}
 
+	private void requestWaitCallList(int startIndex) {
+		startLoadingProgress();
+
+		Packets.WaitCallListType requestType = Packets.WaitCallListType.RequestAgain;
+		if (startIndex == START_INDEX) {
+			requestType = RequestFirstTime;
+			if (mWaitingCallListAdapter != null) {
+				mWaitingCallListAdapter.refreshData(null);
+			}
+		}
+
+		MutableLiveData<ResponseWaitCallListPacket> liveData = mMainViewModel.requestWaitingCallList(requestType, startIndex);
+		liveData.observe(this, new Observer<ResponseWaitCallListPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCallListPacket response) {
+				LogHelper.e("responseWaitCallListPacket : " + response);
+				liveData.removeObserver(this);
+				finishLoadingProgress();
+
+				if (response != null) {
+					ArrayList<Call> waitingCallList = new ArrayList<>();
+					String[] callNumbers = response.getCallNumbers().split("\\|\\|");
+					String[] callReceiptDates = response.getCallReceiptDates().split("\\|\\|");
+					String[] callOrderCounts = response.getOrderCounts().split("\\|\\|");
+					String[] departures = response.getDepartures().split("\\|\\|");
+					String[] destinations = response.getDestinations().split("\\|\\|");
+					String[] distances = response.getDistances().split("\\|\\|");
+
+					LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
+							+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
+					 + " / destinations: " + destinations.length + " / distances : " + distances.length);
+
+					if (response.getWaitCallCount() > 0 && callNumbers.length > 0) {
+						hasMoreData = response.isHasMoreList();
+						LogHelper.e("hasMoreData : " + hasMoreData);
+
+						for (int i = 0; i < callNumbers.length ; i++) {
+							Call call = new Call();
+							call.setCallNumber(Integer.parseInt(callNumbers[i]));
+							call.setCallReceivedDate(callReceiptDates[i]);
+							call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
+							call.setDeparturePoi(departures[i]);
+							call.setDestinationPoi(destinations[i]);
+							call.setDistance(Integer.valueOf(distances[i]));
+
+							waitingCallList.add(call);
+						}
+
+						if (startIndex == START_INDEX) {
+							mWaitingCallListAdapter.refreshData(waitingCallList);
+						} else {
+							mWaitingCallListAdapter.addData(waitingCallList);
+						}
+
+
+						showListOrEmptyMsgView();
+					}
+				}
+			}
+		});
+	}
+
+
 	@Override
 	public void onClick(View view) {
-		// TODO: 2019. 3. 11. 서버에서 데이터 새로 받아와 리스트 새로 고침 처리 필요
-		//mWaitingCallListAdapter.refreshData();
+		if (view.getId() == R.id.ibtn_action_button) {
+			requestWaitCallList(START_INDEX);
+		}
 	}
 
 	@Override
@@ -172,7 +197,25 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 				liveData.removeObserver(this);
 			}
 		});
-
-		//CallReceivingActivity.startActivity(WaitingCallListActivity.this, true);
 	}
+
+	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+		@Override
+		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+			super.onScrolled(recyclerView, dx, dy);
+
+			if (hasMoreData) {
+				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+				if (layoutManager != null) {
+					int totalItemCount = layoutManager.getItemCount();
+					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
+
+					if (lastVisible >= totalItemCount - 1) {
+						LogHelper.e("lastVisibled : " + totalItemCount);
+						requestWaitCallList(totalItemCount + 1);
+					}
+				}
+			}
+		}
+	};
 }

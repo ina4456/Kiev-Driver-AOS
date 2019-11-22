@@ -181,7 +181,7 @@ public class LoginViewModel extends AndroidViewModel {
 			}
 		} else {
 			configuration.setCorporation(false);
-			configuration.setCorporationCode(10);
+			configuration.setCorporationCode(1);
 			for (SelectionItem item : mCorporationList) {
 				item.setChecked(false);
 			}

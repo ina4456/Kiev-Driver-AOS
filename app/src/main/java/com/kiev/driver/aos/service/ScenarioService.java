@@ -406,7 +406,7 @@ public class ScenarioService extends LifecycleService {
 	 * 요청 후 3초 이내에 응답이 없을 경우 Error를 보여준다.
 	 */
 	public void requestServicePacket(String phoneNumber, String vehicleNumber, boolean withTimer) {
-		LogHelper.e("REQ-LOGIN : requestServicePacket()");
+		LogHelper.e("REQ-LOGIN : requestServicePacket() : " + mConfiguration);
 		mServiceResultPacket = null;
 		mServiceResultPacket = new MutableLiveData<>();
 

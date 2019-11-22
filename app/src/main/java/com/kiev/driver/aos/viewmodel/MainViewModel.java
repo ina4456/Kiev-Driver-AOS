@@ -16,6 +16,7 @@ import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
@@ -43,6 +44,8 @@ public class MainViewModel extends AndroidViewModel {
 
 	private ArrayList<SelectionItem> mMessageList;
 	private ArrayList<SelectionItem> mCancelReasonList;
+
+
 
 	private Repository mRepository;
 
@@ -233,7 +236,6 @@ public class MainViewModel extends AndroidViewModel {
 		return mCancelReasonList;
 	}
 
-
 	public void requestAcceptOrRefuse(Packets.OrderDecisionType decisionType) {
 		mRepository.requestAcceptOrRefuse(decisionType);
 	}
@@ -277,8 +279,13 @@ public class MainViewModel extends AndroidViewModel {
 
 	public MutableLiveData<ResponseWaitCallOrderInfoPacket> requestWaitingCallOrder(Call call) {
 		return mRepository.requestWaitingCallOrder(call);
-
 	}
+
+	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
+		return mRepository.requestMyInfo();
+	}
+
+
 
 	public void clearTempCallInfo() {
 		mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Temp);

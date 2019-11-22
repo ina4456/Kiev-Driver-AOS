@@ -137,7 +137,7 @@ public abstract class AppDatabase extends RoomDatabase {
 		    // FIXME: 2019-09-20 테스트 데이터
 		    configuration.setServiceNumber(5);
 		    configuration.setCorporation(false);
-		    configuration.setCorporationCode(10);
+		    configuration.setCorporationCode(1);
 
 		    appDatabase.configDao().upsert(configuration);
 
@@ -148,12 +148,12 @@ public abstract class AppDatabase extends RoomDatabase {
 
 		    //택시/기사 기본값
 		    // FIXME: 2019-09-03 테스트 데이터
-		    taxi.setDriverName("권석범");
-		    taxi.setDriverPhoneNumber("010-5055-6980");
-		    taxi.setCompanyName("팅크웨어");
-		    taxi.setTaxiPlateNumber("37소3150");
-		    taxi.setTaxiModel("기아 셀토스");
-		    taxi.setTaxiColor("회색");
+//		    taxi.setDriverName("권석범");
+//		    taxi.setDriverPhoneNumber("010-5055-6980");
+//		    taxi.setCompanyName("팅크웨어");
+//		    taxi.setTaxiPlateNumber("37소3150");
+//		    taxi.setTaxiModel("기아 셀토스");
+//		    taxi.setTaxiColor("회색");
 		    appDatabase.taxiDao().upsert(taxi);
 
 	    });

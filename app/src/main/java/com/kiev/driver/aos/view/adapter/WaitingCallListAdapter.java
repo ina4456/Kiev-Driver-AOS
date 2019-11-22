@@ -49,14 +49,22 @@ public class WaitingCallListAdapter extends RecyclerView.Adapter<WaitingCallList
 		return mItems.size();
 	}
 
-	public void refreshData(ArrayList<Call> runHistories) {
-		LogHelper.e("refreshData() : " + runHistories.size());
-		if (runHistories != null) {
-			mItems = runHistories;
+	public void refreshData(ArrayList<Call> calls) {
+		LogHelper.e("@@@@ refreshData");
+		if (calls != null) {
+			LogHelper.e("refreshData() : " + calls.size());
+			mItems = calls;
 		} else {
 			mItems.clear();
 		}
 		notifyDataSetChanged();
+	}
+
+	public void addData(ArrayList<Call> calls) {
+		LogHelper.e("@@@@ addData");
+		int curSize = getItemCount();
+		mItems.addAll(calls);
+		notifyItemRangeInserted(curSize, calls.size() - 1);
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

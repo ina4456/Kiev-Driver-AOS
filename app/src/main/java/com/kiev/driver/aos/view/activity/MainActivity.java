@@ -18,6 +18,7 @@ import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
 import com.kiev.driver.aos.model.entity.Taxi;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
 import com.kiev.driver.aos.view.activity.navigationdrawer.CallHistoryActivity;
@@ -40,6 +41,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -143,15 +145,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
 		// TODO: 2019. 3. 6. 내비게이션드로워 기사 정보 set
-		mainViewModel.getTaxiInfo().observe(this, new Observer<Taxi>() {
+		MutableLiveData<ResponseMyInfoPacket> myInfo = mainViewModel.requestMyInfo();
+		myInfo.observe(this, new Observer<ResponseMyInfoPacket>() {
 			@Override
-			public void onChanged(Taxi taxi) {
+			public void onChanged(ResponseMyInfoPacket myInfoPacket) {
 				LogHelper.e("onChanged()-driver");
-				if (taxi != null) {
-					if (taxi.getDriverName() != null) {
-						String driverName = taxi.getDriverName();
+				if (myInfoPacket != null) {
+					String driverName = myInfoPacket.getDriverName();
+					if (driverName != null) {
 						String displayDriverName = String.format(getString(R.string.d_menu_driver_name), driverName);
 						mBinding.navViewBody.tvDriverName.setText(displayDriverName);
+						myInfo.removeObserver(this);
 					}
 				}
 			}

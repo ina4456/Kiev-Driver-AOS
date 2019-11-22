@@ -2,6 +2,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 import com.kiev.driver.aos.util.EncryptUtil;
+import com.kiev.driver.aos.util.LogHelper;
 
 /**
  * 대기콜 배차정보 전송 (GT-1914) 353 Byte
@@ -135,28 +136,36 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 	@Override
 	public void parse(byte[] buffers) {
 		super.parse(buffers);
-		corporationCode = readInt(2);
-		carId = readInt(2);
-		int sucess = readInt(1);
-		isSuccess = sucess == 0x01;
-		callReceiptDate = readString(11);
-		callNumber = readInt(2);
-		longitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-		latitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-		callerPhone = EncryptUtil.decodeStr("" + readString(30));
 
-//		longitude = readFloat(30);
-//		latitude = readFloat(30);
-//		callerPhone = readString(30);
+		try {
+			corporationCode = readInt(2);
+			carId = readInt(2);
+			int success = readInt(1);
+			isSuccess = success == 0x01;
+			callReceiptDate = readString(11);
+			callNumber = readInt(2);
+//			String longitudeStr = readString(30);
+//			String latitudeStr = readString(30);
+//			if (longitudeStr != null && latitudeStr != null && !longitudeStr.isEmpty() && !latitudeStr.isEmpty()) {
+//				longitude = Float.parseFloat(EncryptUtil.decodeStr(longitudeStr));
+//				latitude = Float.parseFloat(EncryptUtil.decodeStr(latitudeStr));
+//			}
+			longitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+			latitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
 
-		place = readString(41);
-		placeExplanation = readString(101);
-		destName = readString(41);
+			callerPhone = EncryptUtil.decodeStr("" + readString(30));
 
-		destLongitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-		destLatitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-//		destLongitude = readFloat(30);
-//		destLatitude = readFloat(30);
+			place = readString(41);
+			placeExplanation = readString(101);
+			destName = readString(41);
+
+			destLongitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+			destLatitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+
+		} catch (NumberFormatException e) {
+			LogHelper.e(">> parse error");
+			e.printStackTrace();
+		}
 
 	}
 

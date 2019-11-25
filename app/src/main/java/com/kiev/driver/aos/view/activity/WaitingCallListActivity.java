@@ -8,12 +8,14 @@ import android.view.View;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingCallListBinding;
+import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingCallListAdapter;
+import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -29,12 +31,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.kiev.driver.aos.repository.remote.packets.Packets.WaitCallListType.RequestFirstTime;
+import static com.kiev.driver.aos.view.activity.CallReceivingActivity.DIALOG_TAG_FAILURE;
 
 
 // TODO: 2019. 3. 11. 배차 요청 후 실패 및 리스트 갱신에 대한 처리 필요
 
 public class WaitingCallListActivity extends BaseActivity implements View.OnClickListener
-		, WaitingCallListAdapter.CallListCallback {
+		, WaitingCallListAdapter.CallListCallback, PopupDialogFragment.PopupDialogListener {
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
@@ -191,9 +194,16 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 		MutableLiveData<ResponseWaitCallOrderInfoPacket> liveData = mMainViewModel.requestWaitingCallOrder(call);
 		liveData.observe(this, new Observer<ResponseWaitCallOrderInfoPacket>() {
 			@Override
-			public void onChanged(ResponseWaitCallOrderInfoPacket responseWaitCallOrderInfoPacket) {
-				LogHelper.e("responseWaitCallOrderInfoPacket : " + responseWaitCallOrderInfoPacket);
+			public void onChanged(ResponseWaitCallOrderInfoPacket response) {
+				LogHelper.e("responseWaitCallOrderInfoPacket : " + response);
 				liveData.removeObserver(this);
+				if (response != null) {
+					if (response.isSuccess()) {
+						finish();
+					} else {
+						showFailurePopup();
+					}
+				}
 			}
 		});
 	}
@@ -217,4 +227,20 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 			}
 		}
 	};
+
+	private void showFailurePopup() {
+		Popup popup = new Popup
+				.Builder(Popup.TYPE_ONE_BTN_NORMAL, DIALOG_TAG_FAILURE)
+				.setContent(getString(R.string.alloc_msg_failed_call))
+				.setBtnLabel(getString(R.string.common_confirm), null)
+				.setDismissSecond(3)
+				.build();
+		showPopupDialog(popup);
+	}
+
+	@Override
+	public void onDismissPopupDialog(String tag, Intent intent) {
+
+	}
 }
+

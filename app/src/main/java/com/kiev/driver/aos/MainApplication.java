@@ -22,7 +22,12 @@ import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.LoginActivity;
 import com.skt.Tmap.TMapTapi;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.core.app.ActivityCompat;
@@ -33,6 +38,9 @@ public class MainApplication extends MultiDexApplication implements Application.
 
 	private static final int MSG_CODE_RESTART_SERVICE = 9999;
 	private static final int PROGRESS_DIALOG_DISPLAY_TIME_MAX = 10000;
+
+	private Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
+
 
 	private AppExecutors mAppExecutors;
 	private ArrayList<Activity> activities;
@@ -49,7 +57,12 @@ public class MainApplication extends MultiDexApplication implements Application.
 
 	@Override
 	public void onCreate() {
+		if (!BuildConfig.DEBUG) {
+			uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+			Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandlerApplication());
+		}
 		super.onCreate();
+
 		Fabric.with(this, new Crashlytics());
 		Stetho.initializeWithDefaults(this);
 		checkTMapKeyCertified();
@@ -358,6 +371,50 @@ public class MainApplication extends MultiDexApplication implements Application.
 			LogHelper.e("Exception progressDialog ");
 		} finally {
 			progressDialog = null;
+		}
+	}
+
+
+	private class UncaughtExceptionHandlerApplication implements Thread.UncaughtExceptionHandler {
+		@Override
+		public void uncaughtException(Thread thread, Throwable ex) {
+			// FATAL Exception 발생시 로그를 저장하고 앱을 재실행 한다.
+			if (uncaughtExceptionHandler != null && ex != null) {
+//				if (scenarioService != null) {
+//					scenarioService.reset();
+//				}
+
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				String date = dateFormat.format(Calendar.getInstance().getTime());
+
+				StringBuffer sb = new StringBuffer();
+
+				Writer writer = new StringWriter();
+				PrintWriter printWriter = new PrintWriter(writer);
+				ex.printStackTrace(printWriter);
+
+				Throwable cause = ex.getCause();
+				while (cause != null) {
+					cause.printStackTrace(printWriter);
+					cause = cause.getCause();
+				}
+
+				printWriter.close();
+				String result = writer.toString();
+				sb.append(result);
+
+				LogHelper.write("#### FATAL EXCEPTION");
+				LogHelper.write(result);
+				LogHelper.disableWriteLogFile();
+				LogHelper.e("ERROR : " + result);
+				ex.printStackTrace();
+
+
+				//uncaughtExceptionHandler.uncaughtException(thread, ex);
+			}
+
+			android.os.Process.killProcess(android.os.Process.myPid());
+			System.exit(1);
 		}
 	}
 }

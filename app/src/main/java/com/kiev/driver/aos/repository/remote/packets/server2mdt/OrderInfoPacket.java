@@ -85,6 +85,43 @@ public class OrderInfoPacket extends ResponsePacket {
 		}
 	}
 
+	public OrderInfoPacket(ResponseWaitCallOrderInfoPacket p) {
+		super(new byte[p.getMessageType()]);
+		LogHelper.e("packet msg type : " + p.getMessageType());
+
+		corporationCode = p.getCorporationCode();
+		carId = p.getCarId();
+		orderKind = p.getOrderKind();
+		callReceiptDate = p.getCallReceiptDate();
+		callNumber = p.getCallNumber();
+		longitude = p.getLongitude();
+		latitude = p.getLatitude();
+		callerPhone = p.getCallerPhone();
+		place = p.getPlace();
+		placeExplanation = p.getPlaceExplanation();
+		allocBoundary = 0;
+		orderCount = 0;
+		destination = p.getDestName();
+		destLatitude = p.getDestLatitude();
+		destLongitude = p.getDestLongitude();
+
+
+
+//
+//		if (p.getMessageType() == Packets.CALLER_INFO_RESEND_DES) {
+//			destName = p.getDestName();
+//			destLongitude = p.getDestLongitude();
+//			destLatitude = p.getDestLatitude();
+//			callClass = p.getCallClass();
+//		} else {
+//			callerName = p.getCallerName();
+//			errorCode = p.getErrorCode();
+//			destination = p.getDestination();
+//			isWheelChair = p.isWheelChair();
+//		}
+	}
+
+
 	public int getCorporationCode() {
 		return corporationCode;
 	}

@@ -391,6 +391,7 @@ public class ScenarioService extends LifecycleService {
 	 * Ack 패킷을 요청 한다. Retry로직이 포함되어 있다.(최대 3회 5초간격)
 	 */
 	public void requestAck(final int messageType, final int serviceNo, final int callNo) {
+		LogHelper.e("requestAct!@#@!#@!#@!#@!");
 		ackRetryCount = 0;
 
 		AckPacket packet = new AckPacket();
@@ -842,6 +843,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
 		packet.setDistance(callInfo.getDistance());
+		packet.setOrderKind(Packets.OrderKind.WaitCall);
 		request(packet);
 	}
 
@@ -1363,8 +1365,13 @@ public class ScenarioService extends LifecycleService {
 
 				case Packets.RESPONSE_WAIT_CALL_ORDER: {
 					ResponseWaitCallOrderInfoPacket resPacket = (ResponseWaitCallOrderInfoPacket) response;
-					LogHelper.e("RESPONSE_WAIT_CALL_ORDER : " + resPacket);
 					mResponseWaitCallOrderInfoPacket.postValue(resPacket);
+					LogHelper.e("RESPONSE_WAIT_CALL_ORDER : " + resPacket);
+
+
+					OrderInfoPacket tempPacket = new OrderInfoPacket(resPacket);
+					processCallInfo(context, messageType, tempPacket, tempPacket.getCallNumber(), !resPacket.isSuccess());
+
 				}
 				break;
 

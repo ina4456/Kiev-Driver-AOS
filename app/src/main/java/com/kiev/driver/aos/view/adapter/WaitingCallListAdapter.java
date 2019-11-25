@@ -80,6 +80,7 @@ public class WaitingCallListAdapter extends RecyclerView.Adapter<WaitingCallList
 
 		private void bindBodyData(Call item) {
 			//LogHelper.e("item : " + item.toString());
+			mBinding.tvDistance.setText(item.getCallDistanceToDeparture());
 			mBinding.tvDeparture.setText(item.getDeparturePoi());
 			mBinding.tvDestination.setText(item.getDestinationPoi());
 		}

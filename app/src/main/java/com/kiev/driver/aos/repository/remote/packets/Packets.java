@@ -74,7 +74,7 @@ public class Packets {
 	public static final int RESPONSE_WAIT_CALL_LIST = 0x1D12; // 내 정보 요청 응답
 	public static final int RESPONSE_WAIT_CALL_ORDER = 0x1914; // 대기콜 배차 요청 응답
 	public static final int RESPONSE_NOTICE_LIST = 0x1138; // 공지사항 리스트 요청 응답
-	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청
+	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청 응답
 
 
 
@@ -219,6 +219,7 @@ public class Packets {
 		WaitOrderTwoWay(11), // 양방향 대기배차, 선택 대기배차 (하남사용)
 		Integration(12), //통합배차 추가 2018. 01. 03 - 권석범
 		Mobile(15),// 모바일배차
+		WaitCall(17),// 대기콜배차
 		Temp(99); // Temp(APP에서만 사용)
 
 
@@ -388,9 +389,9 @@ public class Packets {
 				return 1113;
 
 			case REQUEST_WAIT_CALL_ORDER: // 대기콜 배차 요청
-				return 124;
+				return 125;
 			case RESPONSE_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
-				return 353;
+				return 354;
 
 			case REQUEST_NOTICE_LIST:
 				return 6;

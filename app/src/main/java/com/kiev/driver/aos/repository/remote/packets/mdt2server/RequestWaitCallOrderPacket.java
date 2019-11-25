@@ -23,6 +23,7 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
 	private float latitude; // 위도 (30)
 	private int speed; // 속도 (1)
 	private float distance; //거리 (4)
+	private Packets.OrderKind orderKind; //배차구분 (1)
 
 
     public RequestWaitCallOrderPacket() {
@@ -133,6 +134,14 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
 		this.distance = distance;
 	}
 
+	public Packets.OrderKind getOrderKind() {
+		return orderKind;
+	}
+
+	public void setOrderKind(Packets.OrderKind orderKind) {
+		this.orderKind = orderKind;
+	}
+
 	@Override
     public byte[] toBytes() {
         super.toBytes();
@@ -149,8 +158,10 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
 		writeString(EncryptUtil.encodeStr("" + latitude), 30);
 		writeInt(speed, 1);
 		writeFloat(distance, 4);
+		writeInt(orderKind.value, 1);
 
-        return buffers;
+
+		return buffers;
     }
 
     @Override
@@ -162,6 +173,8 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
                 ", phoneNumber='" + phoneNumber +
                 ", callNumber=" + callNumber +
                 ", distance='" + distance +
-                ", callReceiptDate='" + callReceiptDate + '\'';
+                ", callReceiptDate='" + callReceiptDate +
+		        ", orderKind='" + orderKind +
+		        '\'';
     }
 }

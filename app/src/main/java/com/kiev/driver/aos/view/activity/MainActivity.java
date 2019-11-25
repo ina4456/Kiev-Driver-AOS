@@ -17,7 +17,6 @@ import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
-import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
@@ -114,80 +113,84 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 	}
 
 	private void subscribeViewModel(MainViewModel mainViewModel) {
-		mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
-			@Override
-			public void onChanged(Call call) {
-				LogHelper.e("onChanged-Call");
-				if (call != null) {
-					int callStatus = call.getCallStatus();
-					LogHelper.e("onChanged-Call : " + callStatus);
-					switch (callStatus) {
-						case Constants.CALL_STATUS_DRIVING:
-						case Constants.CALL_STATUS_BOARDED:
-						case Constants.CALL_STATUS_ALIGHTED:
-						case Constants.CALL_STATUS_ALLOCATED:
-							setFragments(MainAllocatedFragment.newInstance(), FRAGMENT_TAG_ALLOCATED);
-							break;
+		if (mainViewModel != null) {
 
-						case Constants.CALL_STATUS_VACANCY:
-						case Constants.CALL_STATUS_WORKING:
-							setFragments(MainNormalFragment.newInstance(), FRAGMENT_TAG_NORMAL);
-							break;
 
-						default:
-							LogHelper.e("onChanged-Call : default : " + callStatus);
-							setFragments(MainNormalFragment.newInstance(), FRAGMENT_TAG_NORMAL);
-							break;
+			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+				@Override
+				public void onChanged(Call call) {
+					LogHelper.e("onChanged-Call");
+					if (call != null) {
+						int callStatus = call.getCallStatus();
+						LogHelper.e("onChanged-Call : " + callStatus);
+						switch (callStatus) {
+							case Constants.CALL_STATUS_DRIVING:
+							case Constants.CALL_STATUS_BOARDED:
+							case Constants.CALL_STATUS_ALIGHTED:
+							case Constants.CALL_STATUS_ALLOCATED:
+								setFragments(MainAllocatedFragment.newInstance(), FRAGMENT_TAG_ALLOCATED);
+								break;
+
+							case Constants.CALL_STATUS_VACANCY:
+							case Constants.CALL_STATUS_WORKING:
+								setFragments(MainNormalFragment.newInstance(), FRAGMENT_TAG_NORMAL);
+								break;
+
+							default:
+								LogHelper.e("onChanged-Call : default : " + callStatus);
+								setFragments(MainNormalFragment.newInstance(), FRAGMENT_TAG_NORMAL);
+								break;
+						}
 					}
 				}
-			}
-		});
+			});
 
 
-		// TODO: 2019. 3. 6. 내비게이션드로워 기사 정보 set
-		MutableLiveData<ResponseMyInfoPacket> myInfo = mainViewModel.requestMyInfo();
-		myInfo.observe(this, new Observer<ResponseMyInfoPacket>() {
-			@Override
-			public void onChanged(ResponseMyInfoPacket myInfoPacket) {
-				LogHelper.e("onChanged()-driver");
-				if (myInfoPacket != null) {
-					String driverName = myInfoPacket.getDriverName();
-					if (driverName != null) {
-						String displayDriverName = String.format(getString(R.string.d_menu_driver_name), driverName);
-						mBinding.navViewBody.tvDriverName.setText(displayDriverName);
-						myInfo.removeObserver(this);
+			// TODO: 2019. 3. 6. 내비게이션드로워 기사 정보 set
+			MutableLiveData<ResponseMyInfoPacket> myInfo = mainViewModel.requestMyInfo();
+			myInfo.observe(this, new Observer<ResponseMyInfoPacket>() {
+				@Override
+				public void onChanged(ResponseMyInfoPacket myInfoPacket) {
+					LogHelper.e("onChanged()-driver");
+					if (myInfoPacket != null) {
+						String driverName = myInfoPacket.getDriverName();
+						if (driverName != null) {
+							String displayDriverName = String.format(getString(R.string.d_menu_driver_name), driverName);
+							mBinding.navViewBody.tvDriverName.setText(displayDriverName);
+							myInfo.removeObserver(this);
+						}
 					}
 				}
-			}
-		});
+			});
 
-		mainViewModel.getConfiguration().observe(this, new Observer<Configuration>() {
-			@Override
-			public void onChanged(Configuration configuration) {
-				LogHelper.e("onChanged()-configuration");
-				mBinding.navViewBody.tvVehicleNumber.setText(String.valueOf(configuration.getCarId()));
-			}
-		});
-
-
-		LiveData<Notice> noticeLiveData = mMainViewModel.getLatestNotice();
-		noticeLiveData.observe(this, new Observer<Notice>() {
-			@Override
-			public void onChanged(Notice notice) {
-				noticeLiveData.removeObserver(this);
-				if (notice != null && notice.getId() != 0 && notice.isNotice()) {
-					LogHelper.e("onChanged-Notice : " + notice.toString());
-					Popup popup = new Popup
-							.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_NOTICE)
-							.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
-							.setTitle(getString(R.string.d_menu_notice))
-							.setContent(notice.getTitle() + "\n\n" + notice.getContent())
-							.build();
-					showPopupDialog(popup);
-					WavResourcePlayer.getInstance(getApplication()).play(R.raw.voice_115);
+			mainViewModel.getConfiguration().observe(this, new Observer<Configuration>() {
+				@Override
+				public void onChanged(Configuration configuration) {
+					LogHelper.e("onChanged()-configuration");
+					mBinding.navViewBody.tvVehicleNumber.setText(String.valueOf(configuration.getCarId()));
 				}
-			}
-		});
+			});
+
+
+			LiveData<Notice> noticeLiveData = mMainViewModel.getLatestNotice();
+			noticeLiveData.observe(this, new Observer<Notice>() {
+				@Override
+				public void onChanged(Notice notice) {
+					noticeLiveData.removeObserver(this);
+					if (notice != null && notice.getId() != 0 && notice.isNotice()) {
+						LogHelper.e("onChanged-Notice : " + notice.toString());
+						Popup popup = new Popup
+								.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_NOTICE)
+								.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
+								.setTitle(getString(R.string.d_menu_notice))
+								.setContent(notice.getTitle() + "\n\n" + notice.getContent())
+								.build();
+						showPopupDialog(popup);
+						WavResourcePlayer.getInstance(getApplication()).play(R.raw.voice_115);
+					}
+				}
+			});
+		}
 	}
 
 
@@ -267,14 +270,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //									|| callStatus == Constants.CALL_STATUS_BOARDED_WITHOUT_DESTINATION) {
 
 							} else {
- 								mMainViewModel.changeCallStatus(Constants.CALL_STATUS_VACANCY);
+								mMainViewModel.changeCallStatus(Constants.CALL_STATUS_VACANCY);
 								logoutOrFinishApp(tag.equals(Constants.DIALOG_TAG_FINISH_APP));
 							}
 						}
 					}
 				}
 				break;
-
 
 
 			case Constants.DIALOG_TAG_CANCEL_CALL_THEN_FINISH_APP:

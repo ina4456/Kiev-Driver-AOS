@@ -14,6 +14,20 @@
         android:layout_marginBottom="6dp"
         android:background="@drawable/selector_bg_wz_item">
 
+
+        <TextView
+            android:id="@+id/tv_distance"
+            android:text="0m"
+            android:textColor="@color/colorGray01"
+            android:gravity="start|center_vertical"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_departure"
+            app:layout_constraintEnd_toStartOf="@+id/gl_button"
+            app:layout_constraintBottom_toTopOf="@+id/iv_departure_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <View
             android:id="@+id/view_vertical_line"
             android:layout_width="2dp"
@@ -38,11 +52,11 @@
             app:layout_constraintEnd_toStartOf="@+id/tv_departure"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_departure"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_departure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="6dp"
             android:background="@android:color/transparent"
             android:gravity="start|center_vertical"
@@ -54,7 +68,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_destination"
             app:layout_constraintEnd_toStartOf="@+id/gl_button"
             app:layout_constraintStart_toEndOf="@+id/iv_departure_icon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_distance"
             tools:text="분당구 삼평동 팅크웨어"/>
 
 
@@ -78,6 +92,8 @@
             android:background="@android:color/transparent"
             android:gravity="start|center_vertical"
             android:lineSpacingExtra="-4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:paddingStart="0dp"
             android:paddingEnd="16dp"
             android:textColor="@color/colorGray01"
@@ -86,7 +102,7 @@
             app:layout_constraintEnd_toStartOf="@+id/gl_button"
             app:layout_constraintStart_toEndOf="@+id/iv_destination_icon"
             app:layout_constraintTop_toBottomOf="@+id/tv_departure"
-            tools:text="분당구 삼평동 팅크웨어\n이이이이이이이이이이이이이"/>
+            tools:text="분당구 삼평동 팅크웨어\n이이이이이이이이이이"/>
 
 
 

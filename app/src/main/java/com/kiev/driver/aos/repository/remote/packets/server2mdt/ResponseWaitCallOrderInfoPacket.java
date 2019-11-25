@@ -1,5 +1,6 @@
 package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
@@ -24,6 +25,7 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 	private String destName;// 목적지 장소명 (41)
 	private float destLongitude; // 목적지 경도 (4)
 	private float destLatitude; // 목적지 위도 (4)
+	private Packets.OrderKind orderKind; // 배차 구분 (1)
 
 	public ResponseWaitCallOrderInfoPacket(byte[] bytes) {
 		super(bytes);
@@ -133,6 +135,14 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 		this.destLatitude = destLatitude;
 	}
 
+	public Packets.OrderKind getOrderKind() {
+		return orderKind;
+	}
+
+	public void setOrderKind(Packets.OrderKind orderKind) {
+		this.orderKind = orderKind;
+	}
+
 	@Override
 	public void parse(byte[] buffers) {
 		super.parse(buffers);
@@ -161,6 +171,35 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 
 			destLongitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
 			destLatitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+			int order = readInt(1);
+			if (Packets.OrderKind.Normal.value == order) {
+				orderKind = Packets.OrderKind.Normal;
+			} else if (Packets.OrderKind.Wait.value == order) {
+				orderKind = Packets.OrderKind.Wait;
+			} else if (Packets.OrderKind.Forced.value == order) {
+				orderKind = Packets.OrderKind.Forced;
+			} else if (Packets.OrderKind.Manual.value == order) {
+				orderKind = Packets.OrderKind.Manual;
+			} else if (Packets.OrderKind.WaitOrder.value == order) {
+				orderKind = Packets.OrderKind.WaitOrder;
+			} else if (Packets.OrderKind.WaitOrderTwoWay.value == order) {
+				orderKind = Packets.OrderKind.WaitOrderTwoWay;
+			} else if (Packets.OrderKind.GetOnOrder.value == order) {
+				orderKind = Packets.OrderKind.GetOnOrder;
+			} else if (Packets.OrderKind.Mobile.value == order) {
+				orderKind = Packets.OrderKind.Mobile;
+
+				//2018. 01. 03 - 권석범
+				//통합배차가 내려왔을 경우 정의가 되어 있지 않아 앱이 중지가 되는 증상이 있어 추가하고
+				//그 외 없는 배차가 내려올시에 일반 배차로 지정함 (김용태 팀장 요청)
+			} else if (Packets.OrderKind.Integration.value == order) {
+				orderKind = Packets.OrderKind.Integration;
+
+			} else if (Packets.OrderKind.WaitCall.value == order) {
+				orderKind = Packets.OrderKind.WaitCall;
+			} else {
+				orderKind = Packets.OrderKind.Normal;
+			}
 
 		} catch (NumberFormatException e) {
 			LogHelper.e(">> parse error");
@@ -185,6 +224,7 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 				", destName='" + destName + '\'' +
 				", destLongitude=" + destLongitude +
 				", destLatitude=" + destLatitude +
+				", orderKind=" + orderKind +
 				'}';
 	}
 }

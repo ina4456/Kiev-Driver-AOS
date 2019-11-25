@@ -307,6 +307,7 @@ public class Call implements Parcelable{
 			distanceStr = distance + "m";
 		} else {
 			distanceFloat = distance / 1000;
+			distanceFloat = distanceFloat + ((distance - (distanceFloat * 1000)) / 1000);
 			distanceStr = String.format("%.1f", distanceFloat);
 			distanceStr = distanceStr + "km";
 		}

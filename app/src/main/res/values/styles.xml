@@ -258,7 +258,6 @@
     </style>
     <!--운행이력 박스 타이틀-->
     <style name="CallHistoryBoxTitleStyle">
-        <item name="android:layout_marginBottom">30dp</item>
         <item name="android:textColor">@color/colorYellow</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">18dp</item>
@@ -279,7 +278,7 @@
     <style name="CallHistoryBoxCountStyle">
         <item name="android:textSize">32dp</item>
         <item name="android:textColor">@color/colorGray01</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">center|top</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -292,9 +291,10 @@
     </style>
     <!--운행이력 박스 회수 구분선-->
     <style name="CallHistoryBoxImageDividerStyle">
+        <item name="android:visibility">gone</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="layout_constraintHeight_max">50dp</item>
+        <item name="layout_constraintHeight_max">30dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:src">@drawable/hs_menu_d_dot</item>
     </style>

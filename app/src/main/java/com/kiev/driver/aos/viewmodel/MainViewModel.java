@@ -18,6 +18,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.CallManager;
@@ -283,6 +284,10 @@ public class MainViewModel extends AndroidViewModel {
 
 	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
 		return mRepository.requestMyInfo();
+	}
+
+	public MutableLiveData<ResponseWaitAreaNewPacket> requestWaitArea(Packets.WaitAreaRequestType requestType, int startIndex) {
+		return mRepository.requestWaitArea(requestType, startIndex);
 	}
 
 

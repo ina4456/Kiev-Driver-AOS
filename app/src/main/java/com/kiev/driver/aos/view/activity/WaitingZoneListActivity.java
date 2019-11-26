@@ -9,7 +9,8 @@ import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingZoneListBinding;
 import com.kiev.driver.aos.model.WaitingZone;
-import com.kiev.driver.aos.model.entity.Call;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingZoneAdapter;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -50,14 +52,14 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 
 
 	private void subscribeMainViewModel(MainViewModel mainViewModel) {
-		mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+		MutableLiveData<ResponseWaitAreaNewPacket> waitArea = mainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, 0);
+		waitArea.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
 			@Override
-			public void onChanged(Call call) {
-				if (call != null) {
-
-				}
+			public void onChanged(ResponseWaitAreaNewPacket responseWaitAreaNewPacket) {
+				LogHelper.e("onChanged() : " + responseWaitAreaNewPacket);
 			}
 		});
+
 	}
 
 	private void initToolbar() {

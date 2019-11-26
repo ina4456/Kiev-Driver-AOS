@@ -8,13 +8,13 @@ import android.view.View;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityCallHistoryBinding;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.viewmodel.CallHistoryViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,18 +37,42 @@ public class CallHistoryActivity extends BaseActivity implements View.OnClickLis
 		mBinding.setLifecycleOwner(this);
 		mBinding.setViewModel(mViewModel);
 
-		mViewModel.getStatistics().observe(this, new Observer<ResponseStatisticsPacket>() {
-			@Override
-			public void onChanged(ResponseStatisticsPacket responseStatisticsPacket) {
-				LogHelper.e("UI 리스폰스 전달");
-			}
-		});
+
+		subscribeViewModel();
 
 		initToolbar();
 		mBinding.clCallHistoryListToday.setOnClickListener(this);
 		mBinding.clCallHistoryListRecent7days.setOnClickListener(this);
 		mBinding.clCallHistoryListThisMonth.setOnClickListener(this);
 		mBinding.clCallHistoryListLastMonth.setOnClickListener(this);
+	}
+
+	private void subscribeViewModel() {
+		MutableLiveData<ResponseStatisticsPacket> statistics = mViewModel.getStatistics();
+		statistics.observe(this, new Observer<ResponseStatisticsPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsPacket response) {
+
+				if (response != null) {
+					statistics.removeObserver(this);
+					mBinding.tvTodayTotalCount.setText(getString(R.string.ch_count, response.getTodayTotalCnt()));
+					mBinding.tvTodayNormalCount.setText(getString(R.string.ch_count, response.getTodayNormalCnt()));
+					mBinding.tvTodayAppCount.setText(getString(R.string.ch_count, response.getTodayAppCnt()));
+
+					mBinding.tvRecent7daysTotalCount.setText(getString(R.string.ch_count, response.getWeekTotalCnt()));
+					mBinding.tvRecent7daysNormalCount.setText(getString(R.string.ch_count, response.getWeekNormalCnt()));
+					mBinding.tvRecent7daysAppCount.setText(getString(R.string.ch_count, response.getWeekAppCnt()));
+
+					mBinding.tvThisMonthTotalCount.setText(getString(R.string.ch_count, response.getThisMonthTotalCnt()));
+					mBinding.tvThisMonthNormalCount.setText(getString(R.string.ch_count, response.getThisMonthNormalCnt()));
+					mBinding.tvThisMonthAppCount.setText(getString(R.string.ch_count, response.getThisMonthAppCnt()));
+
+					mBinding.tvLastMonthTotalCount.setText(getString(R.string.ch_count, response.getLastMonthTotalCnt()));
+					mBinding.tvLastMonthNormalCount.setText(getString(R.string.ch_count, response.getLastMonthNormalCnt()));
+					mBinding.tvLastMonthAppCount.setText(getString(R.string.ch_count, response.getLastMonthAppCnt()));
+				}
+			}
+		});
 	}
 
 

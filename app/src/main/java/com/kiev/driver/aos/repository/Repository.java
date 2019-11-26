@@ -16,6 +16,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeLi
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
@@ -399,7 +400,19 @@ public class Repository {
 		data.observeForever(new Observer<ResponseStatisticsDetailPacket>() {
 			@Override
 			public void onChanged(ResponseStatisticsDetailPacket response) {
-				LogHelper.e("requestWaitingCallList - onChanged");
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+		return data;
+	}
+
+	public MutableLiveData<ResponseWaitAreaNewPacket> requestWaitArea(Packets.WaitAreaRequestType type, int startIndex) {
+		mScenarioService.requestWaitAreaNew(type, startIndex);
+		final MutableLiveData<ResponseWaitAreaNewPacket> data = mScenarioService.getWaitAreaPacket();
+		data.observeForever(new Observer<ResponseWaitAreaNewPacket>() {
+			@Override
+			public void onChanged(ResponseWaitAreaNewPacket response) {
 				data.postValue(response);
 				data.removeObserver(this);
 			}

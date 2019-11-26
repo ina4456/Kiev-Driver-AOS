@@ -8,23 +8,25 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoProcPac
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseAccountPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseAckPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSendingPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitPlaceInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
 
@@ -99,7 +101,10 @@ public class ResponsePacket {
 				return new ResponseStatisticsPacket(bytes);
 			case Packets.RESPONSE_STATISTICS_DETAIL:
 				return new ResponseStatisticsDetailPacket(bytes);
-
+			case Packets.RESPONSE_WAIT_AREA_NEW:
+				return new ResponseWaitAreaNewPacket(bytes);
+			case Packets.RESPONSE_WAIT_DECISION_NEW:
+				return new ResponseWaitDecisionNewPacket(bytes);
 			default:
 				return new ResponsePacket(bytes);
 		}

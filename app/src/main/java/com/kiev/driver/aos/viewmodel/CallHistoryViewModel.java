@@ -5,10 +5,8 @@ import android.app.Application;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
-import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -23,10 +21,8 @@ import androidx.lifecycle.ViewModelProvider;
 public class CallHistoryViewModel extends AndroidViewModel {
 
 	//private final MutableLiveData<ResponseStatisticsPacket> mStatistics;
-	private final LiveData<Taxi> mTaxiInfo;
 	private final LiveData<Call> mCallInfo;
 	private final LiveData<Configuration> mConfiguration;
-	private MutableLiveData<ResponseMyInfoPacket> mMyInfo;
 	private Repository mRepository;
 
 
@@ -35,8 +31,6 @@ public class CallHistoryViewModel extends AndroidViewModel {
 		LogHelper.e("MainViewModel()");
 		mRepository = repository;
 
-
-		mTaxiInfo = repository.getTaxiInfoLive();
 		mCallInfo = repository.getCallInfoLive();
 		mConfiguration = repository.getConfigLive();
 	}
@@ -44,17 +38,11 @@ public class CallHistoryViewModel extends AndroidViewModel {
 	/**
 	 * Expose the LiveData Comments query so the UI can observe it.
 	 */
-	public LiveData<Taxi> getTaxiInfo() {
-		return mTaxiInfo;
-	}
 	public LiveData<Call> getCallInfo() {
 		return mCallInfo;
 	}
 	public LiveData<Configuration> getConfiguration() {
 		return mConfiguration;
-	}
-	public MutableLiveData<ResponseMyInfoPacket> getMyInfo() {
-		return mMyInfo;
 	}
 
 
@@ -62,7 +50,8 @@ public class CallHistoryViewModel extends AndroidViewModel {
 		return mRepository.requestStatistics();
 	}
 
-	public MutableLiveData<ResponseStatisticsDetailPacket> getStatisticsDetail(Packets.StatisticListType type, Packets.StatisticPeriodType period, int startIndex) {
+	public MutableLiveData<ResponseStatisticsDetailPacket> getStatisticsDetail(
+			Packets.StatisticListType type, Packets.StatisticPeriodType period, int startIndex) {
 		return mRepository.requestStatisticsDetail(type, period, startIndex);
 	}
 

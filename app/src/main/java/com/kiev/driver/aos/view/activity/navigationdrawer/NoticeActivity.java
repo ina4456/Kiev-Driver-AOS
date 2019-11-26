@@ -16,12 +16,10 @@ import com.kiev.driver.aos.view.adapter.NoticeAdapter;
 import com.kiev.driver.aos.viewmodel.NoticeViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -81,10 +79,12 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 			mBinding.viewEmptyMsg.tvEmptyMsg.setText(getString(R.string.notice_no_message));
 		}
 
-		initExpandableListView();
-		setEmptyMsgView();
 		mBinding.elvNotice.setVisibility(View.GONE);
 		mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.VISIBLE);
+
+		initExpandableListView();
+		showListOrEmptyMsgView(isNotice);
+
 	}
 
 	// FIXME: 2019-09-03 인솔라인 날짜 데이터 형식 확정 후 수정 필요
@@ -132,24 +132,24 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 						));
 
 						mAdapter.setGroupList(noticeArrayList);
-
+						showListOrEmptyMsgView(isNotice);
 					}
 				}
 			});
-		} else {
-			LiveData<List<Notice>> liveData = mNoticeViewModel.getNoticeList(isNotice);
-			liveData.observe(this, new Observer<List<Notice>>() {
-				@Override
-				public void onChanged(List<Notice> notices) {
-					if (notices != null && notices.size() > 0) {
-						liveData.removeObserver(this);
-						LogHelper.e("notice list : " + notices.size());
-						//setRecyclerView(new ArrayList(notices));
-						mAdapter.setGroupList(notices);
-						setEmptyMsgView();
-					}
-				}
-			});
+//		} else {
+//			LiveData<List<Notice>> liveData = mNoticeViewModel.getNoticeList(isNotice);
+//			liveData.observe(this, new Observer<List<Notice>>() {
+//				@Override
+//				public void onChanged(List<Notice> notices) {
+//					if (notices != null && notices.size() > 0) {
+//						liveData.removeObserver(this);
+//						LogHelper.e("notice list : " + notices.size());
+//						//setRecyclerView(new ArrayList(notices));
+//						mAdapter.setGroupList(notices);
+//						showListOrEmptyMsgView();
+//					}
+//				}
+//			});
 		}
 	}
 
@@ -167,9 +167,12 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 		});
 	}
 
-	private void setEmptyMsgView() {
+
+
+	private void showListOrEmptyMsgView(boolean isNotice) {
 		if (mAdapter != null) {
 			if (mAdapter.getGroupCount() <= 0) {
+				mBinding.viewEmptyMsg.tvEmptyMsg.setText(getString(isNotice ? R.string.notice_no_notice : R.string.notice_no_message));
 				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.VISIBLE);
 				mBinding.elvNotice.setVisibility(View.GONE);
 			} else {
@@ -178,6 +181,7 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 			}
 		}
 	}
+
 
 	private Notice getNoticeObjectFromPacket(int code, String date, String title, String content) {
 		Notice notice = new Notice();

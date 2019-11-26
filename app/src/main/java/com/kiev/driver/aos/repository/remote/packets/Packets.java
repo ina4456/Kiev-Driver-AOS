@@ -40,6 +40,8 @@ public class Packets {
 	public static final int REQUEST_NOTICE_LIST = 0x1137; // 공지사항 리스트 요청
 	public static final int REQUEST_STATISTICS = 0x1613; // 콜정산 통계 요청
 	public static final int REQUEST_STATISTICS_DETAIL = 0x1915; // 탑승 이력 요청
+	public static final int REQUEST_WAIT_AREA_NEW = 0x1521; // 대기장소현황 요청
+	public static final int REQUEST_WAIT_DECISION_NEW = 0x1523; // 대기장소 대기 요청
 
 
 
@@ -77,6 +79,8 @@ public class Packets {
 	public static final int RESPONSE_NOTICE_LIST = 0x1138; // 공지사항 리스트 요청 응답
 	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청 응답
 	public static final int RESPONSE_STATISTICS_DETAIL = 0x1916; // 탑승 이력 요청 응답
+	public static final int RESPONSE_WAIT_AREA_NEW = 0x1522; // 대기장소현황 요청 응답
+	public static final int RESPONSE_WAIT_DECISION_NEW = 0x1524; // 대기장소 대기 요청 응답
 
 
 
@@ -312,6 +316,19 @@ public class Packets {
 		}
 	}
 
+
+	// 대기 지역 현황 요청 구분
+	public enum WaitAreaRequestType {
+		Normal(0x00), // 일반 요청
+		Waiting(0x01); // 대기 상태일 경우 요청
+
+		public int value;
+
+		WaitAreaRequestType(int value) {
+			this.value = value;
+		}
+	}
+
 	//----------------------------------------------------------------------------------------
 	// Packet Size
 	//----------------------------------------------------------------------------------------
@@ -439,6 +456,15 @@ public class Packets {
 			case RESPONSE_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
 				return 1457;
 
+			case REQUEST_WAIT_AREA_NEW: // 대기 지역 현황 요청
+				return 70;
+			case RESPONSE_WAIT_AREA_NEW: // 대기 지역 현황 요청 응답
+				return 458;
+
+			case REQUEST_WAIT_DECISION_NEW: // 대기 지역 대기 요청
+				return 107;
+			case RESPONSE_WAIT_DECISION_NEW: // 대기 지역 대기 요청 응답
+				return 73;
 
 			default:
 				return 0;

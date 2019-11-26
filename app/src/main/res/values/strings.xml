@@ -151,9 +151,13 @@
     <string name="ch_last_month">지난달</string>
     <string name="ch_working_days">영업</string>
     <string name="ch_run_count">운행</string>
-    <string name="ch_count">%d회</string>
+    <string name="ch_total_count">총</string>
+    <string name="ch_normal">일반콜</string>
+    <string name="ch_app">앱콜</string>
+
+    <string name="ch_count">%d건</string>
     <string name="ch_day">%d일</string>
-    <string name="ch_count_def">0회</string>
+    <string name="ch_count_def">0건</string>
     <string name="ch_day_def">0일</string>
     <string name="ch_detail_complete_s">완료</string>
     <string name="ch_detail_cancel_s">취소</string>

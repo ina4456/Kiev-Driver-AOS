@@ -45,6 +45,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPa
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
@@ -65,6 +66,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
@@ -165,6 +167,11 @@ public class ScenarioService extends LifecycleService {
 	private MutableLiveData<ResponseStatisticsDetailPacket> mStatisticDetailPacket;
 	public MutableLiveData<ResponseStatisticsDetailPacket> getStatisticDetailPacket() {
 		return mStatisticDetailPacket;
+	}
+
+	private MutableLiveData<ResponseWaitAreaNewPacket> mWaitArea;
+	public MutableLiveData<ResponseWaitAreaNewPacket> getWaitAreaPacket() {
+		return mWaitArea;
 	}
 
 
@@ -878,7 +885,6 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
-
 	public void requestStatisticsDetail(Packets.StatisticListType type, Packets.StatisticPeriodType period, int startIndex) {
 		mStatisticDetailPacket = new MutableLiveData<>();
 
@@ -893,6 +899,24 @@ public class ScenarioService extends LifecycleService {
 
 		request(packet);
 	}
+
+	public void requestWaitAreaNew(Packets.WaitAreaRequestType requestType, int startIndex) {
+		mWaitArea = new MutableLiveData<>();
+
+		RequestWaitAreaNewPacket packet = new RequestWaitAreaNewPacket();
+		packet.setServiceNumber(mConfiguration.getServiceNumber());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setRequestType(requestType);
+		packet.setLongitude(gpsHelper.getLongitude());
+		packet.setLatitude(gpsHelper.getLatitude());
+		packet.setStartIndex(startIndex);
+		packet.setRequestCount(10);
+
+		request(packet);
+	}
+
+
 
 
 
@@ -1416,6 +1440,13 @@ public class ScenarioService extends LifecycleService {
 					ResponseStatisticsDetailPacket resPacket = (ResponseStatisticsDetailPacket) response;
 					LogHelper.e("RESPONSE_STATISTICS_DETAIL : " + resPacket);
 					mStatisticDetailPacket.postValue(resPacket);
+				}
+				break;
+
+				case Packets.RESPONSE_WAIT_AREA_NEW: {
+					ResponseWaitAreaNewPacket resPacket = (ResponseWaitAreaNewPacket) response;
+					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+					mWaitArea.postValue(resPacket);
 				}
 				break;
 			}

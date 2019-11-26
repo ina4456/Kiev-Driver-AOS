@@ -1,6 +1,7 @@
 package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
  * Created by sbkwon on 2019. 9. 4..
@@ -168,7 +169,7 @@ public class ResponseStatisticsPacket extends ResponsePacket {
         super.parse(buffers);
         corporationCode = readInt(2);
         carId = readInt(2);
-        phoneNumber = readString(13);
+		phoneNumber = EncryptUtil.decodeStr("" + readString(30));
 
 		todayTotalCnt = readInt(2);
 		todayNormalCnt = readInt(2);

@@ -8,25 +8,33 @@ import android.view.View;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityCallHistoryDetailListBinding;
 import com.kiev.driver.aos.model.CallHistory;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
+import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.view.adapter.CallHistoryAdapter;
+import com.kiev.driver.aos.viewmodel.CallHistoryViewModel;
 
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 public class CallHistoryDetailListActivity extends BaseActivity implements View.OnClickListener {
 
 	private ActivityCallHistoryDetailListBinding mBinding;
-	private static final String EXTRA_KEY_LIST_NUMBER = "extra_key_list_number";
+	private static final String EXTRA_KEY_PERIOD_TYPE = "extra_key_list_number";
 	private CallHistoryAdapter mCallHistoryAdapter;
+	private CallHistoryViewModel mViewModel;
 
-	public static void startActivity(Context context, int listNumber) {
+	public static void startActivity(Context context, int periodType) {
 		final Intent intent = new Intent(context, CallHistoryDetailListActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		intent.putExtra(EXTRA_KEY_LIST_NUMBER, listNumber);
+		intent.putExtra(EXTRA_KEY_PERIOD_TYPE, periodType);
 		context.startActivity(intent);
 	}
 
@@ -34,7 +42,44 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_call_history_detail_list);
-		int titleRid = getIntent().getIntExtra(EXTRA_KEY_LIST_NUMBER, R.string.d_menu_call_history);
+		mViewModel = new ViewModelProvider(this, new CallHistoryViewModel.Factory(getApplication()))
+				.get(CallHistoryViewModel.class);
+		mBinding.setLifecycleOwner(this);
+		mBinding.setViewModel(mViewModel);
+
+
+		int titleRid;
+		int periodTypeInt = getIntent().getIntExtra(EXTRA_KEY_PERIOD_TYPE, 0);
+		Packets.StatisticPeriodType periodType;
+		switch (periodTypeInt) {
+			case 1:
+				periodType = Packets.StatisticPeriodType.Week;
+				titleRid = R.string.ch_recent_7_days;
+				break;
+			case 2:
+				periodType = Packets.StatisticPeriodType.ThisMonth;
+				titleRid = R.string.ch_this_month;
+				break;
+			case 3:
+				periodType = Packets.StatisticPeriodType.LastMonth;
+				titleRid = R.string.ch_last_month;
+				break;
+			default:
+				periodType = Packets.StatisticPeriodType.Today;
+				titleRid = R.string.ch_today;
+				break;
+		}
+
+		MutableLiveData<ResponseStatisticsDetailPacket> detailPacket =
+				mViewModel.getStatisticsDetail(Packets.StatisticListType.TotalCall, periodType, 0);
+
+		detailPacket.observe(this, new Observer<ResponseStatisticsDetailPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsDetailPacket responseStatisticsPacket) {
+				LogHelper.e("UI 리스폰스 전달");
+			}
+		});
+
 
 		initToolbar(titleRid);
 		initRecyclerView();

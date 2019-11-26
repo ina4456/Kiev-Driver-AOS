@@ -76,7 +76,6 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 		}
 
 		private void bindBodyData(CallHistory item) {
-			LogHelper.e("item : " + item.toString());
 
 			tvDate.setText(item.getDate());
 			tvOrderStatus.setText(item.getOrderStatus());

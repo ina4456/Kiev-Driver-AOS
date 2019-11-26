@@ -12,6 +12,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeLi
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSendingPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
@@ -96,6 +97,8 @@ public class ResponsePacket {
 				return new ResponseNoticeListPacket(bytes);
 			case Packets.RESPONSE_STATISTICS:
 				return new ResponseStatisticsPacket(bytes);
+			case Packets.RESPONSE_STATISTICS_DETAIL:
+				return new ResponseStatisticsDetailPacket(bytes);
 
 			default:
 				return new ResponsePacket(bytes);

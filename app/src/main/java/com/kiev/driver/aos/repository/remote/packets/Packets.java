@@ -39,6 +39,7 @@ public class Packets {
 	public static final int REQUEST_WAIT_CALL_ORDER = 0x1913; // 대기콜 배차 요청
 	public static final int REQUEST_NOTICE_LIST = 0x1137; // 공지사항 리스트 요청
 	public static final int REQUEST_STATISTICS = 0x1613; // 콜정산 통계 요청
+	public static final int REQUEST_STATISTICS_DETAIL = 0x1915; // 탑승 이력 요청
 
 
 
@@ -75,6 +76,7 @@ public class Packets {
 	public static final int RESPONSE_WAIT_CALL_ORDER = 0x1914; // 대기콜 배차 요청 응답
 	public static final int RESPONSE_NOTICE_LIST = 0x1138; // 공지사항 리스트 요청 응답
 	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청 응답
+	public static final int RESPONSE_STATISTICS_DETAIL = 0x1916; // 탑승 이력 요청 응답
 
 
 
@@ -281,6 +283,35 @@ public class Packets {
 		}
 	}
 
+
+	// 통계 상세 리스트 조회 구분
+	public enum StatisticListType {
+		TotalCall(0x01),
+		NormalCall(0x02),
+		AppCall(0x03),
+		OfficeCall(0x04);
+
+		public int value;
+
+		StatisticListType(int value) {
+			this.value = value;
+		}
+	}
+
+	// 통계 상세 조회 기간 구분
+	public enum StatisticPeriodType {
+		Today(0x01),
+		Week(0x02),
+		ThisMonth(0x03),
+		LastMonth(0x04);
+
+		public int value;
+
+		StatisticPeriodType(int value) {
+			this.value = value;
+		}
+	}
+
 	//----------------------------------------------------------------------------------------
 	// Packet Size
 	//----------------------------------------------------------------------------------------
@@ -398,10 +429,15 @@ public class Packets {
 			case RESPONSE_NOTICE_LIST:
 				return 1504;
 
-			case REQUEST_STATISTICS: // 대기콜 배차 요청
+			case REQUEST_STATISTICS: // 콜 통계 요청
 				return 67;
-			case RESPONSE_STATISTICS: // 대기콜 배차 요청 응답
+			case RESPONSE_STATISTICS: // 콜 통계 요청 응답
 				return 114;
+
+			case REQUEST_STATISTICS_DETAIL: // 콜 통계 상세 요청
+				return 40;
+			case RESPONSE_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
+				return 1457;
 
 
 			default:

@@ -7,12 +7,15 @@ import android.view.View;
 
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityCallHistoryBinding;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
+import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.viewmodel.CallHistoryViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 public class CallHistoryActivity extends BaseActivity implements View.OnClickListener {
@@ -34,6 +37,12 @@ public class CallHistoryActivity extends BaseActivity implements View.OnClickLis
 		mBinding.setLifecycleOwner(this);
 		mBinding.setViewModel(mViewModel);
 
+		mViewModel.getStatistics().observe(this, new Observer<ResponseStatisticsPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsPacket responseStatisticsPacket) {
+				LogHelper.e("UI 리스폰스 전달");
+			}
+		});
 
 		initToolbar();
 		mBinding.clCallHistoryListToday.setOnClickListener(this);
@@ -60,16 +69,16 @@ public class CallHistoryActivity extends BaseActivity implements View.OnClickLis
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.cl_call_history_list_today:
-				CallHistoryDetailListActivity.startActivity(this, R.string.ch_today);
+				CallHistoryDetailListActivity.startActivity(this, 0);
 				break;
 			case R.id.cl_call_history_list_recent_7days:
-				CallHistoryDetailListActivity.startActivity(this, R.string.ch_recent_7_days);
+				CallHistoryDetailListActivity.startActivity(this, 1);
 				break;
 			case R.id.cl_call_history_list_this_month:
-				CallHistoryDetailListActivity.startActivity(this, R.string.ch_this_month);
+				CallHistoryDetailListActivity.startActivity(this, 2);
 				break;
 			case R.id.cl_call_history_list_last_month:
-				CallHistoryDetailListActivity.startActivity(this, R.string.ch_last_month);
+				CallHistoryDetailListActivity.startActivity(this, 3);
 				break;
 		}
 	}

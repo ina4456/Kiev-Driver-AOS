@@ -43,6 +43,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestOrderReal
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
@@ -62,6 +63,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponsePeriodSe
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseRestPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
@@ -159,7 +161,11 @@ public class ScenarioService extends LifecycleService {
 		return mStatisticPacket;
 	}
 
-//	private MutableLiveData<ResponseWaitCallListPacket> mResponseWaitCallListPacket;
+
+	private MutableLiveData<ResponseStatisticsDetailPacket> mStatisticDetailPacket;
+	public MutableLiveData<ResponseStatisticsDetailPacket> getStatisticDetailPacket() {
+		return mStatisticDetailPacket;
+	}
 
 
 	public Packets.BoardType getBoardType() {
@@ -873,6 +879,23 @@ public class ScenarioService extends LifecycleService {
 	}
 
 
+	public void requestStatisticsDetail(Packets.StatisticListType type, Packets.StatisticPeriodType period, int startIndex) {
+		mStatisticDetailPacket = new MutableLiveData<>();
+
+		RequestStatisticsDetailPacket packet = new RequestStatisticsDetailPacket();
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setQueryType(type);
+		packet.setStartIndex(startIndex);
+		packet.setRequestCount(10);
+		packet.setQueryPeriod(period);
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+
+		request(packet);
+	}
+
+
+
 	/**
 	 * 배차 데이터를 아래의 순서로 업데이트 한다.
 	 * 1. 전달 받은 콜넘버와 저장 받은 배차데이터를 비교하여
@@ -1380,12 +1403,21 @@ public class ScenarioService extends LifecycleService {
 					LogHelper.e("RESPONSE_NOTICE_LIST : " + resPacket);
 					mNoticeListPacket.postValue(resPacket);
 				}
+				break;
 
 				case Packets.RESPONSE_STATISTICS: {
 					ResponseStatisticsPacket resPacket = (ResponseStatisticsPacket) response;
 					LogHelper.e("RESPONSE_STATISTICS : " + resPacket);
 					mStatisticPacket.postValue(resPacket);
 				}
+				break;
+
+				case Packets.RESPONSE_STATISTICS_DETAIL: {
+					ResponseStatisticsDetailPacket resPacket = (ResponseStatisticsDetailPacket) response;
+					LogHelper.e("RESPONSE_STATISTICS_DETAIL : " + resPacket);
+					mStatisticDetailPacket.postValue(resPacket);
+				}
+				break;
 			}
 		}
 	};

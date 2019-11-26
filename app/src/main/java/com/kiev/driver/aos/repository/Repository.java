@@ -14,6 +14,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
@@ -389,6 +390,20 @@ public class Repository {
 			}
 		});
 
+		return data;
+	}
+
+	public MutableLiveData<ResponseStatisticsDetailPacket> requestStatisticsDetail(Packets.StatisticListType type, Packets.StatisticPeriodType period, int startIndex) {
+		mScenarioService.requestStatisticsDetail(type, period, startIndex);
+		final MutableLiveData<ResponseStatisticsDetailPacket> data = mScenarioService.getStatisticDetailPacket();
+		data.observeForever(new Observer<ResponseStatisticsDetailPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsDetailPacket response) {
+				LogHelper.e("requestWaitingCallList - onChanged");
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
 		return data;
 	}
 

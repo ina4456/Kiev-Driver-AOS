@@ -2,18 +2,18 @@ package com.kiev.driver.aos.model;
 
 
 public class WaitingZone {
-	private int waitingZoneId;
+	private String waitingZoneId;
 	private String waitingZoneName;
 	private int numberOfCarsInAreas;    //전체 대기 인원
 	private boolean isAvailableWait;
 	private int myWaitingOrder;                //선택된 대기존에서 내 순번
 
 
-	public int getWaitingZoneId() {
+	public String getWaitingZoneId() {
 		return waitingZoneId;
 	}
 
-	public void setWaitingZoneId(int waitingZoneId) {
+	public void setWaitingZoneId(String waitingZoneId) {
 		this.waitingZoneId = waitingZoneId;
 	}
 

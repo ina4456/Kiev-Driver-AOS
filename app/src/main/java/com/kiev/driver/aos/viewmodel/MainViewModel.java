@@ -21,6 +21,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
@@ -291,10 +292,13 @@ public class MainViewModel extends AndroidViewModel {
 		return mRepository.requestWaitArea(requestType, startIndex);
 	}
 
-	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(int waitAreaId) {
+	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(String waitAreaId) {
 		return mRepository.requestWaitDecision(waitAreaId);
 	}
 
+	public MutableLiveData<ResponseWaitCancelPacket> requestWaitCancel(String waitAreaId) {
+		return mRepository.requestWaitCancel(waitAreaId);
+	}
 
 
 	public void clearTempCallInfo() {

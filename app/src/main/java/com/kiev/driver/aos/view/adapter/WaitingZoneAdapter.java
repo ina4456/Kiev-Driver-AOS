@@ -78,7 +78,7 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 
 		private void bindBodyData(WaitingZone item) {
 			mBinding.tvWzName.setText(item.getWaitingZoneName());
-			mBinding.tvWzWaitingOrder.setText(String.valueOf(item.getNumberOfCarsInAreas()) );
+			mBinding.tvWzWaitingOrder.setText(mContext.getString(R.string.wz_btn_waiting_count, item.getNumberOfCarsInAreas()));
 			mBinding.btnWzRequest.setEnabled(item.isAvailableWait());
 
 
@@ -112,41 +112,41 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 						LogHelper.e("btn_wz_request");
 						mCallback.onListItemSelected(mItems.get(index), true);
 
-//						mBinding.btnWzRequest.setVisibility(View.GONE);
-//						mBinding.btnWzCancel.setVisibility(View.VISIBLE);
-//						mBinding.tvWzName.setPressed(true);
-//						mBinding.tvWzWaitingOrder.setPressed(true);
-//						mBinding.clWzItem.setSelected(true);
-//
-//						for (int i = 0; i < mItems.size(); i++) {
-//							if (i == index) {
-//								LogHelper.e("i : " + index);
-//								mItems.get(i).setAvailableWait(true);
-//								mCallback.onListItemSelected(mItems.get(i), true);
-//							} else {
-//								mItems.get(i).setAvailableWait(false);
-//							}
-//						}
-//
-//						notifyDataSetChanged();
+						mBinding.btnWzRequest.setVisibility(View.GONE);
+						mBinding.btnWzCancel.setVisibility(View.VISIBLE);
+						mBinding.tvWzName.setPressed(true);
+						mBinding.tvWzWaitingOrder.setPressed(true);
+						mBinding.clWzItem.setSelected(true);
+
+						for (int i = 0; i < mItems.size(); i++) {
+							if (i == index) {
+								LogHelper.e("i : " + index);
+								mItems.get(i).setMyWaitingOrder(1);
+								mCallback.onListItemSelected(mItems.get(i), true);
+							} else {
+								mItems.get(i).setMyWaitingOrder(0);
+							}
+						}
+
+						notifyDataSetChanged();
 						break;
 
 
 					case R.id.btn_wz_cancel:
 						LogHelper.e("btn_wz_cancel");
 						mCallback.onListItemSelected(mItems.get(index), false);
-//						mBinding.btnWzRequest.setVisibility(View.VISIBLE);
-//						mBinding.btnWzCancel.setVisibility(View.GONE);
-//						mBinding.tvWzName.setPressed(false);
-//						mBinding.tvWzWaitingOrder.setPressed(false);
-//						mBinding.clWzItem.setSelected(false);
+						mBinding.btnWzRequest.setVisibility(View.VISIBLE);
+						mBinding.btnWzCancel.setVisibility(View.GONE);
+						mBinding.tvWzName.setPressed(false);
+						mBinding.tvWzWaitingOrder.setPressed(false);
+						mBinding.clWzItem.setSelected(false);
 
 
-//						for (int i = 0; i < mItems.size(); i++) {
-//							mItems.get(i).setBelongToThisWaitingZone(false);
-//						}
+						for (int i = 0; i < mItems.size(); i++) {
+							mItems.get(i).setMyWaitingOrder(0);
+						}
 
-//						notifyDataSetChanged();
+						notifyDataSetChanged();
 
 						break;
 				}

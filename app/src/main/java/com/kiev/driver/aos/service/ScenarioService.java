@@ -70,6 +70,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisti
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
@@ -179,6 +180,11 @@ public class ScenarioService extends LifecycleService {
 	private MutableLiveData<ResponseWaitDecisionNewPacket> mWaitDecision;
 	public MutableLiveData<ResponseWaitDecisionNewPacket> getWaitDecisionPacket() {
 		return mWaitDecision;
+	}
+
+	private MutableLiveData<ResponseWaitCancelPacket> mWaitCancel;
+	public MutableLiveData<ResponseWaitCancelPacket> getWaitCancelPacket() {
+		return mWaitCancel;
 	}
 
 
@@ -694,6 +700,7 @@ public class ScenarioService extends LifecycleService {
 	 * 대기취소 패킷을 요청한다.
 	 */
 	public void requestWaitCancel(String waitPlaceCode) {
+		mWaitCancel = new MutableLiveData<>();
 		// 저장된 대기지역이 있는데 대기지역을 다시 요청하는 경우는 취소의 케이스로 간주한다.
 		WaitOrderInfoPacket wait = mRepository.loadWaitCallInfo();
 		if (wait != null) {
@@ -924,7 +931,7 @@ public class ScenarioService extends LifecycleService {
 	}
 
 
-	public void requestWaitDecisionNew(int waitAreaId) {
+	public void requestWaitDecisionNew(String waitAreaId) {
 		mWaitDecision = new MutableLiveData<>();
 
 		RequestWaitDecisionPacket packet = new RequestWaitDecisionPacket();
@@ -1472,6 +1479,20 @@ public class ScenarioService extends LifecycleService {
 					ResponseWaitAreaNewPacket resPacket = (ResponseWaitAreaNewPacket) response;
 					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
 					mWaitArea.postValue(resPacket);
+				}
+				break;
+
+				case Packets.RESPONSE_WAIT_DECISION_NEW: {
+					ResponseWaitDecisionNewPacket resPacket = (ResponseWaitDecisionNewPacket) response;
+					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+					mWaitDecision.postValue(resPacket);
+				}
+				break;
+
+				case Packets.RESPONSE_WAIT_CANCEL: {
+					ResponseWaitCancelPacket resPacket = (ResponseWaitCancelPacket) response;
+					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+					mWaitCancel.postValue(resPacket);
 				}
 				break;
 			}

@@ -10,6 +10,7 @@ import com.kiev.driver.aos.databinding.ActivityWaitingZoneListBinding;
 import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingZoneAdapter;
@@ -142,7 +143,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 						for (int i = 0; i < waitAreaIds.length ; i++) {
 							try {
 								WaitingZone waitZone = new WaitingZone();
-								waitZone.setWaitingZoneId(Integer.parseInt(waitAreaIds[i]));
+								waitZone.setWaitingZoneId(waitAreaIds[i]);
 								waitZone.setWaitingZoneName(waitAreaNames[i]);
 								waitZone.setNumberOfCarsInAreas(Integer.parseInt(numberOfCarsInAreas[i]));
 								waitZone.setAvailableWait(isAvailableWaits[i].equals("Y"));
@@ -187,6 +188,15 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 					public void onChanged(ResponseWaitDecisionNewPacket response) {
 						liveData.removeObserver(this);
 						LogHelper.e("대기 결정 응답 :  " + response);
+					}
+				});
+			} else {
+				MutableLiveData<ResponseWaitCancelPacket> liveData =  mMainViewModel.requestWaitCancel(item.getWaitingZoneId());
+				liveData.observe(this, new Observer<ResponseWaitCancelPacket>() {
+					@Override
+					public void onChanged(ResponseWaitCancelPacket response) {
+						liveData.removeObserver(this);
+						LogHelper.e("대기 취소 응답 :  " + response);
 					}
 				});
 			}

@@ -357,7 +357,7 @@ public class Packets {
 			case WAIT_DECISION: // 대기결정
 				return 38;
 			case WAIT_CANCEL: // 대기취소
-				return 23;
+				return 41;
 			case REQUEST_CALLER_INFO: // 대기배차고객정보 요청
 				return 7;
 			case REQUEST_ACCOUNT: // 콜 정산 요청

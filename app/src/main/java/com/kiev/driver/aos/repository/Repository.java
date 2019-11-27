@@ -19,6 +19,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisti
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
@@ -421,12 +422,25 @@ public class Repository {
 		return data;
 	}
 
-	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(int waitAreaId) {
+	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(String waitAreaId) {
 		mScenarioService.requestWaitDecisionNew(waitAreaId);
 		final MutableLiveData<ResponseWaitDecisionNewPacket> data = mScenarioService.getWaitDecisionPacket();
 		data.observeForever(new Observer<ResponseWaitDecisionNewPacket>() {
 			@Override
 			public void onChanged(ResponseWaitDecisionNewPacket response) {
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+		return data;
+	}
+
+	public MutableLiveData<ResponseWaitCancelPacket> requestWaitCancel(String waitAreaId) {
+		mScenarioService.requestWaitCancel(waitAreaId);
+		final MutableLiveData<ResponseWaitCancelPacket> data = mScenarioService.getWaitCancelPacket();
+		data.observeForever(new Observer<ResponseWaitCancelPacket>() {
+			@Override
+			public void onChanged(ResponseWaitCancelPacket response) {
 				data.postValue(response);
 				data.removeObserver(this);
 			}

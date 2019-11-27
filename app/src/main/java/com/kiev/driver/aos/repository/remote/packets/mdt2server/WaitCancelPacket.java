@@ -2,6 +2,7 @@ package com.kiev.driver.aos.repository.remote.packets.mdt2server;
 
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
  * Created by zic325 on 2016. 9. 8..
@@ -14,7 +15,7 @@ public class WaitCancelPacket extends RequestPacket {
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
     private String phoneNumber; // Phone Number (13)
-    private String areaCode; // 대기지역코드 (3)
+    private String areaCode; // 대기지역코드 (4)
 
     public WaitCancelPacket() {
         super(Packets.WAIT_CANCEL);
@@ -66,8 +67,8 @@ public class WaitCancelPacket extends RequestPacket {
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
         writeInt(carId, 2);
-        writeString(phoneNumber, 13);
-        writeString(areaCode, 3);
+	    writeString(EncryptUtil.encodeStr(""+ phoneNumber), 30);
+        writeString(areaCode, 4);
         return buffers;
     }
 

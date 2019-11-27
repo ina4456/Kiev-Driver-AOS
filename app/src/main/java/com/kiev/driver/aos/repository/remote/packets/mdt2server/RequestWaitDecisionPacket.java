@@ -16,7 +16,7 @@ public class RequestWaitDecisionPacket extends RequestPacket {
 	private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
 	private float longitude; // 경도 (30)
 	private float latitude; // 위도 (30)
-	private int waitAreaId; //대기배차결정 지역코드 (4)
+	private String waitAreaId; //대기배차결정 지역코드 (4)
 
 	public RequestWaitDecisionPacket() {
 		super(Packets.REQUEST_WAIT_DECISION_NEW);
@@ -78,11 +78,11 @@ public class RequestWaitDecisionPacket extends RequestPacket {
 		this.latitude = latitude;
 	}
 
-	public int getWaitAreaId() {
+	public String getWaitAreaId() {
 		return waitAreaId;
 	}
 
-	public void setWaitAreaId(int waitAreaId) {
+	public void setWaitAreaId(String waitAreaId) {
 		this.waitAreaId = waitAreaId;
 	}
 
@@ -96,7 +96,7 @@ public class RequestWaitDecisionPacket extends RequestPacket {
 		writeDateTime(gpsTime, 6);
 		writeString(EncryptUtil.encodeStr("" + longitude), 30);
 		writeString(EncryptUtil.encodeStr("" + latitude), 30);
-		writeInt(waitAreaId, 4);
+		writeString(waitAreaId, 4);
 
 		return buffers;
 	}

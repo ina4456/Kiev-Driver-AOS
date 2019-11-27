@@ -96,7 +96,7 @@ public class ResponseWaitAreaNewPacket extends ResponsePacket {
 		waitAreaIds = readString(50);
 		numberOfCarInAreas = readString(50);
 		isAvailableWaits = readString(50);
-		myWaitNumbers = readString(2);
+		myWaitNumbers = readString(50);
 		int hasMore = readInt(1);
 		hasMoreData = hasMore == 0x01;
     }

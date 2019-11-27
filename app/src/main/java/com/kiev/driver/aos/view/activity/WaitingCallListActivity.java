@@ -138,24 +138,25 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 				finishLoadingProgress();
 
 				if (response != null) {
-					ArrayList<Call> waitingCallList = new ArrayList<>();
-					String[] callNumbers = response.getCallNumbers().split("\\|\\|");
-					String[] callReceiptDates = response.getCallReceiptDates().split("\\|\\|");
-					String[] callOrderCounts = response.getOrderCounts().split("\\|\\|");
-					String[] departures = response.getDepartures().split("\\|\\|");
-					String[] destinations = response.getDestinations().split("\\|\\|");
-					String[] distances = response.getDistances().split("\\|\\|");
+					try {
+						ArrayList<Call> waitingCallList = new ArrayList<>();
+						String[] callNumbers = response.getCallNumbers().split("\\|\\|");
+						String[] callReceiptDates = response.getCallReceiptDates().split("\\|\\|");
+						String[] callOrderCounts = response.getOrderCounts().split("\\|\\|");
+						String[] departures = response.getDepartures().split("\\|\\|");
+						String[] destinations = response.getDestinations().split("\\|\\|");
+						String[] distances = response.getDistances().split("\\|\\|");
 
-					LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
-							+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
-							+ " / destinations: " + destinations.length + " / distances : " + distances.length);
+						LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
+								+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
+								+ " / destinations: " + destinations.length + " / distances : " + distances.length);
 
-					if (response.getWaitCallCount() > 0 && callNumbers.length > 0) {
-						hasMoreData = response.isHasMoreList();
-						LogHelper.e("hasMoreData : " + hasMoreData);
+						if (response.getWaitCallCount() > 0 && callNumbers.length > 0) {
+							hasMoreData = response.isHasMoreList();
+							LogHelper.e("hasMoreData : " + hasMoreData);
 
-						for (int i = 0; i < callNumbers.length; i++) {
-							try {
+							for (int i = 0; i < callNumbers.length; i++) {
+
 								Call call = new Call();
 								call.setCallNumber(Integer.parseInt(callNumbers[i]));
 								call.setCallReceivedDate(callReceiptDates[i]);
@@ -164,19 +165,20 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 								call.setDestinationPoi(destinations[i]);
 								call.setDistance(Integer.valueOf(distances[i]));
 								waitingCallList.add(call);
-							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-								e.printStackTrace();
+
 							}
+
+
+							if (startIndex == START_INDEX) {
+								mWaitingCallListAdapter.refreshData(waitingCallList);
+							} else {
+								mWaitingCallListAdapter.addData(waitingCallList);
+							}
+
+							showListOrEmptyMsgView();
 						}
-
-
-						if (startIndex == START_INDEX) {
-							mWaitingCallListAdapter.refreshData(waitingCallList);
-						} else {
-							mWaitingCallListAdapter.addData(waitingCallList);
-						}
-
-						showListOrEmptyMsgView();
+					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+						e.printStackTrace();
 					}
 				}
 			}

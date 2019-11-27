@@ -12,7 +12,7 @@ public class ResponseStatisticsDetailPacket extends ResponsePacket {
 
     private int carId; // Car ID (2)
 	private Packets.StatisticListType queryType; //요청 구분(1) : 통합, 일반콜, 앱콜, 업무콜
-	private int resultCount; //총 개수(2)
+	private int totalCount; //총 개수(2)
 	private String callType; //콜 구분(20) : 일반콜, 앱콜, 업무콜
 	private String callNumber; //콜 번호(40)
 	private String receiptDate; //콜 접수일 (70)
@@ -44,12 +44,12 @@ public class ResponseStatisticsDetailPacket extends ResponsePacket {
 		this.queryType = queryType;
 	}
 
-	public int getResultCount() {
-		return resultCount;
+	public int getTotalCount() {
+		return totalCount;
 	}
 
-	public void setResultCount(int resultCount) {
-		this.resultCount = resultCount;
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 
 	public String getCallType() {
@@ -130,7 +130,7 @@ public class ResponseStatisticsDetailPacket extends ResponsePacket {
 		carId = readInt(2);
 		int qType = readInt(1);
 		queryType = getCallType(qType);
-		resultCount = readInt(2);
+		totalCount = readInt(2);
 		callType = readString(20);
 		callNumber = readString(40);
 		receiptDate = readString(70);
@@ -165,7 +165,7 @@ public class ResponseStatisticsDetailPacket extends ResponsePacket {
 		return "콜 정산 통계 상세 응답 (0x" + Integer.toHexString(messageType) + ") " +
 				"carId=" + carId +
 				", queryType=" + queryType +
-				", resultCount=" + resultCount +
+				", totalCount=" + totalCount +
 				", callType=" + callType +
 				", callNumber='" + callNumber + '\'' +
 				", receiptDate='" + receiptDate + '\'' +

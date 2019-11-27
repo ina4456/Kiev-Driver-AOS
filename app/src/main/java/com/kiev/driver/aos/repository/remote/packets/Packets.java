@@ -459,7 +459,7 @@ public class Packets {
 			case REQUEST_WAIT_AREA_NEW: // 대기 지역 현황 요청
 				return 70;
 			case RESPONSE_WAIT_AREA_NEW: // 대기 지역 현황 요청 응답
-				return 459;
+				return 509;
 
 			case REQUEST_WAIT_DECISION_NEW: // 대기 지역 대기 요청
 				return 107;

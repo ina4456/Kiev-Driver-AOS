@@ -125,23 +125,24 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 				finishLoadingProgress();
 
 				if (response != null) {
-					ArrayList<WaitingZone> waitingZoneList = new ArrayList<>();
-					String[] waitAreaIds = response.getWaitAreaIds().split("\\|\\|");
-					String[] waitAreaNames = response.getWaitAreaNames().split("\\|\\|");
-					String[] numberOfCarsInAreas = response.getNumberOfCarInAreas().split("\\|\\|");
-					String[] isAvailableWaits = response.getIsAvailableWaits().split("\\|\\|");
-					String[] myWaitNumbers = response.getMyWaitNumbers().split("\\|\\|");
+					try {
+						ArrayList<WaitingZone> waitingZoneList = new ArrayList<>();
+						String[] waitAreaIds = response.getWaitAreaIds().split("\\|\\|");
+						String[] waitAreaNames = response.getWaitAreaNames().split("\\|\\|");
+						String[] numberOfCarsInAreas = response.getNumberOfCarInAreas().split("\\|\\|");
+						String[] isAvailableWaits = response.getIsAvailableWaits().split("\\|\\|");
+						String[] myWaitNumbers = response.getMyWaitNumbers().split("\\|\\|");
 
-					LogHelper.e("waitAreaIds : " + waitAreaIds.length + " / waitAreaNames : " + waitAreaNames.length
-							+ " / numberOfCarsInAreas : " + numberOfCarsInAreas.length + " / isAvailableWaits : " + isAvailableWaits.length
-							+ " / myWaitNumbers: " + myWaitNumbers.length);
+						LogHelper.e("waitAreaIds : " + waitAreaIds.length + " / waitAreaNames : " + waitAreaNames.length
+								+ " / numberOfCarsInAreas : " + numberOfCarsInAreas.length + " / isAvailableWaits : " + isAvailableWaits.length
+								+ " / myWaitNumbers: " + myWaitNumbers.length);
 
-					if (response.getTotalCount() > 0 && waitAreaIds.length > 0) {
-						hasMoreData = response.isHasMoreData();
-						LogHelper.e("hasMoreData : " + hasMoreData);
+						if (response.getTotalCount() > 0 && waitAreaIds.length > 0) {
+							hasMoreData = response.isHasMoreData();
+							LogHelper.e("hasMoreData : " + hasMoreData);
 
-						for (int i = 0; i < waitAreaIds.length ; i++) {
-							try {
+							for (int i = 0; i < waitAreaIds.length; i++) {
+
 								WaitingZone waitZone = new WaitingZone();
 								waitZone.setWaitingZoneId(waitAreaIds[i]);
 								waitZone.setWaitingZoneName(waitAreaNames[i]);
@@ -149,18 +150,18 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 								waitZone.setAvailableWait(isAvailableWaits[i].equals("Y"));
 								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
 								waitingZoneList.add(waitZone);
-							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-								e.printStackTrace();
 							}
-						}
 
-						if (startIndex == START_INDEX) {
-							mWaitingZoneAdapter.refreshData(waitingZoneList);
-						} else {
-							mWaitingZoneAdapter.addData(waitingZoneList);
-						}
+							if (startIndex == START_INDEX) {
+								mWaitingZoneAdapter.refreshData(waitingZoneList);
+							} else {
+								mWaitingZoneAdapter.addData(waitingZoneList);
+							}
 
-						showListOrEmptyMsgView();
+							showListOrEmptyMsgView();
+						}
+					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -182,7 +183,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 		LogHelper.e("item : " + item + " / " + isRequest);
 		if (item != null) {
 			if (isRequest) {
-				MutableLiveData<ResponseWaitDecisionNewPacket> liveData =  mMainViewModel.requestWaitDecision(item.getWaitingZoneId());
+				MutableLiveData<ResponseWaitDecisionNewPacket> liveData = mMainViewModel.requestWaitDecision(item.getWaitingZoneId());
 				liveData.observe(this, new Observer<ResponseWaitDecisionNewPacket>() {
 					@Override
 					public void onChanged(ResponseWaitDecisionNewPacket response) {
@@ -191,7 +192,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 					}
 				});
 			} else {
-				MutableLiveData<ResponseWaitCancelPacket> liveData =  mMainViewModel.requestWaitCancel(item.getWaitingZoneId());
+				MutableLiveData<ResponseWaitCancelPacket> liveData = mMainViewModel.requestWaitCancel(item.getWaitingZoneId());
 				liveData.observe(this, new Observer<ResponseWaitCancelPacket>() {
 					@Override
 					public void onChanged(ResponseWaitCancelPacket response) {

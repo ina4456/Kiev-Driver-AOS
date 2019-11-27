@@ -142,29 +142,30 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 				finishLoadingProgress();
 
 				if (response != null) {
-					ArrayList<CallHistory> historyList = new ArrayList<>();
-					String[] callNumbers = response.getCallNumber().split("\\|\\|");
-					String[] callTypes = response.getCallType().split("\\|\\|");
-					String[] callReceiptDates = response.getReceiptDate().split("\\|\\|");
-					String[] departures = response.getDeparture().split("\\|\\|");
-					String[] destinations = response.getDestination().split("\\|\\|");
-					String[] boardedTimes = response.getBoardingTime().split("\\|\\|");
-					String[] alightedTimes = response.getAlightingTime().split("\\|\\|");
-					String[] phoneNumbers = response.getPhoneNumber().split("\\|\\|");
+					try {
+						mBinding.tvCallHistoryCompletedCount.setText(getString(R.string.ch_count, response.getTotalCount()));
+						ArrayList<CallHistory> historyList = new ArrayList<>();
+						String[] callNumbers = response.getCallNumber().split("\\|\\|");
+						String[] callTypes = response.getCallType().split("\\|\\|");
+						String[] callReceiptDates = response.getReceiptDate().split("\\|\\|");
+						String[] departures = response.getDeparture().split("\\|\\|");
+						String[] destinations = response.getDestination().split("\\|\\|");
+						String[] boardedTimes = response.getBoardingTime().split("\\|\\|");
+						String[] alightedTimes = response.getAlightingTime().split("\\|\\|");
+						String[] phoneNumbers = response.getPhoneNumber().split("\\|\\|");
 
 
-					LogHelper.e( "callTypes : " + callTypes.length
-							+ "callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
-							+ " / departures : " + departures.length + " / destinations: " + destinations.length
-							+ " / boardingTimes: " + boardedTimes.length + " / alightedTimes : " + alightedTimes.length
-							+ " / phoneNumbers : " + phoneNumbers.length);
+						LogHelper.e("callTypes : " + callTypes.length
+								+ "callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
+								+ " / departures : " + departures.length + " / destinations: " + destinations.length
+								+ " / boardingTimes: " + boardedTimes.length + " / alightedTimes : " + alightedTimes.length
+								+ " / phoneNumbers : " + phoneNumbers.length);
 
-					if (response.getResultCount() > 0 && callNumbers.length > 0) {
-						hasMoreData = response.isHasMore();
-						LogHelper.e("hasMoreData : " + hasMoreData);
+						if (response.getTotalCount() > 0 && callNumbers.length > 0) {
+							hasMoreData = response.isHasMore();
+							LogHelper.e("hasMoreData : " + hasMoreData);
 
-						for (int i = 0; i < callNumbers.length; i++) {
-							try {
+							for (int i = 0; i < callNumbers.length; i++) {
 								CallHistory history = new CallHistory();
 								history.setCallId(Integer.parseInt(callNumbers[i]));
 								history.setCallType(callTypes[i]);
@@ -175,21 +176,22 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 								history.setEndTime(alightedTimes[i]);
 								history.setPassengerPhoneNumber(phoneNumbers[i]);
 								historyList.add(history);
-							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-								e.printStackTrace();
 							}
+
+							if (startIndex == START_INDEX) {
+								mCallHistoryAdapter.refreshData(historyList);
+							} else {
+								mCallHistoryAdapter.addData(historyList);
+							}
+
+							showListOrEmptyMsgView();
+
 						}
-
-						if (startIndex == START_INDEX) {
-							mCallHistoryAdapter.refreshData(historyList);
-						} else {
-							mCallHistoryAdapter.addData(historyList);
-						}
-
-						showListOrEmptyMsgView();
-
+					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+						e.printStackTrace();
 					}
 				}
+
 			}
 		});
 	}

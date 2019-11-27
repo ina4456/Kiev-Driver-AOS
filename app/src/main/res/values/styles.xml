@@ -258,15 +258,19 @@
     </style>
     <!--운행이력 박스 타이틀-->
     <style name="CallHistoryBoxTitleStyle">
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">@color/colorYellow</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
     </style>
     <!--운행이력 박스 항목 라벨-->
     <style name="CallHistoryBoxLabelStyle">
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">@color/colorGray04</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">20dp</item>
@@ -276,6 +280,7 @@
     </style>
     <!--운행이력 박스 항목 횟수-->
     <style name="CallHistoryBoxCountStyle">
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textSize">32dp</item>
         <item name="android:textColor">@color/colorGray01</item>
         <item name="android:gravity">center|top</item>

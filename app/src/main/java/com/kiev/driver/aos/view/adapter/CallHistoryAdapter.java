@@ -94,8 +94,18 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 				destination = mContext.getString(R.string.alloc_no_destination);
 			tvDestination.setText(destination);
 
-			tvStartTime.setText(item.getStartTime());
-			tvEndTime.setText(item.getEndTime());
+			String startTime = item.getStartTime();
+			if (startTime == null || startTime.isEmpty()) {
+				startTime = "";
+			}
+			tvStartTime.setText(startTime);
+
+			String endTime = item.getEndTime();
+			if (endTime == null || endTime.isEmpty()) {
+				endTime = "";
+			}
+			tvEndTime.setText(endTime);
+
 			btnCallPassenger.setOnClickListener(this);
 			btnCallPassenger.setVisibility(View.GONE);
 
@@ -115,6 +125,7 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 			if (phoneNumber != null && !phoneNumber.isEmpty()) {
 				LogHelper.e("phoneNumber : " + phoneNumber);
 
+				// FIXME: 2019-11-27 사용자 환경 설정값으로 스피커폰 사용 여부 설정 필요
 				CallManager.getInstance(mContext)
 						.call(mContext, phoneNumber, true);
 			} else {

@@ -1,13 +1,22 @@
 package com.kiev.driver.aos.model;
 
 public class CallHistory {
+	private String callType;
+	private int callId;
 	private String date;
-	private String orderStatus;
 	private String departure;
 	private String destination;
 	private String startTime;
 	private String endTime;
 	private String passengerPhoneNumber;
+
+	public int getCallId() {
+		return callId;
+	}
+
+	public void setCallId(int callId) {
+		this.callId = callId;
+	}
 
 	public String getDate() {
 		return date;
@@ -17,12 +26,12 @@ public class CallHistory {
 		this.date = date;
 	}
 
-	public String getOrderStatus() {
-		return orderStatus;
+	public String getCallType() {
+		return callType;
 	}
 
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
+	public void setCallType(String callType) {
+		this.callType = callType;
 	}
 
 	public String getDeparture() {
@@ -69,7 +78,7 @@ public class CallHistory {
 	public String toString() {
 		return "CallHistory{" +
 				"date='" + date + '\'' +
-				", orderStatus='" + orderStatus + '\'' +
+				", callType='" + callType + '\'' +
 				", departure='" + departure + '\'' +
 				", destination='" + destination + '\'' +
 				", startTime='" + startTime + '\'' +

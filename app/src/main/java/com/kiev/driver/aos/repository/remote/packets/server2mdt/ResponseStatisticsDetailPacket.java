@@ -1,237 +1,180 @@
 package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
  * Created by sbkwon on 2019. 9. 4..
- * 콜정산정보 (GT-1614) 97 Byte
+ * 콜정산정보 (GT-1916) 1457 Byte
  * Server -> MDT
  */
 public class ResponseStatisticsDetailPacket extends ResponsePacket {
 
-    private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-    private String phoneNumber; // Phone Number (30)
+	private Packets.StatisticListType queryType; //요청 구분(1) : 통합, 일반콜, 앱콜, 업무콜
+	private int resultCount; //총 개수(2)
+	private String callType; //콜 구분(20) : 일반콜, 앱콜, 업무콜
+	private String callNumber; //콜 번호(40)
+	private String receiptDate; //콜 접수일 (70)
+	private String departure; //출발지 (220)
+	private String destination; //도착지 (220)
 
-	//오늘(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
-	private int todayTotalCnt;
-	private int todayNormalCnt;
-	private int todayBusinessCnt;
-	private int todayAppCnt;
-	private int todayPeakCnt;
-	private int todaySuburbCnt;
+	private String boardingTime; //승차시간(40)
+	private String alightingTime; //하차시간(40)
+	private String phoneNumber; //승객 전화번호(160)
+	private boolean hasMore; //추가 리스트 유/무
 
-	//최근 7일(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
-	private int weekTotalCnt;
-	private int weekNormalCnt;
-	private int weekBusinessCnt;
-	private int weekAppCnt;
-	private int weekPeakCnt;
-	private int weekSuburbCnt;
-
-	//이번달(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
-	private int thisMonthTotalCnt;
-	private int thisMonthNormalCnt;
-	private int thisMonthBusinessCnt;
-	private int thisMonthAppCnt;
-	private int thisMonthPeakCnt;
-	private int thisMonthSuburbCnt;
-
-	//지난달(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
-	private int lastMonthTotalCnt;
-	private int lastMonthNormalCnt;
-	private int lastMonthBusinessCnt;
-	private int lastMonthAppCnt;
-	private int lastMonthPeakCnt;
-	private int lastMonthSuburbCnt;
-
-    private String memo; // 비고 (30)
-
-    public ResponseStatisticsDetailPacket(byte[] bytes) {
-        super(bytes);
-    }
-
-	public int getCorporationCode() {
-		return corporationCode;
+	public ResponseStatisticsDetailPacket(byte[] bytes) {
+		super(bytes);
 	}
 
 	public int getCarId() {
 		return carId;
 	}
 
+	public void setCarId(int carId) {
+		this.carId = carId;
+	}
+
+	public Packets.StatisticListType getQueryType() {
+		return queryType;
+	}
+
+	public void setQueryType(Packets.StatisticListType queryType) {
+		this.queryType = queryType;
+	}
+
+	public int getResultCount() {
+		return resultCount;
+	}
+
+	public void setResultCount(int resultCount) {
+		this.resultCount = resultCount;
+	}
+
+	public String getCallType() {
+		return callType;
+	}
+
+	public void setCallType(String callType) {
+		this.callType = callType;
+	}
+
+	public String getCallNumber() {
+		return callNumber;
+	}
+
+	public void setCallNumber(String callNumber) {
+		this.callNumber = callNumber;
+	}
+
+	public String getReceiptDate() {
+		return receiptDate;
+	}
+
+	public void setReceiptDate(String receiptDate) {
+		this.receiptDate = receiptDate;
+	}
+
+	public String getDeparture() {
+		return departure;
+	}
+
+	public void setDeparture(String departure) {
+		this.departure = departure;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
+	public String getBoardingTime() {
+		return boardingTime;
+	}
+
+	public void setBoardingTime(String boardingTime) {
+		this.boardingTime = boardingTime;
+	}
+
+	public String getAlightingTime() {
+		return alightingTime;
+	}
+
+	public void setAlightingTime(String alightingTime) {
+		this.alightingTime = alightingTime;
+	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public int getTodayTotalCnt() {
-		return todayTotalCnt;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
-	public int getTodayNormalCnt() {
-		return todayNormalCnt;
+	public boolean isHasMore() {
+		return hasMore;
 	}
 
-	public int getTodayBusinessCnt() {
-		return todayBusinessCnt;
-	}
-
-	public int getTodayAppCnt() {
-		return todayAppCnt;
-	}
-
-	public int getTodayPeakCnt() {
-		return todayPeakCnt;
-	}
-
-	public int getTodaySuburbCnt() {
-		return todaySuburbCnt;
-	}
-
-	public int getWeekTotalCnt() {
-		return weekTotalCnt;
-	}
-
-	public int getWeekNormalCnt() {
-		return weekNormalCnt;
-	}
-
-	public int getWeekBusinessCnt() {
-		return weekBusinessCnt;
-	}
-
-	public int getWeekAppCnt() {
-		return weekAppCnt;
-	}
-
-	public int getWeekPeakCnt() {
-		return weekPeakCnt;
-	}
-
-	public int getWeekSuburbCnt() {
-		return weekSuburbCnt;
-	}
-
-	public int getThisMonthTotalCnt() {
-		return thisMonthTotalCnt;
-	}
-
-	public int getThisMonthNormalCnt() {
-		return thisMonthNormalCnt;
-	}
-
-	public int getThisMonthBusinessCnt() {
-		return thisMonthBusinessCnt;
-	}
-
-	public int getThisMonthAppCnt() {
-		return thisMonthAppCnt;
-	}
-
-	public int getThisMonthPeakCnt() {
-		return thisMonthPeakCnt;
-	}
-
-	public int getThisMonthSuburbCnt() {
-		return thisMonthSuburbCnt;
-	}
-
-	public int getLastMonthTotalCnt() {
-		return lastMonthTotalCnt;
-	}
-
-	public int getLastMonthNormalCnt() {
-		return lastMonthNormalCnt;
-	}
-
-	public int getLastMonthBusinessCnt() {
-		return lastMonthBusinessCnt;
-	}
-
-	public int getLastMonthAppCnt() {
-		return lastMonthAppCnt;
-	}
-
-	public int getLastMonthPeakCnt() {
-		return lastMonthPeakCnt;
-	}
-
-	public int getLastMonthSuburbCnt() {
-		return lastMonthSuburbCnt;
-	}
-
-	public String getMemo() {
-		return memo;
+	public void setHasMore(boolean hasMore) {
+		this.hasMore = hasMore;
 	}
 
 	@Override
     public void parse(byte[] buffers) {
-        super.parse(buffers);
-        corporationCode = readInt(2);
-        carId = readInt(2);
-        phoneNumber = readString(13);
+		super.parse(buffers);
+		carId = readInt(2);
+		int qType = readInt(1);
+		queryType = getCallType(qType);
+		resultCount = readInt(2);
+		callType = readString(20);
+		callNumber = readString(40);
+		receiptDate = readString(70);
 
-		todayTotalCnt = readInt(2);
-		todayNormalCnt = readInt(2);
-		todayBusinessCnt = readInt(2);
-		todayAppCnt = readInt(2);
-		todayPeakCnt = readInt(2);
-		todaySuburbCnt = readInt(2);
-		
-		weekTotalCnt = readInt(2);
-		weekNormalCnt = readInt(2);
-		weekBusinessCnt = readInt(2);
-		weekAppCnt = readInt(2);
-		weekPeakCnt = readInt(2);
-		weekSuburbCnt = readInt(2);
-		
-		thisMonthTotalCnt = readInt(2);
-		thisMonthNormalCnt = readInt(2);
-		thisMonthBusinessCnt = readInt(2);
-		thisMonthAppCnt = readInt(2);
-		thisMonthPeakCnt = readInt(2);
-		thisMonthSuburbCnt = readInt(2);
-		
-		lastMonthTotalCnt = readInt(2);
-		lastMonthNormalCnt = readInt(2);
-		lastMonthBusinessCnt = readInt(2);
-		lastMonthAppCnt = readInt(2);
-		lastMonthPeakCnt = readInt(2);
-		lastMonthSuburbCnt = readInt(2);
-        
-        memo = readString(30);
-    }
+		departure = readString(220);
+		destination = readString(220);
+
+		boardingTime = readString(40);
+		alightingTime = readString(40);
+
+		phoneNumber = readString(160);
+		int more = readInt(1);
+		hasMore = more == 0x01;
+	}
+
+	private Packets.StatisticListType getCallType(int query) {
+		Packets.StatisticListType queryType;
+		if (Packets.StatisticListType.NormalCall.value == query) {
+			queryType = Packets.StatisticListType.NormalCall;
+		} else if (Packets.StatisticListType.AppCall.value == query) {
+			queryType = Packets.StatisticListType.NormalCall;
+		} else if (Packets.StatisticListType.BusinessCall.value == query) {
+			queryType = Packets.StatisticListType.BusinessCall;
+		} else {
+			queryType = Packets.StatisticListType.TotalCall;
+		}
+		return queryType;
+	}
 
 	@Override
 	public String toString() {
-		return "콜 정산 통계 상세 (0x" + Integer.toHexString(messageType) + ") " +
-				"corporationCode=" + corporationCode +
-				", carId=" + carId +
+		return "콜 정산 통계 상세 응답 (0x" + Integer.toHexString(messageType) + ") " +
+				"carId=" + carId +
+				", queryType=" + queryType +
+				", resultCount=" + resultCount +
+				", callType=" + callType +
+				", callNumber='" + callNumber + '\'' +
+				", receiptDate='" + receiptDate + '\'' +
+				", departure='" + departure + '\'' +
+				", destination='" + destination + '\'' +
+				", boardingTime='" + boardingTime + '\'' +
+				", alightingTime='" + alightingTime + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
-				", todayTotalCnt=" + todayTotalCnt +
-				", todayNormalCnt=" + todayNormalCnt +
-				", todayBusinessCnt=" + todayBusinessCnt +
-				", todayAppCnt=" + todayAppCnt +
-				", todayPeakCnt=" + todayPeakCnt +
-				", todaySuburbCnt=" + todaySuburbCnt +
-				", weekTotalCnt=" + weekTotalCnt +
-				", weekNormalCnt=" + weekNormalCnt +
-				", weekBusinessCnt=" + weekBusinessCnt +
-				", weekAppCnt=" + weekAppCnt +
-				", weekPeakCnt=" + weekPeakCnt +
-				", weekSuburbCnt=" + weekSuburbCnt +
-				", thisMonthTotalCnt=" + thisMonthTotalCnt +
-				", thisMonthNormalCnt=" + thisMonthNormalCnt +
-				", thisMonthBusinessCnt=" + thisMonthBusinessCnt +
-				", thisMonthAppCnt=" + thisMonthAppCnt +
-				", thisMonthPeakCnt=" + thisMonthPeakCnt +
-				", thisMonthSuburbCnt=" + thisMonthSuburbCnt +
-				", lastMonthTotalCnt=" + lastMonthTotalCnt +
-				", lastMonthNormalCnt=" + lastMonthNormalCnt +
-				", lastMonthBusinessCnt=" + lastMonthBusinessCnt +
-				", lastMonthAppCnt=" + lastMonthAppCnt +
-				", lastMonthPeakCnt=" + lastMonthPeakCnt +
-				", lastMonthSuburbCnt=" + lastMonthSuburbCnt +
-				", memo='" + memo + '\'' +
+				", hasMore=" + hasMore +
 				'}';
 	}
 }

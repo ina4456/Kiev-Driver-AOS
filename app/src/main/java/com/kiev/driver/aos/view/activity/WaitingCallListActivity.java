@@ -148,23 +148,27 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 
 					LogHelper.e("callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
 							+ " / callOrderCounts : " + callOrderCounts.length + " / departures : " + departures.length
-					 + " / destinations: " + destinations.length + " / distances : " + distances.length);
+							+ " / destinations: " + destinations.length + " / distances : " + distances.length);
 
 					if (response.getWaitCallCount() > 0 && callNumbers.length > 0) {
 						hasMoreData = response.isHasMoreList();
 						LogHelper.e("hasMoreData : " + hasMoreData);
 
-						for (int i = 0; i < callNumbers.length ; i++) {
-							Call call = new Call();
-							call.setCallNumber(Integer.parseInt(callNumbers[i]));
-							call.setCallReceivedDate(callReceiptDates[i]);
-							call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
-							call.setDeparturePoi(departures[i]);
-							call.setDestinationPoi(destinations[i]);
-							call.setDistance(Integer.valueOf(distances[i]));
-
-							waitingCallList.add(call);
+						for (int i = 0; i < callNumbers.length; i++) {
+							try {
+								Call call = new Call();
+								call.setCallNumber(Integer.parseInt(callNumbers[i]));
+								call.setCallReceivedDate(callReceiptDates[i]);
+								call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
+								call.setDeparturePoi(departures[i]);
+								call.setDestinationPoi(destinations[i]);
+								call.setDistance(Integer.valueOf(distances[i]));
+								waitingCallList.add(call);
+							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+								e.printStackTrace();
+							}
 						}
+
 
 						if (startIndex == START_INDEX) {
 							mWaitingCallListAdapter.refreshData(waitingCallList);

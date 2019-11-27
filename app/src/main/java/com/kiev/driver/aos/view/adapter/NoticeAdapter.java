@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.model.entity.Notice;
-import com.kiev.driver.aos.util.LogHelper;
 
 import java.util.List;
 
@@ -108,8 +107,6 @@ public class NoticeAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         View v = convertView;
-        LogHelper.e("getChildView()");
-
         if (v == null) {
             viewHolder = new ViewHolder();
             v = inflater.inflate(R.layout.item_notice_child, null);

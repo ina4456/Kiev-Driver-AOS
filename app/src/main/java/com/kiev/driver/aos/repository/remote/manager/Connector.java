@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import androidx.annotation.NonNull;
@@ -180,9 +181,22 @@ public class Connector extends Thread {
                     if (socket != null && !socket.isClosed()) {
                         int available = buffRecv.available();
                         if (available > 0) {
-                            byte[] bytes = new byte[available];
+                            LogHelper.e("available : " + available);
+	                        // FIXME: 2019-11-27 available 값 이상(1300 이상)의 데이터가 서버로부터 전송되는 경우에 대한 처리 필요
+                            byte[] bytes = new byte[2000];
                             buffRecv.read(bytes);
                             LogHelper.d(">> Receive (" + available + ") : " + getPrettyByteArray(bytes));
+
+	                        int maxLogSize = 1000;
+	                        for(int i = 0; i <= bytes.length / maxLogSize; i++) {
+		                        int start = i * maxLogSize;
+		                        int end = (i+1) * maxLogSize;
+		                        end = end > bytes.length ? bytes.length : end;
+		                        byte[] splits = Arrays.copyOfRange(bytes, start, end);
+		                        if (splits.length > 0) {
+			                        LogHelper.d("byte : [" + start + "-" + end + "] : " + getPrettyByteArray(splits));
+		                        }
+	                        }
 
                             sendMessage(MSG_RECEIVED_DATA, bytes);
                         }

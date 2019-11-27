@@ -278,6 +278,7 @@ public class NetworkManager {
     }
 
     private void splitPackets(byte[] response) {
+    	LogHelper.e("splitPackets : " + response.length);
         // 서버에서 내려오는 패킷의 길이가 일정하지 않으므로
         // 메시지 타입을 먼저 파싱해서 정의된 버퍼 사이즈를 가져온다.
         int messageType = parseMessageType(response);
@@ -294,6 +295,8 @@ public class NetworkManager {
         } else {
             splits = response;
         }
+
+        LogHelper.e("response.length : " + response.length + "/ size : " + size + "/ splits : " + splits.length);
 
 /*
         // Response Packet을 생성하면서 파싱을 동시에 진행 한다.

@@ -19,6 +19,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisti
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
@@ -419,6 +420,21 @@ public class Repository {
 		});
 		return data;
 	}
+
+	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(int waitAreaId) {
+		mScenarioService.requestWaitDecisionNew(waitAreaId);
+		final MutableLiveData<ResponseWaitDecisionNewPacket> data = mScenarioService.getWaitDecisionPacket();
+		data.observeForever(new Observer<ResponseWaitDecisionNewPacket>() {
+			@Override
+			public void onChanged(ResponseWaitDecisionNewPacket response) {
+				data.postValue(response);
+				data.removeObserver(this);
+			}
+		});
+		return data;
+	}
+
+
 
 
 	public int getDistance(double latitude, double longitude) {

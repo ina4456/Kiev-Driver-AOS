@@ -5,7 +5,6 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
  * 대기지역요청 (GT-1511) 22 Byte
  * MDT -> Server
  */

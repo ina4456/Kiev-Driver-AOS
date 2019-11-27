@@ -5,26 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingZoneListBinding;
 import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingZoneAdapter;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WaitingZoneListActivity extends BaseActivity implements View.OnClickListener, WaitingZoneAdapter.WaitingZoneListCallback {
+
+	private static final int START_INDEX = 1;
+	private boolean hasMoreData = false;
 
 	private MainViewModel mMainViewModel;
 	private ActivityWaitingZoneListBinding mBinding;
@@ -41,18 +47,19 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 		super.onCreate(savedInstanceState);
 		MainViewModel.Factory callFactory = new MainViewModel.Factory(getApplication());
 		mMainViewModel = ViewModelProviders.of(this, callFactory).get(MainViewModel.class);
-		subscribeMainViewModel(mMainViewModel);
+		//subscribeMainViewModel(mMainViewModel);
 
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_waiting_zone_list);
 
 		initToolbar();
+		requestWaitZoneList(START_INDEX);
 		initRecyclerView();
-		displayEmptyMsgTextView();
+		showListOrEmptyMsgView();
 	}
 
 
 	private void subscribeMainViewModel(MainViewModel mainViewModel) {
-		MutableLiveData<ResponseWaitAreaNewPacket> waitArea = mainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, 0);
+		MutableLiveData<ResponseWaitAreaNewPacket> waitArea = mainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, START_INDEX);
 		waitArea.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
 			@Override
 			public void onChanged(ResponseWaitAreaNewPacket responseWaitAreaNewPacket) {
@@ -77,46 +84,86 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 	}
 
 	private void initRecyclerView() {
-		/**
-		 * 테스트 데이터
-		 */
-		ArrayList<WaitingZone> waitingZoneArrayList = new ArrayList<>();
-
-
-		for (int i = 0; i < 10; i++) {
-			WaitingZone waitingZone = new WaitingZone();
-			waitingZone.setWaitingZoneName("판교 현대백화점 " + i);
-			waitingZone.setWaitingTotalWaitingCount("10");
-			waitingZone.setBelongToThisWaitingZone(false);
-			waitingZone.setWaitingOrder("10대 중 3번째");
-			if (i > 5) {
-				waitingZone.setPossibleToSelect(false);
-			} else {
-				waitingZone.setPossibleToSelect(true);
-			}
-			waitingZoneArrayList.add(waitingZone);
-		}
-
-		/**
-		 * 테스트 데이터
-		 */
-
-		mWaitingZoneAdapter = new WaitingZoneAdapter(this, waitingZoneArrayList, this);
+		mWaitingZoneAdapter = new WaitingZoneAdapter(this, new ArrayList(), this);
 		mBinding.rvWaitingZone.setNestedScrollingEnabled(false);
 		mBinding.rvWaitingZone.setAdapter(mWaitingZoneAdapter);
 		mBinding.rvWaitingZone.setFocusable(false);
 		mBinding.rvWaitingZone.setVerticalScrollBarEnabled(true);
 		mBinding.rvWaitingZone.scrollTo(0, 0);
+		mBinding.rvWaitingZone.addOnScrollListener(mScrollListener);
 	}
 
-	// TODO: 2019-06-21 대기장소가 없을 경우 표시하게 구현 필요
-	private void displayEmptyMsgTextView() {
+	private void showListOrEmptyMsgView() {
 		if (mWaitingZoneAdapter != null) {
 			if (mWaitingZoneAdapter.getItemCount() <= 0) {
+				mBinding.viewEmptyMsg.tvEmptyMsg.setText(getString(R.string.wz_msg_no_waiting_zone));
 				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.VISIBLE);
 				mBinding.rvWaitingZone.setVisibility(View.GONE);
+			} else {
+				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.GONE);
+				mBinding.rvWaitingZone.setVisibility(View.VISIBLE);
 			}
 		}
+	}
+
+	private void requestWaitZoneList(int startIndex) {
+		startLoadingProgress();
+
+		if (startIndex == START_INDEX) {
+			if (mWaitingZoneAdapter != null) {
+				mWaitingZoneAdapter.refreshData(null);
+			}
+		}
+
+		MutableLiveData<ResponseWaitAreaNewPacket> liveData = mMainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, startIndex);
+		liveData.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
+			@Override
+			public void onChanged(ResponseWaitAreaNewPacket response) {
+				LogHelper.e("responseWaitCallListPacket : " + response);
+				liveData.removeObserver(this);
+				finishLoadingProgress();
+
+				if (response != null) {
+					ArrayList<WaitingZone> waitingZoneList = new ArrayList<>();
+					String[] waitAreaIds = response.getWaitAreaIds().split("\\|\\|");
+					String[] waitAreaNames = response.getWaitAreaNames().split("\\|\\|");
+					String[] numberOfCarsInAreas = response.getNumberOfCarInAreas().split("\\|\\|");
+					String[] isAvailableWaits = response.getIsAvailableWaits().split("\\|\\|");
+					String[] myWaitNumbers = response.getMyWaitNumbers().split("\\|\\|");
+
+					LogHelper.e("waitAreaIds : " + waitAreaIds.length + " / waitAreaNames : " + waitAreaNames.length
+							+ " / numberOfCarsInAreas : " + numberOfCarsInAreas.length + " / isAvailableWaits : " + isAvailableWaits.length
+							+ " / myWaitNumbers: " + myWaitNumbers.length);
+
+					if (response.getTotalCount() > 0 && waitAreaIds.length > 0) {
+						hasMoreData = response.isHasMoreData();
+						LogHelper.e("hasMoreData : " + hasMoreData);
+
+						for (int i = 0; i < waitAreaIds.length ; i++) {
+							try {
+								WaitingZone waitZone = new WaitingZone();
+								waitZone.setWaitingZoneId(Integer.parseInt(waitAreaIds[i]));
+								waitZone.setWaitingZoneName(waitAreaNames[i]);
+								waitZone.setNumberOfCarsInAreas(Integer.parseInt(numberOfCarsInAreas[i]));
+								waitZone.setAvailableWait(isAvailableWaits[i].equals("Y"));
+								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
+								waitingZoneList.add(waitZone);
+							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+								e.printStackTrace();
+							}
+						}
+
+						if (startIndex == START_INDEX) {
+							mWaitingZoneAdapter.refreshData(waitingZoneList);
+						} else {
+							mWaitingZoneAdapter.addData(waitingZoneList);
+						}
+
+						showListOrEmptyMsgView();
+					}
+				}
+			}
+		});
 	}
 
 
@@ -131,11 +178,47 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 
 	@Override
 	public void onListItemSelected(WaitingZone item, boolean isRequest) {
+		LogHelper.e("item : " + item + " / " + isRequest);
 		if (item != null) {
-			mMainViewModel.changeCallStatus(isRequest
-					? Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE
-					: Constants.CALL_STATUS_VACANCY);
-			mMainViewModel.setWaitingZone(item);
+			if (isRequest) {
+				MutableLiveData<ResponseWaitDecisionNewPacket> liveData =  mMainViewModel.requestWaitDecision(item.getWaitingZoneId());
+				liveData.observe(this, new Observer<ResponseWaitDecisionNewPacket>() {
+					@Override
+					public void onChanged(ResponseWaitDecisionNewPacket response) {
+						liveData.removeObserver(this);
+						LogHelper.e("대기 결정 응답 :  " + response);
+					}
+				});
+			}
+
+
+			// TODO: 2019-11-27 대기 결정 api 호출
+//			mMainViewModel.changeCallStatus(isRequest
+//					? Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE
+//					: Constants.CALL_STATUS_VACANCY);
+//			mMainViewModel.setWaitingZone(item);
 		}
 	}
+
+
+	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+		@Override
+		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+			super.onScrolled(recyclerView, dx, dy);
+
+			if (hasMoreData) {
+				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+				if (layoutManager != null) {
+					int totalItemCount = layoutManager.getItemCount();
+					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
+
+					if (lastVisible >= totalItemCount - 1) {
+						LogHelper.e("lastVisibled : " + totalItemCount);
+						requestWaitZoneList(totalItemCount + 1);
+					}
+				}
+			}
+		}
+	};
+
 }

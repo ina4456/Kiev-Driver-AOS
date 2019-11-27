@@ -17,14 +17,21 @@ import com.kiev.driver.aos.viewmodel.CallHistoryViewModel;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CallHistoryDetailListActivity extends BaseActivity implements View.OnClickListener {
+
+	private static final int START_INDEX = 1;
+	private boolean hasMoreData = false;
+	private Packets.StatisticPeriodType periodType;
 
 	private ActivityCallHistoryDetailListBinding mBinding;
 	private static final String EXTRA_KEY_PERIOD_TYPE = "extra_key_list_number";
@@ -50,7 +57,6 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 
 		int titleRid;
 		int periodTypeInt = getIntent().getIntExtra(EXTRA_KEY_PERIOD_TYPE, 0);
-		Packets.StatisticPeriodType periodType;
 		switch (periodTypeInt) {
 			case 1:
 				periodType = Packets.StatisticPeriodType.Week;
@@ -70,22 +76,12 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 				break;
 		}
 
-		MutableLiveData<ResponseStatisticsDetailPacket> detailPacket =
-				mViewModel.getStatisticsDetail(Packets.StatisticListType.TotalCall, periodType, 0);
-
-		detailPacket.observe(this, new Observer<ResponseStatisticsDetailPacket>() {
-			@Override
-			public void onChanged(ResponseStatisticsDetailPacket responseStatisticsPacket) {
-				LogHelper.e("UI 리스폰스 전달");
-			}
-		});
-
 
 		initToolbar(titleRid);
+		requestHistoryList(periodType, START_INDEX);
 		initRecyclerView();
-		displayEmptyMsgTextView();
+		showListOrEmptyMsgView();
 	}
-
 
 	private void initToolbar(int titleRid) {
 		setSupportActionBar(mBinding.callHistoryDetailToolbar.toolbar);
@@ -104,55 +100,120 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 	}
 
 	private void initRecyclerView() {
-		/**
-		 * 테스트 데이터
-		 */
-		ArrayList<CallHistory> callHistoryArrayList = new ArrayList<>();
-		CallHistory callHistory = new CallHistory();
-		callHistory.setDate("2019-02-20");
-		callHistory.setDeparture("분당구 삼평동");
-		callHistory.setDestination("판교 현대백화점");
-		callHistory.setStartTime("10:20");
-		callHistory.setEndTime("20:20");
-		callHistory.setOrderStatus("운행완료");
-
-		CallHistory callHistory2 = new CallHistory();
-		callHistory2.setDate("2019-02-11");
-		callHistory2.setDeparture("분당구 삼평동");
-		callHistory2.setDestination("판교 현대백화점");
-		callHistory2.setStartTime("10:20");
-		callHistory2.setEndTime("20:20");
-		callHistory2.setOrderStatus("운행완료");
-		callHistory2.setPassengerPhoneNumber("01050556980");
-
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory2);
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory);
-		callHistoryArrayList.add(callHistory);
-		/**
-		 * 테스트 데이터
-		 */
-
-		mCallHistoryAdapter = new CallHistoryAdapter(this, callHistoryArrayList);
+		mCallHistoryAdapter = new CallHistoryAdapter(this, new ArrayList<>());
 		mBinding.rvCallHistory.setNestedScrollingEnabled(false);
 		mBinding.rvCallHistory.setAdapter(mCallHistoryAdapter);
 		mBinding.rvCallHistory.setFocusable(false);
+		mBinding.rvCallHistory.setVerticalScrollBarEnabled(true);
 		mBinding.rvCallHistory.scrollTo(0, 0);
+		mBinding.rvCallHistory.addOnScrollListener(mScrollListener);
 	}
 
-
-	private void displayEmptyMsgTextView() {
+	private void showListOrEmptyMsgView() {
 		if (mCallHistoryAdapter != null) {
 			if (mCallHistoryAdapter.getItemCount() <= 0) {
+				mBinding.viewEmptyMsg.tvEmptyMsg.setText(getString(R.string.ch_msg_no_history));
 				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.VISIBLE);
 				mBinding.rvCallHistory.setVisibility(View.GONE);
+			} else {
+				mBinding.viewEmptyMsg.clEmptyView.setVisibility(View.GONE);
+				mBinding.rvCallHistory.setVisibility(View.VISIBLE);
 			}
 		}
 	}
+
+	private void requestHistoryList(Packets.StatisticPeriodType periodType, int startIndex) {
+		startLoadingProgress();
+
+		MutableLiveData<ResponseStatisticsDetailPacket> historyPacket =
+				mViewModel.getStatisticsDetail(Packets.StatisticListType.TotalCall, periodType, startIndex);
+
+		if (startIndex == START_INDEX) {
+			if (mCallHistoryAdapter != null) {
+				mCallHistoryAdapter.refreshData(null);
+			}
+		}
+
+		historyPacket.observe(this, new Observer<ResponseStatisticsDetailPacket>() {
+			@Override
+			public void onChanged(ResponseStatisticsDetailPacket response) {
+				//LogHelper.e("UI 리스폰스 전달: " + response);
+				historyPacket.removeObserver(this);
+				finishLoadingProgress();
+
+				if (response != null) {
+					ArrayList<CallHistory> historyList = new ArrayList<>();
+					String[] callNumbers = response.getCallNumber().split("\\|\\|");
+					String[] callTypes = response.getCallType().split("\\|\\|");
+					String[] callReceiptDates = response.getReceiptDate().split("\\|\\|");
+					String[] departures = response.getDeparture().split("\\|\\|");
+					String[] destinations = response.getDestination().split("\\|\\|");
+					String[] boardedTimes = response.getBoardingTime().split("\\|\\|");
+					String[] alightedTimes = response.getAlightingTime().split("\\|\\|");
+					String[] phoneNumbers = response.getPhoneNumber().split("\\|\\|");
+
+
+					LogHelper.e( "callTypes : " + callTypes.length
+							+ "callNumbers : " + callNumbers.length + " / callReceiptDates : " + callReceiptDates.length
+							+ " / departures : " + departures.length + " / destinations: " + destinations.length
+							+ " / boardingTimes: " + boardedTimes.length + " / alightedTimes : " + alightedTimes.length
+							+ " / phoneNumbers : " + phoneNumbers.length);
+
+					if (response.getResultCount() > 0 && callNumbers.length > 0) {
+						hasMoreData = response.isHasMore();
+						LogHelper.e("hasMoreData : " + hasMoreData);
+
+						for (int i = 0; i < callNumbers.length; i++) {
+							try {
+								CallHistory history = new CallHistory();
+								history.setCallId(Integer.parseInt(callNumbers[i]));
+								history.setCallType(callTypes[i]);
+								history.setDate(callReceiptDates[i]);
+								history.setDeparture(departures[i]);
+								history.setDestination(destinations[i]);
+								history.setStartTime(boardedTimes[i]);
+								history.setEndTime(alightedTimes[i]);
+								history.setPassengerPhoneNumber(phoneNumbers[i]);
+								historyList.add(history);
+							} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+								e.printStackTrace();
+							}
+						}
+
+						if (startIndex == START_INDEX) {
+							mCallHistoryAdapter.refreshData(historyList);
+						} else {
+							mCallHistoryAdapter.addData(historyList);
+						}
+
+						showListOrEmptyMsgView();
+
+					}
+				}
+			}
+		});
+	}
+
+
+	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+		@Override
+		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+			super.onScrolled(recyclerView, dx, dy);
+
+			if (hasMoreData) {
+				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+				if (layoutManager != null) {
+					int totalItemCount = layoutManager.getItemCount();
+					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
+
+					if (lastVisible >= totalItemCount - 1) {
+						LogHelper.e("lastVisibled : " + totalItemCount);
+						requestHistoryList(periodType, totalItemCount + 1);
+					}
+				}
+			}
+		}
+	};
 
 
 	@Override

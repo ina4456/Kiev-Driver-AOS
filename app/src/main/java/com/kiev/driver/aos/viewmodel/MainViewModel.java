@@ -21,6 +21,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.NavigationExecutor;
@@ -150,12 +151,12 @@ public class MainViewModel extends AndroidViewModel {
 	}
 
 	public void setWaitingZone(WaitingZone waitingZone) {
-		Call call = this.mCallInfo.getValue();
-		if (call != null) {
-			call.setWaitingZoneId(waitingZone.getWaitingZoneId());
-			call.setWaitingZoneName(waitingZone.getWaitingZoneName());
-			mRepository.updateCallInfo(call);
-		}
+//		Call call = this.mCallInfo.getValue();
+//		if (call != null) {
+//			call.setWaitingZoneId(waitingZone.getWaitingZoneId());
+//			call.setWaitingZoneName(waitingZone.getWaitingZoneName());
+//			mRepository.updateCallInfo(call);
+//		}
 	}
 
 
@@ -288,6 +289,10 @@ public class MainViewModel extends AndroidViewModel {
 
 	public MutableLiveData<ResponseWaitAreaNewPacket> requestWaitArea(Packets.WaitAreaRequestType requestType, int startIndex) {
 		return mRepository.requestWaitArea(requestType, startIndex);
+	}
+
+	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(int waitAreaId) {
+		return mRepository.requestWaitDecision(waitAreaId);
 	}
 
 

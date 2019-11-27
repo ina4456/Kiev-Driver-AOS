@@ -50,6 +50,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaP
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallOrderPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitDecisionPacket;
@@ -69,6 +70,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisti
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
@@ -172,6 +174,11 @@ public class ScenarioService extends LifecycleService {
 	private MutableLiveData<ResponseWaitAreaNewPacket> mWaitArea;
 	public MutableLiveData<ResponseWaitAreaNewPacket> getWaitAreaPacket() {
 		return mWaitArea;
+	}
+
+	private MutableLiveData<ResponseWaitDecisionNewPacket> mWaitDecision;
+	public MutableLiveData<ResponseWaitDecisionNewPacket> getWaitDecisionPacket() {
+		return mWaitDecision;
 	}
 
 
@@ -893,7 +900,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setCarId(mConfiguration.getCarId());
 		packet.setQueryType(type);
 		packet.setStartIndex(startIndex);
-		packet.setRequestCount(10);
+		packet.setRequestCount(5);
 		packet.setQueryPeriod(period);
 		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
 
@@ -911,10 +918,28 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setStartIndex(startIndex);
-		packet.setRequestCount(10);
+		packet.setRequestCount(5);
 
 		request(packet);
 	}
+
+
+	public void requestWaitDecisionNew(int waitAreaId) {
+		mWaitDecision = new MutableLiveData<>();
+
+		RequestWaitDecisionPacket packet = new RequestWaitDecisionPacket();
+		packet.setServiceNumber(mConfiguration.getServiceNumber());
+		packet.setCorporationCode(mConfiguration.getCorporationCode());
+		packet.setCarId(mConfiguration.getCarId());
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+		packet.setGpsTime(gpsHelper.getTime());
+		packet.setLongitude(gpsHelper.getLongitude());
+		packet.setLatitude(gpsHelper.getLatitude());
+		packet.setWaitAreaId(waitAreaId);
+
+		request(packet);
+	}
+
 
 
 

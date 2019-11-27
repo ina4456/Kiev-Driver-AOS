@@ -123,7 +123,7 @@
     <string name="wz_btn_request">대기요청</string>
     <string name="wz_btn_waiting_count">%d대</string>
     <string name="wz_btn_waiting_and_order_count">%d대 중 %d번째</string>
-    <string name="wz_msg_no_waiting_zone">주변에 대기장소가 없습니다.</string>
+    <string name="wz_msg_no_waiting_zone">대기장소가 없습니다.</string>
     <string name="wz_msg_exit_waiting_zone">차량 위치가 변경되어 설정된 대기장소를 해제합니다.</string>
 
 
@@ -167,6 +167,7 @@
     <string name="ch_call_type_all">전체</string>
     <string name="ch_call_type_normal">일반콜</string>
     <string name="ch_call_type_business">업무콜</string>
+    <string name="ch_msg_no_history">운행이력이 없습니다.</string>
 
 
     <!--내정보-->

@@ -60,6 +60,14 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 		notifyDataSetChanged();
 	}
 
+	public void addData(ArrayList<CallHistory> calls) {
+		LogHelper.e("@@@@ addData");
+		int curSize = getItemCount();
+		mItems.addAll(calls);
+		notifyItemRangeInserted(curSize, calls.size() - 1);
+	}
+
+
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 		private TextView tvDate, tvOrderStatus, tvDeparture, tvDestination, tvStartTime, tvEndTime;
 		private LinearLayout btnCallPassenger;
@@ -78,7 +86,7 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 		private void bindBodyData(CallHistory item) {
 
 			tvDate.setText(item.getDate());
-			tvOrderStatus.setText(item.getOrderStatus());
+			tvOrderStatus.setText(item.getCallType());
 			tvDeparture.setText(item.getDeparture());
 
 			String destination = item.getDestination();

@@ -2,18 +2,18 @@ package com.kiev.driver.aos.model;
 
 
 public class WaitingZone {
-	private String waitingZoneId;
+	private int waitingZoneId;
 	private String waitingZoneName;
-	private String waitingTotalWaitingCount;    //전체 대기 인원
-	private String waitingOrder;                //선택된 대기존에서 내 순번
-	private boolean isBelongToThisWaitingZone;  //대기존에서 유저가 대기중인지 여부/
-	private boolean possibleToSelect;
+	private int numberOfCarsInAreas;    //전체 대기 인원
+	private boolean isAvailableWait;
+	private int myWaitingOrder;                //선택된 대기존에서 내 순번
 
-	public String getWaitingZoneId() {
+
+	public int getWaitingZoneId() {
 		return waitingZoneId;
 	}
 
-	public void setWaitingZoneId(String waitingZoneId) {
+	public void setWaitingZoneId(int waitingZoneId) {
 		this.waitingZoneId = waitingZoneId;
 	}
 
@@ -25,47 +25,38 @@ public class WaitingZone {
 		this.waitingZoneName = waitingZoneName;
 	}
 
-	public String getWaitingTotalWaitingCount() {
-		return waitingTotalWaitingCount;
+	public int getNumberOfCarsInAreas() {
+		return numberOfCarsInAreas;
 	}
 
-	public void setWaitingTotalWaitingCount(String waitingTotalWaitingCount) {
-		this.waitingTotalWaitingCount = waitingTotalWaitingCount;
+	public void setNumberOfCarsInAreas(int numberOfCarsInAreas) {
+		this.numberOfCarsInAreas = numberOfCarsInAreas;
 	}
 
-	public String getWaitingOrder() {
-		return waitingOrder;
+	public boolean isAvailableWait() {
+		return isAvailableWait;
 	}
 
-	public void setWaitingOrder(String waitingOrder) {
-		this.waitingOrder = waitingOrder;
+	public void setAvailableWait(boolean availableWait) {
+		isAvailableWait = availableWait;
 	}
 
-	public boolean isBelongToThisWaitingZone() {
-		return isBelongToThisWaitingZone;
+	public int getMyWaitingOrder() {
+		return myWaitingOrder;
 	}
 
-	public void setBelongToThisWaitingZone(boolean belongToThisWaitingZone) {
-		isBelongToThisWaitingZone = belongToThisWaitingZone;
-	}
-
-	public boolean isPossibleToSelect() {
-		return possibleToSelect;
-	}
-
-	public void setPossibleToSelect(boolean possibleToSelect) {
-		this.possibleToSelect = possibleToSelect;
+	public void setMyWaitingOrder(int myWaitingOrder) {
+		this.myWaitingOrder = myWaitingOrder;
 	}
 
 	@Override
 	public String toString() {
 		return "WaitingZone{" +
-				"waitingZoneId='" + waitingZoneId + '\'' +
+				"waitingZoneId=" + waitingZoneId +
 				", waitingZoneName='" + waitingZoneName + '\'' +
-				", waitingTotalWaitingCount='" + waitingTotalWaitingCount + '\'' +
-				", waitingOrder='" + waitingOrder + '\'' +
-				", isBelongToThisWaitingZone=" + isBelongToThisWaitingZone +
-				", possibleToSelect=" + possibleToSelect +
+				", numberOfCarsInAreas=" + numberOfCarsInAreas +
+				", isAvailableWait=" + isAvailableWait +
+				", myWaitingOrder=" + myWaitingOrder +
 				'}';
 	}
 }

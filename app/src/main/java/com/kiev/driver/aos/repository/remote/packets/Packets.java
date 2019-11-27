@@ -293,7 +293,7 @@ public class Packets {
 		TotalCall(0x01),
 		NormalCall(0x02),
 		AppCall(0x03),
-		OfficeCall(0x04);
+		BusinessCall(0x04);
 
 		public int value;
 
@@ -454,12 +454,12 @@ public class Packets {
 			case REQUEST_STATISTICS_DETAIL: // 콜 통계 상세 요청
 				return 40;
 			case RESPONSE_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
-				return 1457;
+				return 818;
 
 			case REQUEST_WAIT_AREA_NEW: // 대기 지역 현황 요청
 				return 70;
 			case RESPONSE_WAIT_AREA_NEW: // 대기 지역 현황 요청 응답
-				return 458;
+				return 459;
 
 			case REQUEST_WAIT_DECISION_NEW: // 대기 지역 대기 요청
 				return 107;

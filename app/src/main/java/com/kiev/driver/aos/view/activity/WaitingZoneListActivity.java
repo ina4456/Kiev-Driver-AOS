@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ActivityWaitingZoneListBinding;
+import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.WaitingZone;
+import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
@@ -24,16 +27,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.kiev.driver.aos.view.activity.CallReceivingActivity.DIALOG_TAG_FAILURE;
 
 public class WaitingZoneListActivity extends BaseActivity implements View.OnClickListener, WaitingZoneAdapter.WaitingZoneListCallback {
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
-
-	private MainViewModel mMainViewModel;
+	private boolean isLoading = false;
+	private MainViewModel mViewModel;
 	private ActivityWaitingZoneListBinding mBinding;
 	private WaitingZoneAdapter mWaitingZoneAdapter;
 
@@ -46,28 +51,17 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MainViewModel.Factory callFactory = new MainViewModel.Factory(getApplication());
-		mMainViewModel = ViewModelProviders.of(this, callFactory).get(MainViewModel.class);
-		//subscribeMainViewModel(mMainViewModel);
-
+		LogHelper.e("onCreat()");
+		mViewModel = new ViewModelProvider(this, new MainViewModel.Factory(getApplication()))
+				.get(MainViewModel.class);
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_waiting_zone_list);
+		mBinding.setLifecycleOwner(this);
 
 		initToolbar();
+		subscribeViewModel(mViewModel);
 		requestWaitZoneList(START_INDEX);
 		initRecyclerView();
 		showListOrEmptyMsgView();
-	}
-
-
-	private void subscribeMainViewModel(MainViewModel mainViewModel) {
-		MutableLiveData<ResponseWaitAreaNewPacket> waitArea = mainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, START_INDEX);
-		waitArea.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
-			@Override
-			public void onChanged(ResponseWaitAreaNewPacket responseWaitAreaNewPacket) {
-				LogHelper.e("onChanged() : " + responseWaitAreaNewPacket);
-			}
-		});
-
 	}
 
 	private void initToolbar() {
@@ -108,6 +102,8 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 	}
 
 	private void requestWaitZoneList(int startIndex) {
+		LogHelper.e("requestWaitZoneList : " + startIndex);
+		isLoading = true;
 		startLoadingProgress();
 
 		if (startIndex == START_INDEX) {
@@ -116,12 +112,13 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 			}
 		}
 
-		MutableLiveData<ResponseWaitAreaNewPacket> liveData = mMainViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, startIndex);
+		MutableLiveData<ResponseWaitAreaNewPacket> liveData = mViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, startIndex);
 		liveData.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
 			@Override
 			public void onChanged(ResponseWaitAreaNewPacket response) {
 				LogHelper.e("responseWaitCallListPacket : " + response);
 				liveData.removeObserver(this);
+				isLoading = false;
 				finishLoadingProgress();
 
 				if (response != null) {
@@ -142,13 +139,13 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 							LogHelper.e("hasMoreData : " + hasMoreData);
 
 							for (int i = 0; i < waitAreaIds.length; i++) {
-
 								WaitingZone waitZone = new WaitingZone();
 								waitZone.setWaitingZoneId(waitAreaIds[i]);
 								waitZone.setWaitingZoneName(waitAreaNames[i]);
 								waitZone.setNumberOfCarsInAreas(Integer.parseInt(numberOfCarsInAreas[i]));
 								waitZone.setAvailableWait(isAvailableWaits[i].equals("Y"));
 								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
+
 								waitingZoneList.add(waitZone);
 							}
 
@@ -169,45 +166,77 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 	}
 
 
+
+	private void subscribeViewModel(MainViewModel mainViewModel) {
+		if (mainViewModel != null) {
+			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+				@Override
+				public void onChanged(Call call) {
+					LogHelper.e("onChanged-Call");
+					if (call != null) {
+						int callStatus = call.getCallStatus();
+						LogHelper.e("onChanged-Call : " + callStatus);
+						switch (callStatus) {
+							case Constants.CALL_STATUS_DRIVING:
+							case Constants.CALL_STATUS_BOARDED:
+							case Constants.CALL_STATUS_ALLOCATED:
+								finish();
+								break;
+
+							case Constants.CALL_STATUS_VACANCY:
+								requestWaitZoneList(START_INDEX);
+								break;
+						}
+					}
+				}
+			});
+		}
+	}
+
+
 	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.ibtn_action_button) {
-			// TODO: 2019-06-20 리프레시 리스트 구현
-			LogHelper.e("refresh waiting zone list");
-			//mWaitingZoneAdapter.refreshData();
+			requestWaitZoneList(START_INDEX);
 		}
 	}
 
 	@Override
-	public void onListItemSelected(WaitingZone item, boolean isRequest) {
+	public void onListItemSelected(int index, WaitingZone item, boolean isRequest) {
 		LogHelper.e("item : " + item + " / " + isRequest);
 		if (item != null) {
 			if (isRequest) {
-				MutableLiveData<ResponseWaitDecisionNewPacket> liveData = mMainViewModel.requestWaitDecision(item.getWaitingZoneId());
+				MutableLiveData<ResponseWaitDecisionNewPacket> liveData = mViewModel.requestWaitDecision(item.getWaitingZoneId());
 				liveData.observe(this, new Observer<ResponseWaitDecisionNewPacket>() {
 					@Override
 					public void onChanged(ResponseWaitDecisionNewPacket response) {
 						liveData.removeObserver(this);
 						LogHelper.e("대기 결정 응답 :  " + response);
+						if (response.getWaitProcType() == Packets.WaitProcType.Success) {
+							mViewModel.setWaitingZone(item, isRequest);
+							requestWaitZoneList(START_INDEX);
+						} else {
+							showFailurePopup(isRequest);
+						}
 					}
 				});
 			} else {
-				MutableLiveData<ResponseWaitCancelPacket> liveData = mMainViewModel.requestWaitCancel(item.getWaitingZoneId());
+				MutableLiveData<ResponseWaitCancelPacket> liveData = mViewModel.requestWaitCancel(item.getWaitingZoneId());
 				liveData.observe(this, new Observer<ResponseWaitCancelPacket>() {
 					@Override
 					public void onChanged(ResponseWaitCancelPacket response) {
 						liveData.removeObserver(this);
 						LogHelper.e("대기 취소 응답 :  " + response);
+						if (response.getWaitCancelType() == Packets.WaitCancelType.Success) {
+							mViewModel.setWaitingZone(item, isRequest);
+							requestWaitZoneList(START_INDEX);
+						} else {
+							showFailurePopup(isRequest);
+						}
+
 					}
 				});
 			}
-
-
-			// TODO: 2019-11-27 대기 결정 api 호출
-//			mMainViewModel.changeCallStatus(isRequest
-//					? Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE
-//					: Constants.CALL_STATUS_VACANCY);
-//			mMainViewModel.setWaitingZone(item);
 		}
 	}
 
@@ -223,13 +252,31 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 					int totalItemCount = layoutManager.getItemCount();
 					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
 
-					if (lastVisible >= totalItemCount - 1) {
+					if (lastVisible >= totalItemCount - 1 && !isLoading) {
 						LogHelper.e("lastVisibled : " + totalItemCount);
-						requestWaitZoneList(totalItemCount + 1);
+
+						mBinding.rvWaitingZone.post(new Runnable() {
+							@Override
+							public void run() {
+								//layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+								requestWaitZoneList(totalItemCount + 1);
+							}
+						});
 					}
 				}
 			}
 		}
 	};
 
+
+	private void showFailurePopup(boolean isRequest) {
+		Popup popup = new Popup
+				.Builder(Popup.TYPE_ONE_BTN_NORMAL, DIALOG_TAG_FAILURE)
+				.setContent(isRequest ? getString(R.string.wz_msg_request_failed)
+						: getString(R.string.wz_msg_cancel_failed))
+				.setBtnLabel(getString(R.string.common_confirm), null)
+				.setDismissSecond(3)
+				.build();
+		showPopupDialog(popup);
+	}
 }

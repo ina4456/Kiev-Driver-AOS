@@ -3,6 +3,7 @@ package com.kiev.driver.aos.repository;
 import com.kiev.driver.aos.AppExecutors;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
+import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
@@ -21,7 +22,6 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCall
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
 import com.kiev.driver.aos.service.ScenarioService;
@@ -233,6 +233,11 @@ public class Repository {
 		mSharedPreferenceManager.setWaitOrderInfo(waitOrderInfoPacket);
 	}
 
+	public void saveWaitArea(WaitingZone waitingZone) {
+		mSharedPreferenceManager.setWaitArea(waitingZone);
+	}
+
+
 	public OrderInfoPacket loadCallInfoWithOrderKind(Packets.OrderKind kind) {
 		switch (kind) {
 			case Normal:
@@ -273,12 +278,12 @@ public class Repository {
 		}
 	}
 
-	public ResponseWaitDecisionPacket getWaitArea() {
-		return mSharedPreferenceManager.getWaitArea();
+	public WaitingZone getWaitingZone() {
+		return mSharedPreferenceManager.getWaitingZone();
 	}
 
-	public void clearWaitArea() {
-		mSharedPreferenceManager.clearWaitArea();
+	public void clearWaitingZone() {
+		mSharedPreferenceManager.clearWaitingZone();
 	}
 
 
@@ -333,6 +338,11 @@ public class Repository {
 	}
 
 	public MutableLiveData<ResponseMyInfoPacket> requestMyInfo() {
+		if (mScenarioService == null){
+			return null;
+		}
+
+
 		mScenarioService.requestMyInfo();
 		final MutableLiveData<ResponseMyInfoPacket> data = mScenarioService.getResponseMyInfo();
 		data.observeForever(new Observer<ResponseMyInfoPacket>() {

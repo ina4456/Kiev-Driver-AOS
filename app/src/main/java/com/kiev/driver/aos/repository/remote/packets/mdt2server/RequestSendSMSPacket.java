@@ -2,6 +2,7 @@ package com.kiev.driver.aos.repository.remote.packets.mdt2server;
 
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
  * SMS 전송 요청 (GT-5813) 102 Byte
@@ -77,7 +78,7 @@ public class RequestSendSMSPacket extends RequestPacket {
         writeInt(carId, 2);
 		writeString(callReceiptDate, 11);
 		writeInt(callNumber, 2);
-        writeString(content, 80);
+        writeString(EncryptUtil.encodeStrUTF8(content), 160);
         return buffers;
     }
 

@@ -1,5 +1,7 @@
 package com.kiev.driver.aos.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
 public class EncryptUtil {
@@ -60,5 +62,17 @@ public class EncryptUtil {
 			System.out.println(tmpStr[idx] + " >>Encode>> " + encodeStr(tmpStr[idx]) + " >>Decode>> " + decodeStr(encodeStr(tmpStr[idx])));
 
 		}
+	}
+
+
+
+	public static String encodeStrUTF8(String str) {
+		try {
+			LogHelper.e("encodeStrUTF8 () " + str);
+			return URLEncoder.encode(str, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
 }

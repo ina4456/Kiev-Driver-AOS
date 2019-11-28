@@ -18,6 +18,7 @@ import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.model.Popup;
+import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
@@ -72,7 +73,6 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCall
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
@@ -392,9 +392,9 @@ public class ScenarioService extends LifecycleService {
 			}
 
 			// 대기 상태이면서 대기 고객 정보가 없을 때 주행이 올라오면 대기 취소를 한다.
-			ResponseWaitDecisionPacket p = mRepository.getWaitArea();
-			if (p != null && mRepository.loadWaitCallInfo() == null) {
-				requestWaitCancel(p.getWaitPlaceCode());
+			WaitingZone waitingZone = mRepository.getWaitingZone();
+			if (waitingZone != null && mRepository.loadWaitCallInfo() == null) {
+				requestWaitCancel(waitingZone.getWaitingZoneId());
 			}
 		}
 	}
@@ -869,6 +869,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
+		LogHelper.e("distance : " + callInfo.getDistance());
 		packet.setDistance(callInfo.getDistance());
 		packet.setOrderKind(Packets.OrderKind.WaitCall);
 		request(packet);
@@ -925,7 +926,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setStartIndex(startIndex);
-		packet.setRequestCount(5);
+		packet.setRequestCount(10);
 
 		request(packet);
 	}
@@ -968,7 +969,7 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.d(">> refreshSavedPassengerInfo - 1");
 
 			mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Wait);
-			mRepository.clearWaitArea();
+			mRepository.clearWaitingZone();
 		}
 
 		OrderInfoPacket getOn = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
@@ -1102,7 +1103,7 @@ public class ScenarioService extends LifecycleService {
 							mRepository.updateConfig(mConfiguration);
 						}
 
-						if (mRepository.getWaitArea() != null) {
+						if (mRepository.getWaitingZone() != null) {
 							pollingCheckWaitRange(true);
 						}
 
@@ -1157,14 +1158,13 @@ public class ScenarioService extends LifecycleService {
 				case Packets.RESPONSE_PERIOD_SENDING: { // 주기 전송 응답
 					ResponsePeriodSendingPacket packet = (ResponsePeriodSendingPacket) response;
 					// 메시지 존재하는 경우
-					LogHelper.e("packet.hasMessage() : " + packet.hasMessage());
 					if (packet.hasMessage()) {
 						requestMessage();
 					}
 
 					// 2017. 12. 19 - 권석범
 					// 배차상태 & 저장된 고객정보가 없을 경우 배차정보요청 패킷(GT-1A11) 전송
-					LogHelper.e("packet.hasMessage()2 : " + packet.hasOrder());
+					LogHelper.e("packet.hasOrder : " + packet.hasOrder());
 					if (packet.hasOrder()) {
 						OrderInfoPacket orderInfoPacket = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 						if (orderInfoPacket == null) {
@@ -1304,12 +1304,12 @@ public class ScenarioService extends LifecycleService {
 						// - 0x0A : 주행중 일반콜 수신될 경우
 						LogHelper.e("if 3");
 						requestOrderRealtime(Packets.OrderDecisionType.Driving, packet);
-					} else if (mRepository.getWaitArea() != null
+					} else if (mRepository.getWaitingZone() != null
 							&& packet.getOrderKind() == Packets.OrderKind.Normal) {
 						// - 0x0C : 대기배차 상태인데 일반콜 수신될 경우
 						LogHelper.e("if 4");
 						requestOrderRealtime(Packets.OrderDecisionType.Waiting, packet);
-					} else if (mRepository.getWaitArea() != null
+					} else if (mRepository.getWaitingZone() != null
 							&& packet.getOrderKind() == Packets.OrderKind.WaitOrderTwoWay) {
 						// 대기배차 상태인데 양방향 대기배차 수신될 경우 (하남사용)
 						LogHelper.e("if 5");
@@ -1412,7 +1412,7 @@ public class ScenarioService extends LifecycleService {
 
 					if (tempPacket != null && tempPacket.getOrderKind() == Packets.OrderKind.WaitOrderTwoWay) {
 						//대기콜(하남)인 경우, 배차 처리되면 대기 상태 해제 한다. 그리고, 아이나비 화면으로 가기 때문에 부작용 없다고 생각한다.
-						mRepository.clearWaitArea();
+						mRepository.clearWaitingZone();
 					}
 
 					processCallInfo(context, messageType, tempPacket, p.getCallNumber(), isFailed);
@@ -1673,21 +1673,20 @@ public class ScenarioService extends LifecycleService {
 					sendEmptyMessageDelayed(MSG_EMERGENCY, mConfiguration.getEmergencyPeriodTime() * 1000);
 					break;
 				case MSG_AREA_CHECK:
-					// FIXME: 2019-08-29
-/*					LogHelper.d(">> Wait Area : Search");
-					ResponseWaitDecisionPacket p = PreferenceUtil.getWaitArea(context);
+					LogHelper.d(">> Wait Area : Search");
+					WaitingZone waitingZone = mRepository.getWaitingZone();
 					LogHelper.d(">> Wait Area : Speed -> " + gpsHelper.getSpeed());
-					if (p != null && gpsHelper.getSpeed() > 5) {
-						float distance = getDistance(p.getLatitude(), p.getLongitude());
-						LogHelper.d(">> Wait Area : distance -> " + distance + ". range -> " + p.getWaitRange());
-						if (distance > p.getWaitRange()) {
+					if (waitingZone != null && gpsHelper.getSpeed() > 5) {
+						float distance = gpsHelper.getDistance(waitingZone.getLatitude(), waitingZone.getLongitude());
+						LogHelper.d(">> Wait Area : distance -> " + distance + ". range -> " + waitingZone.getWaitRange());
+						if (distance > waitingZone.getWaitRange()) {
 							LogHelper.d(">> Wait Area : Out of area");
 							removeMessages(MSG_AREA_CHECK);
-							requestWaitCancel(p.getWaitPlaceCode());
+							requestWaitCancel(waitingZone.getWaitingZoneId());
 							return;
 						}
 					}
-					sendEmptyMessageDelayed(MSG_AREA_CHECK, 5000);*/
+					sendEmptyMessageDelayed(MSG_AREA_CHECK, 5000);
 					break;
 				case MSG_REPORT:
 					LogHelper.e("poling handler MSG_REPORT");

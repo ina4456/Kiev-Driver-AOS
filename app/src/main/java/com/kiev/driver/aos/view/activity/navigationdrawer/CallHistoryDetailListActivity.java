@@ -31,7 +31,8 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
-	private Packets.StatisticPeriodType periodType;
+	private Packets.StatisticPeriodType currentPeriodType;
+	private Packets.StatisticListType currentListType;
 
 	private ActivityCallHistoryDetailListBinding mBinding;
 	private static final String EXTRA_KEY_PERIOD_TYPE = "extra_key_list_number";
@@ -59,26 +60,27 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		int periodTypeInt = getIntent().getIntExtra(EXTRA_KEY_PERIOD_TYPE, 0);
 		switch (periodTypeInt) {
 			case 1:
-				periodType = Packets.StatisticPeriodType.Week;
+				currentPeriodType = Packets.StatisticPeriodType.Week;
 				titleRid = R.string.ch_recent_7_days;
 				break;
 			case 2:
-				periodType = Packets.StatisticPeriodType.ThisMonth;
+				currentPeriodType = Packets.StatisticPeriodType.ThisMonth;
 				titleRid = R.string.ch_this_month;
 				break;
 			case 3:
-				periodType = Packets.StatisticPeriodType.LastMonth;
+				currentPeriodType = Packets.StatisticPeriodType.LastMonth;
 				titleRid = R.string.ch_last_month;
 				break;
 			default:
-				periodType = Packets.StatisticPeriodType.Today;
+				currentPeriodType = Packets.StatisticPeriodType.Today;
 				titleRid = R.string.ch_today;
 				break;
 		}
 
 
 		initToolbar(titleRid);
-		requestHistoryList(periodType, START_INDEX);
+		currentListType = Packets.StatisticListType.TotalCall;
+		requestHistoryList(currentListType, currentPeriodType, START_INDEX);
 		initRecyclerView();
 		showListOrEmptyMsgView();
 	}
@@ -89,7 +91,6 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		mBinding.callHistoryDetailToolbar.ibtnActionButton.setVisibility(View.GONE);
 		mBinding.callHistoryDetailToolbar.btnActionButton.setOnClickListener(this);
 		mBinding.callHistoryDetailToolbar.btnActionButton.setVisibility(View.VISIBLE);
-		mBinding.callHistoryDetailToolbar.toolbar.setOnClickListener(this);
 		ActionBar ab = getSupportActionBar();
 		if (ab != null) {
 			ab.setTitle(getString(titleRid));
@@ -99,14 +100,42 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		}
 	}
 
+
 	private void initRecyclerView() {
 		mCallHistoryAdapter = new CallHistoryAdapter(this, new ArrayList<>());
-		mBinding.rvCallHistory.setNestedScrollingEnabled(false);
+		mBinding.rvCallHistory.setNestedScrollingEnabled(true);
 		mBinding.rvCallHistory.setAdapter(mCallHistoryAdapter);
 		mBinding.rvCallHistory.setFocusable(false);
 		mBinding.rvCallHistory.setVerticalScrollBarEnabled(true);
 		mBinding.rvCallHistory.scrollTo(0, 0);
-		mBinding.rvCallHistory.addOnScrollListener(mScrollListener);
+		LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(mBinding.rvCallHistory.getLayoutManager());
+
+		// FIXME: 2019-11-28 기존 다른 리스트와 같은 방식으로 scrollListener를 사용할 경우
+		// 해당 통계 상세 리스트를 5개씩 연속으로 로딩하는 증상이 있다. (recyclerview 가 렌더링하는 갯수가 5개 정도는
+		// 한꺼번에 로딩해서 계속 bottom에 reach 했다고 판단하는 듯 하다.
+		// 따라서 아래와 같이 onScrollStateChanged 를 사용하게 변경하였다.
+		// 하지만 bottom에 reach와 상관없이 스크롤 할 경우 해당 로직을 타기 때문에 수정이 필요하다.
+		//mBinding.rvCallHistory.addOnScrollListener(mScrollListener);
+
+		mBinding.rvCallHistory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+				super.onScrollStateChanged(recyclerView, newState);
+				if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+					if (hasMoreData) {
+						int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+						int visibleItemCount = layoutManager.getChildCount();
+						int totalItemCount = layoutManager.getItemCount();
+
+						if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+							LogHelper.e("last shown : " + totalItemCount);
+							requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
+						}
+					}
+				}
+			}
+		});
+
 	}
 
 	private void showListOrEmptyMsgView() {
@@ -122,11 +151,8 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		}
 	}
 
-	private void requestHistoryList(Packets.StatisticPeriodType periodType, int startIndex) {
+	private void requestHistoryList(Packets.StatisticListType listType, Packets.StatisticPeriodType periodType, int startIndex) {
 		startLoadingProgress();
-
-		MutableLiveData<ResponseStatisticsDetailPacket> historyPacket =
-				mViewModel.getStatisticsDetail(Packets.StatisticListType.TotalCall, periodType, startIndex);
 
 		if (startIndex == START_INDEX) {
 			if (mCallHistoryAdapter != null) {
@@ -134,16 +160,18 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 			}
 		}
 
-		historyPacket.observe(this, new Observer<ResponseStatisticsDetailPacket>() {
+		MutableLiveData<ResponseStatisticsDetailPacket> liveData =
+				mViewModel.getStatisticsDetail(listType, periodType, startIndex);
+		liveData.observe(this, new Observer<ResponseStatisticsDetailPacket>() {
 			@Override
 			public void onChanged(ResponseStatisticsDetailPacket response) {
 				//LogHelper.e("UI 리스폰스 전달: " + response);
-				historyPacket.removeObserver(this);
+				liveData.removeObserver(this);
 				finishLoadingProgress();
 
 				if (response != null) {
 					try {
-						mBinding.tvCallHistoryCompletedCount.setText(getString(R.string.ch_count, response.getTotalCount()));
+						mBinding.tvCallHistoryCompletedCount.setText(String.valueOf(response.getTotalCount()));
 						ArrayList<CallHistory> historyList = new ArrayList<>();
 						String[] callNumbers = response.getCallNumber().split("\\|\\|");
 						String[] callTypes = response.getCallType().split("\\|\\|");
@@ -152,6 +180,8 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 						String[] destinations = response.getDestination().split("\\|\\|");
 						String[] boardedTimes = response.getBoardingTime().split("\\|\\|");
 						String[] alightedTimes = response.getAlightingTime().split("\\|\\|");
+
+						// FIXME: 2019-11-27 데이터없이 파이프 라인만 있을 경우 처리 필요
 						String[] phoneNumbers = response.getPhoneNumber().split("\\|\\|");
 
 
@@ -168,13 +198,13 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 							for (int i = 0; i < callNumbers.length; i++) {
 								CallHistory history = new CallHistory();
 								history.setCallId(Integer.parseInt(callNumbers[i]));
-								history.setCallType(callTypes[i]);
+								history.setCallTypeStr(callTypes[i]);
 								history.setDate(callReceiptDates[i]);
 								history.setDeparture(departures[i]);
 								history.setDestination(destinations[i]);
 								history.setStartTime(boardedTimes[i]);
 								history.setEndTime(alightedTimes[i]);
-								history.setPassengerPhoneNumber(phoneNumbers[i]);
+								history.setPassengerPhoneNumber(hasData(phoneNumbers) ? phoneNumbers[i] : "0");
 								historyList.add(history);
 							}
 
@@ -191,9 +221,16 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 						e.printStackTrace();
 					}
 				}
-
 			}
 		});
+	}
+
+	private boolean hasData(String[] data) {
+		if (data != null && data.length > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 
@@ -210,7 +247,7 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 
 					if (lastVisible >= totalItemCount - 1) {
 						LogHelper.e("lastVisibled : " + totalItemCount);
-						requestHistoryList(periodType, totalItemCount + 1);
+						requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
 					}
 				}
 			}
@@ -218,18 +255,58 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 	};
 
 
+//	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+//		@Override
+//		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//			super.onScrolled(recyclerView, dx, dy);
+//
+//			LogHelper.e("onScrolled()");
+//
+//			if (hasMoreData) {
+//				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+//				if (layoutManager != null) {
+////					int totalItemCount = layoutManager.getItemCount();
+//					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
+//
+//					LogHelper.e("try to load more");
+////					if (lastVisible >= totalItemCount - 1) { //&& totalItemCount <= visibleThreshold) {
+////						LogHelper.e("lastVisibled : " + totalItemCount);
+////						requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
+////					}
+//
+//					int visibleItemCount = layoutManager.getChildCount();
+//					int totalItemCount = layoutManager.getItemCount();
+//					int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+//					if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+//						LogHelper.e("lastVisibled : " + totalItemCount);
+//						//requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
+//					}
+//				}
+//			}
+//		}
+//
+//	};
+
+
 	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.btn_action_button) {
-			// TODO: 2019-06-21 필터 변경에 따른 리스트 변경 구현 필요
 			String filter = mBinding.callHistoryDetailToolbar.btnActionButton.getText().toString();
 			if (filter.equals(getString(R.string.ch_call_type_all))) {
 				filter = getString(R.string.ch_call_type_normal);
+				currentListType = Packets.StatisticListType.NormalCall;
 			} else if (filter.equals(getString(R.string.ch_call_type_normal))) {
+				filter = getString(R.string.ch_call_type_app);
+				currentListType = Packets.StatisticListType.AppCall;
+			} else if (filter.equals(getString(R.string.ch_call_type_app))) {
 				filter = getString(R.string.ch_call_type_business);
+				currentListType = Packets.StatisticListType.BusinessCall;
 			} else {
 				filter = getString(R.string.ch_call_type_all);
+				currentListType = Packets.StatisticListType.TotalCall;
 			}
+
+			requestHistoryList(currentListType, currentPeriodType, START_INDEX);
 			mBinding.callHistoryDetailToolbar.btnActionButton.setText(filter);
 		}
 	}

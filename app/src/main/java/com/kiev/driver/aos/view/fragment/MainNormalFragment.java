@@ -10,6 +10,7 @@ import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.FragmentMainBinding;
 import com.kiev.driver.aos.model.Popup;
+import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.util.LogHelper;
@@ -45,10 +46,22 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 		mBinding.setLifecycleOwner(this);
 		mBinding.setViewModel(mMainViewModel);
 
+
 		subscribeMainViewModel(mMainViewModel);
 		setListeners();
 
 		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		WaitingZone waitingZone = mMainViewModel.getWaitingZone();
+		if (waitingZone != null) {
+			mBinding.tvVacancy.setText(getString(R.string.main_state_waiting_msg, waitingZone.getWaitingZoneName()));
+		} else {
+			mBinding.tvVacancy.setText(getString(R.string.main_state_vacancy_msg));
+		}
 	}
 
 	@Override
@@ -66,18 +79,10 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 					switch (callStatus) {
 						case Constants.CALL_STATUS_WORKING:
 						case Constants.CALL_STATUS_VACANCY:
-						case Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE:
 							mBinding.groupVacancy.setVisibility(View.VISIBLE);
 							//mBinding.groupBoarding.setVisibility(View.GONE);
 							mBinding.groupResting.setVisibility(View.GONE);
 
-							if (callStatus == Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE) {
-								mBinding.btnWaitingZone.setText(call.getWaitingZoneName());
-								mBinding.btnWaitingZone.setTextColor(getResources().getColorStateList(R.color.selector_tc_waiting_zone_btn));
-							} else {
-								mBinding.btnWaitingZone.setText(getString(R.string.main_btn_waiting_zone));
-								mBinding.btnWaitingZone.setTextColor(getResources().getColorStateList(R.color.selector_tc_main_middle_btn));
-							}
 							break;
 
 						/*case Constants.CALL_STATUS_BOARDED:

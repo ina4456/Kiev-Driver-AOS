@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="com.kiev.driver.aos.viewmodel.CallHistoryViewModel"/>
+            type="com.kiev.driver.aos.viewmodel.CallHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,16 +23,16 @@
             layout="@layout/view_toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/sv_history"
+            style="@style/ScrollbarStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
             android:scrollbars="vertical"
-            style="@style/ScrollbarStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,22 +45,33 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_call_history_completed"
                     style="@style/CallHistoryDetailListTopCountStyle"
+                    android:layout_marginStart="32dp"
                     android:text="@string/ch_total_count"
                     android:textColor="@color/colorGray04"
-                    android:layout_marginStart="32dp"
                     app:layout_constraintEnd_toStartOf="@+id/tv_call_history_completed_count"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_call_history_completed_count"
                     style="@style/CallHistoryDetailListTopCountStyle"
-                    android:text="@string/ch_count_def"
-                    android:textColor="@color/colorGray01"
                     android:layout_marginStart="8dp"
+                    android:text="0"
+                    android:textColor="@color/colorGray01"
                     app:layout_constraintEnd_toStartOf="@+id/tv_call_history_canceled"
                     app:layout_constraintStart_toEndOf="@+id/tv_call_history_completed"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_call_history_completed_end_fix"
+                    style="@style/CallHistoryDetailListTopCountStyle"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/ch_count_end_fix"
+                    android:textColor="@color/colorGray04"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_call_history_completed_count"
+                    app:layout_constraintStart_toEndOf="@+id/tv_call_history_completed_count"
+                    app:layout_constraintTop_toTopOf="@+id/tv_call_history_completed_count" />
 
                 <View
                     android:id="@+id/view_divider"
@@ -72,7 +84,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_call_history_completed_count"
                     app:layout_constraintEnd_toStartOf="@+id/tv_call_history_canceled"
                     app:layout_constraintStart_toEndOf="@+id/tv_call_history_completed_count"
-                    app:layout_constraintTop_toTopOf="@+id/tv_call_history_completed_count"/>
+                    app:layout_constraintTop_toTopOf="@+id/tv_call_history_completed_count" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_call_history_canceled"
@@ -82,7 +94,8 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/tv_call_history_canceled_count"
                     app:layout_constraintStart_toEndOf="@+id/view_divider"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_call_history_canceled_count"
                     style="@style/CallHistoryDetailListTopCountStyle"
@@ -92,7 +105,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_call_history_canceled"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -107,20 +120,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_call_history_completed"
                     tools:listitem="@layout/item_call_history_detail_list"/>
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
 
         <include
             android:id="@+id/view_empty_msg"
-            android:visibility="gone"
+            layout="@layout/view_empty_msg"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/call_history_detail_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            layout="@layout/view_empty_msg"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/call_history_detail_toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

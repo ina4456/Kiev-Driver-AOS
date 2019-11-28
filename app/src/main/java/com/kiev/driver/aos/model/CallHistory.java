@@ -1,7 +1,10 @@
 package com.kiev.driver.aos.model;
 
+import com.kiev.driver.aos.repository.remote.packets.Packets;
+
 public class CallHistory {
-	private String callType;
+	private Packets.StatisticListType callType;
+	private String callTypeStr;
 	private int callId;
 	private String date;
 	private String departure;
@@ -26,11 +29,30 @@ public class CallHistory {
 		this.date = date;
 	}
 
-	public String getCallType() {
+	public String getCallTypeStr() {
+		return callTypeStr;
+	}
+
+	public void setCallTypeStr(String callTypeStr) {
+		this.callTypeStr = callTypeStr;
+		switch (callTypeStr) {
+			case "3":
+				this.setCallType(Packets.StatisticListType.AppCall);
+				break;
+			case "4":
+				this.setCallType(Packets.StatisticListType.BusinessCall);
+				break;
+			default:
+				this.setCallType(Packets.StatisticListType.NormalCall);
+				break;
+		}
+	}
+
+	public Packets.StatisticListType getCallType() {
 		return callType;
 	}
 
-	public void setCallType(String callType) {
+	public void setCallType(Packets.StatisticListType callType) {
 		this.callType = callType;
 	}
 
@@ -78,7 +100,7 @@ public class CallHistory {
 	public String toString() {
 		return "CallHistory{" +
 				"date='" + date + '\'' +
-				", callType='" + callType + '\'' +
+				", callTypeStr='" + callTypeStr + '\'' +
 				", departure='" + departure + '\'' +
 				", destination='" + destination + '\'' +
 				", startTime='" + startTime + '\'' +

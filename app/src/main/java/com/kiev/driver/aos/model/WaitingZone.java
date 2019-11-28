@@ -2,11 +2,15 @@ package com.kiev.driver.aos.model;
 
 
 public class WaitingZone {
+	private int carId; // Car ID (2)
 	private String waitingZoneId;
 	private String waitingZoneName;
 	private int numberOfCarsInAreas;    //전체 대기 인원
 	private boolean isAvailableWait;
 	private int myWaitingOrder;                //선택된 대기존에서 내 순번
+	private float longitude; // 대기지역 경도 (30)
+	private float latitude; // 대기지역 위도 (30)
+	private int waitRange; // 대기범위 (2)
 
 
 	public String getWaitingZoneId() {
@@ -49,14 +53,50 @@ public class WaitingZone {
 		this.myWaitingOrder = myWaitingOrder;
 	}
 
+	public int getCarId() {
+		return carId;
+	}
+
+	public void setCarId(int carId) {
+		this.carId = carId;
+	}
+
+	public float getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
+	}
+
+	public float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+
+	public int getWaitRange() {
+		return waitRange;
+	}
+
+	public void setWaitRange(int waitRange) {
+		this.waitRange = waitRange;
+	}
+
 	@Override
 	public String toString() {
 		return "WaitingZone{" +
-				"waitingZoneId=" + waitingZoneId +
+				"carId=" + carId +
+				", waitingZoneId='" + waitingZoneId + '\'' +
 				", waitingZoneName='" + waitingZoneName + '\'' +
 				", numberOfCarsInAreas=" + numberOfCarsInAreas +
 				", isAvailableWait=" + isAvailableWait +
 				", myWaitingOrder=" + myWaitingOrder +
+				", longitude=" + longitude +
+				", latitude=" + latitude +
+				", waitRange=" + waitRange +
 				'}';
 	}
 }

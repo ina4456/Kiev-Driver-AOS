@@ -4,17 +4,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.databinding.ItemCallHistoryDetailListBinding;
 import com.kiev.driver.aos.model.CallHistory;
 import com.kiev.driver.aos.repository.Repository;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 
 import java.util.ArrayList;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -69,50 +70,62 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 
 
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-		private TextView tvDate, tvOrderStatus, tvDeparture, tvDestination, tvStartTime, tvEndTime;
-		private LinearLayout btnCallPassenger;
+		ItemCallHistoryDetailListBinding mBinding;
 
 		public ViewHolder(View view) {
 			super(view);
-			tvDate = view.findViewById(R.id.tv_date);
-			tvOrderStatus = view.findViewById(R.id.tv_order_status);
-			tvDeparture = view.findViewById(R.id.tv_departure);
-			tvDestination = view.findViewById(R.id.tv_destination);
-			tvStartTime = view.findViewById(R.id.tv_start_time);
-			tvEndTime = view.findViewById(R.id.tv_end_time);
-			btnCallPassenger = view.findViewById(R.id.ll_btn_call_passenger);
+			mBinding = DataBindingUtil.bind(view);
+			if (mBinding != null) {
+				mBinding.llBtnCallPassenger.setOnClickListener(this);
+			}
 		}
 
 		private void bindBodyData(CallHistory item) {
-
-			tvDate.setText(item.getDate());
-			tvOrderStatus.setText(item.getCallType());
-			tvDeparture.setText(item.getDeparture());
+			mBinding.tvDate.setText(item.getDate());
+			mBinding.tvOrderStatus.setText(item.getCallTypeStr());
+			mBinding.tvDeparture.setText(item.getDeparture());
 
 			String destination = item.getDestination();
 			if (destination.isEmpty())
 				destination = mContext.getString(R.string.alloc_no_destination);
-			tvDestination.setText(destination);
+			mBinding.tvDestination.setText(destination);
 
 			String startTime = item.getStartTime();
-			if (startTime == null || startTime.isEmpty()) {
+			if (startTime == null || startTime.equals("null") || startTime.isEmpty()) {
 				startTime = "";
 			}
-			tvStartTime.setText(startTime);
+			mBinding.tvStartTime.setText(startTime);
 
 			String endTime = item.getEndTime();
-			if (endTime == null || endTime.isEmpty()) {
+			if (endTime == null || endTime.equals("null") || endTime.isEmpty()) {
 				endTime = "";
 			}
-			tvEndTime.setText(endTime);
+			mBinding.tvEndTime.setText(endTime);
 
-			btnCallPassenger.setOnClickListener(this);
-			btnCallPassenger.setVisibility(View.GONE);
+			int colorId;
+			int resourceId;
+			String callType;
+			if (item.getCallType() == Packets.StatisticListType.AppCall) {
+				colorId = R.color.colorGreen01;
+				resourceId = R.drawable.selector_rounded_border_rect_status_app;
+				callType = mContext.getString(R.string.ch_call_type_app);
+			} else if (item.getCallType() == Packets.StatisticListType.BusinessCall){
+				colorId = R.color.colorBlue01;
+				resourceId = R.drawable.selector_rounded_border_rect_status_business;
+				callType = mContext.getString(R.string.ch_call_type_business);
+			} else {
+				colorId = R.color.colorYellow;
+				resourceId = R.drawable.selector_rounded_border_rect_status_normal;
+				callType = mContext.getString(R.string.ch_call_type_normal);
+			}
+			mBinding.tvCallType.setTextColor(mContext.getResources().getColor(colorId));
+			mBinding.tvCallType.setBackgroundResource(resourceId);
+			mBinding.tvCallType.setText(callType);
 
-
+			mBinding.llBtnCallPassenger.setVisibility(View.GONE);
 			String phoneNumber = item.getPassengerPhoneNumber();
-			if (phoneNumber != null && !phoneNumber.isEmpty()) {
-				btnCallPassenger.setVisibility(View.VISIBLE);
+			if (phoneNumber != null && !phoneNumber.isEmpty() && !phoneNumber.equals("0")) {
+				mBinding.llBtnCallPassenger.setVisibility(View.VISIBLE);
 			}
 		}
 

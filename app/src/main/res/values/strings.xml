@@ -70,8 +70,9 @@
     <!--메인-->
     <string name="main_state_vacancy_msg">콜 대기중 입니다.</string>
     <string name="main_state_boarding_msg">손님이 탑승 중입니다.</string>
-    <string name="main_state_resting_msg">휴식 중입니다.</string>
+    <string name="main_state_resting_msg">휴식 중입니다.</string>중
     <string name="main_state_resting_msg2">콜을 받지 않습니다.</string>
+    <string name="main_state_waiting_msg">\"%s\"\n대기중 입니다.</string>
     <string name="main_btn_boarding">손님탑승</string>
     <string name="main_btn_boarding2">손님승차</string>
     <string name="main_btn_alighting">손님하차</string>
@@ -125,7 +126,8 @@
     <string name="wz_btn_waiting_and_order_count">%d대 중 %d번째</string>
     <string name="wz_msg_no_waiting_zone">대기장소가 없습니다.</string>
     <string name="wz_msg_exit_waiting_zone">차량 위치가 변경되어 설정된 대기장소를 해제합니다.</string>
-
+    <string name="wz_msg_request_failed">대기 요청에 실패하였습니다.</string>
+    <string name="wz_msg_cancel_failed">대기 취소에 실패하였습니다.</string>
 
     <!--대기장소-->
     <string name="wc_msg_no_waiting_call">대기콜이 없습니다.</string>
@@ -152,8 +154,9 @@
     <string name="ch_working_days">영업</string>
     <string name="ch_run_count">운행</string>
     <string name="ch_total_count">총</string>
+    <string name="ch_count_end_fix">건</string>
     <string name="ch_normal">일반콜</string>
-    <string name="ch_app">앱콜</string>
+    <string name="ch_app">앱 콜</string>
 
     <string name="ch_count">%d건</string>
     <string name="ch_day">%d일</string>
@@ -167,6 +170,7 @@
     <string name="ch_call_type_all">전체</string>
     <string name="ch_call_type_normal">일반콜</string>
     <string name="ch_call_type_business">업무콜</string>
+    <string name="ch_call_type_app">앱콜</string>
     <string name="ch_msg_no_history">운행이력이 없습니다.</string>
 
 

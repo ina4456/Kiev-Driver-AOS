@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
@@ -139,20 +139,22 @@ public class SharedPreferenceManager {
 	 * ===================================================================
 	 * 대기상태 저장
 	 */
-	public void setWaitArea(@NonNull ResponseWaitDecisionPacket packet) {
-		LogHelper.write("==> [대기상태 저장] : " + packet);
-		setDataAsJson(SP_KEY_WAIT_AREA, new Gson().toJson(packet));
+	public void setWaitArea(@NonNull WaitingZone waitingzone) {
+		LogHelper.write("==> [대기상태 저장] : " + waitingzone);
+		setDataAsJson(SP_KEY_WAIT_AREA, new Gson().toJson(waitingzone));
 	}
+
+
 	/**
 	 * @return 대기상태
 	 */
-	public ResponseWaitDecisionPacket getWaitArea() {
-		return getDataAsJson(SP_KEY_WAIT_AREA, ResponseWaitDecisionPacket.class);
+	public WaitingZone getWaitingZone() {
+		return getDataAsJson(SP_KEY_WAIT_AREA, WaitingZone.class);
 	}
 	/**
 	 * 대기상태 삭제
 	 */
-	public void clearWaitArea() {
+	public void clearWaitingZone() {
 		LogHelper.write("==> [대기상태 삭제]");
 		clearData(SP_KEY_WAIT_AREA);
 	}

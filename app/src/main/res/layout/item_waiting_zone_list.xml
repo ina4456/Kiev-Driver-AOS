@@ -27,7 +27,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="판교 현대백화점"
+            tools:text="판교 현대백화점"
             android:layout_marginBottom="4dp"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@+id/tv_wz_waiting_order"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toStartOf="@+id/gl_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_wz_name"
-            android:text="12대"/>
+            tools:text="12대"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_button"

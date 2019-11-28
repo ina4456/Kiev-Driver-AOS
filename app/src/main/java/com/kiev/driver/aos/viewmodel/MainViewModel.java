@@ -49,7 +49,6 @@ public class MainViewModel extends AndroidViewModel {
 	private ArrayList<SelectionItem> mCancelReasonList;
 
 
-
 	private Repository mRepository;
 
 	public MainViewModel(@NonNull Application application, Repository repository) {
@@ -70,12 +69,15 @@ public class MainViewModel extends AndroidViewModel {
 	public LiveData<Configuration> getConfiguration() {
 		return mConfiguration;
 	}
+
 	public LiveData<Taxi> getTaxiInfo() {
 		return mTaxiInfo;
 	}
+
 	public LiveData<Call> getCallInfo() {
 		return mCallInfo;
 	}
+
 	public LiveData<Notice> getLatestNotice() {
 		return mNotice;
 	}
@@ -106,7 +108,7 @@ public class MainViewModel extends AndroidViewModel {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				((MainApplication)getApplication()).progressOff();
+				((MainApplication) getApplication()).progressOff();
 			}
 		}, 3000);
 //		Call call = this.mCallInfo.getValue();
@@ -151,13 +153,20 @@ public class MainViewModel extends AndroidViewModel {
 		}
 	}
 
-	public void setWaitingZone(WaitingZone waitingZone) {
-//		Call call = this.mCallInfo.getValue();
-//		if (call != null) {
-//			call.setWaitingZoneId(waitingZone.getWaitingZoneId());
-//			call.setWaitingZoneName(waitingZone.getWaitingZoneName());
-//			mRepository.updateCallInfo(call);
-//		}
+	public WaitingZone getWaitingZone() {
+		return mRepository.getWaitingZone();
+	}
+
+	public void setWaitingZone(WaitingZone waitingZone, boolean isSave) {
+		int callStatus;
+		if (isSave) {
+			mRepository.saveWaitArea(waitingZone);
+//			callStatus = Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE;
+		} else {
+			mRepository.clearWaitingZone();
+//			callStatus = Constants.CALL_STATUS_VACANCY;
+		}
+//		mRepository.changeCallStatus(callStatus);
 	}
 
 

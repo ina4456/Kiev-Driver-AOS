@@ -29,7 +29,7 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 	}
 
 	public interface WaitingZoneListCallback {
-		void onListItemSelected(WaitingZone item, boolean isRequest);
+		void onListItemSelected(int index, WaitingZone item, boolean isRequest);
 	}
 
 	@Override
@@ -64,6 +64,32 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 		notifyItemRangeInserted(curSize, waitingZones.size() - 1);
 	}
 
+	public void setViewsAsWaitingOrNot(boolean isWaiting, ViewHolder vh, int index, int waitOrder) {
+		vh.mBinding.btnWzRequest.setVisibility(isWaiting ? View.GONE : View.VISIBLE);
+		vh.mBinding.btnWzCancel.setVisibility(isWaiting ? View.VISIBLE : View.GONE);
+		vh.mBinding.tvWzName.setPressed(isWaiting);
+		vh.mBinding.tvWzWaitingOrder.setPressed(isWaiting);
+		vh.mBinding.clWzItem.setSelected(isWaiting);
+
+		for (int i = 0; i < mItems.size(); i++) {
+			WaitingZone item = mItems.get(i);
+			if (isWaiting) {
+				if (i == index) {
+					LogHelper.e("i : " + index);
+					item.setMyWaitingOrder(waitOrder);
+				} else {
+					item.setAvailableWait(false);
+					item.setMyWaitingOrder(0);
+				}
+			} else {
+				item.setMyWaitingOrder(0);
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+
+
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 		ItemWaitingZoneListBinding mBinding;
 
@@ -78,26 +104,42 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 
 		private void bindBodyData(WaitingZone item) {
 			mBinding.tvWzName.setText(item.getWaitingZoneName());
-			mBinding.tvWzWaitingOrder.setText(mContext.getString(R.string.wz_btn_waiting_count, item.getNumberOfCarsInAreas()));
-			mBinding.btnWzRequest.setEnabled(item.isAvailableWait());
 
 
 			if (item.getMyWaitingOrder() > 0) {
 				mBinding.clWzItem.setEnabled(true);
 				mBinding.clWzItem.setSelected(true);
-
 				mBinding.tvWzName.setPressed(true);
 				mBinding.tvWzWaitingOrder.setPressed(true);
-				mBinding.btnWzRequest.setVisibility(View.GONE);
 				mBinding.btnWzCancel.setVisibility(View.VISIBLE);
+				mBinding.tvWzWaitingOrder.setText(mContext.getString(
+						R.string.wz_btn_waiting_and_order_count
+						, item.getNumberOfCarsInAreas()
+						, item.getMyWaitingOrder()
+				));
+				mBinding.btnWzRequest.setVisibility(View.GONE);
+				mBinding.btnWzRequest.setEnabled(true);
+
 			} else {
 				mBinding.clWzItem.setEnabled(false);
 				mBinding.clWzItem.setSelected(false);
-
 				mBinding.tvWzName.setPressed(false);
 				mBinding.tvWzWaitingOrder.setPressed(false);
-				mBinding.btnWzRequest.setVisibility(View.VISIBLE);
 				mBinding.btnWzCancel.setVisibility(View.GONE);
+				mBinding.tvWzWaitingOrder.setText(mContext.getString(
+						R.string.wz_btn_waiting_count, item.getNumberOfCarsInAreas()
+				));
+
+				boolean hasOrder = false;
+				for (WaitingZone waitingZone : mItems) {
+					if (waitingZone.getMyWaitingOrder() > 0) {
+						hasOrder = true;
+						break;
+					}
+				}
+
+				mBinding.btnWzRequest.setVisibility(View.VISIBLE);
+				mBinding.btnWzRequest.setEnabled(!hasOrder && item.isAvailableWait());
 			}
 		}
 
@@ -110,43 +152,13 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 				switch (v.getId()) {
 					case R.id.btn_wz_request:
 						LogHelper.e("btn_wz_request");
-						mCallback.onListItemSelected(mItems.get(index), true);
-
-						mBinding.btnWzRequest.setVisibility(View.GONE);
-						mBinding.btnWzCancel.setVisibility(View.VISIBLE);
-						mBinding.tvWzName.setPressed(true);
-						mBinding.tvWzWaitingOrder.setPressed(true);
-						mBinding.clWzItem.setSelected(true);
-
-						for (int i = 0; i < mItems.size(); i++) {
-							if (i == index) {
-								LogHelper.e("i : " + index);
-								mItems.get(i).setMyWaitingOrder(1);
-								mCallback.onListItemSelected(mItems.get(i), true);
-							} else {
-								mItems.get(i).setMyWaitingOrder(0);
-							}
-						}
-
-						notifyDataSetChanged();
+						mCallback.onListItemSelected(index, mItems.get(index), true);
 						break;
 
 
 					case R.id.btn_wz_cancel:
 						LogHelper.e("btn_wz_cancel");
-						mCallback.onListItemSelected(mItems.get(index), false);
-						mBinding.btnWzRequest.setVisibility(View.VISIBLE);
-						mBinding.btnWzCancel.setVisibility(View.GONE);
-						mBinding.tvWzName.setPressed(false);
-						mBinding.tvWzWaitingOrder.setPressed(false);
-						mBinding.clWzItem.setSelected(false);
-
-
-						for (int i = 0; i < mItems.size(); i++) {
-							mItems.get(i).setMyWaitingOrder(0);
-						}
-
-						notifyDataSetChanged();
+						mCallback.onListItemSelected(index, mItems.get(index), false);
 
 						break;
 				}

@@ -17,6 +17,7 @@ import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
@@ -283,19 +284,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 			case Constants.DIALOG_TAG_CANCEL_CALL_THEN_LOGOUT:
 				LogHelper.e("onDismissPopupDialog 2 : " + tag);
 				if (intent != null) {
-					// TODO: 2019. 3. 4. 탑승실패 사유 서버 전송 처리 필요
-					//mMainViewModel.changeCallStatus(Constants.CALL_STATUS_VACANCY);
-					mMainViewModel.requestCancelCall("");
-					WavResourcePlayer.getInstance(MainActivity.this).play(R.raw.voice_151);
-
-					new Handler().postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							showFinishOrLogoutDialog(tag.equals(Constants.DIALOG_TAG_CANCEL_CALL_THEN_FINISH_APP)
-									? R.id.ibtn_action_button
-									: R.id.btn_logout);
+					//탑승 실패 처리
+					String cancelReason = intent.getStringExtra(Constants.DIALOG_INTENT_KEY_SELECTED_ITEM);
+					Packets.ReportKind reason = Packets.ReportKind.Failed;
+					LogHelper.e("cancelResason : " + cancelReason);
+					if (cancelReason != null) {
+						if (cancelReason.equals(getString(R.string.alloc_cancel_reason_passenger))) {
+							reason = Packets.ReportKind.FailedPassengerCancel;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_no_show))) {
+							reason = Packets.ReportKind.FailedNoShow;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_using_other_car))) {
+							reason = Packets.ReportKind.FailedUseAnotherTaxi;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_etc))) {
+							reason = Packets.ReportKind.FailedEtc;
 						}
-					}, 300);
+
+						mMainViewModel.requestCancelCall(reason);
+						WavResourcePlayer.getInstance(MainActivity.this).play(R.raw.voice_151);
+
+						new Handler().postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								showFinishOrLogoutDialog(tag.equals(Constants.DIALOG_TAG_CANCEL_CALL_THEN_FINISH_APP)
+										? R.id.ibtn_action_button
+										: R.id.btn_logout);
+							}
+						}, 300);
+					}
+
 				}
 
 				break;

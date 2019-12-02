@@ -12,7 +12,6 @@ import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingCallListAdapter;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
@@ -156,7 +155,6 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 							LogHelper.e("hasMoreData : " + hasMoreData);
 
 							for (int i = 0; i < callNumbers.length; i++) {
-
 								Call call = new Call();
 								call.setCallNumber(Integer.parseInt(callNumbers[i]));
 								call.setCallReceivedDate(callReceiptDates[i]);
@@ -165,7 +163,6 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 								call.setDestinationPoi(destinations[i]);
 								call.setDistance(Integer.valueOf(distances[i]));
 								waitingCallList.add(call);
-
 							}
 
 
@@ -174,6 +171,7 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 							} else {
 								mWaitingCallListAdapter.addData(waitingCallList);
 							}
+							LogHelper.e("waitingCallList : " + waitingCallList.size());
 
 							showListOrEmptyMsgView();
 						}
@@ -197,21 +195,8 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	public void onListItemSelected(Call call) {
 		LogHelper.e("selected Item : " + call.toString());
 
-		MutableLiveData<ResponseWaitCallOrderInfoPacket> liveData = mMainViewModel.requestWaitingCallOrder(call);
-		liveData.observe(this, new Observer<ResponseWaitCallOrderInfoPacket>() {
-			@Override
-			public void onChanged(ResponseWaitCallOrderInfoPacket response) {
-				LogHelper.e("responseWaitCallOrderInfoPacket : " + response);
-				liveData.removeObserver(this);
-				if (response != null) {
-					if (response.isSuccess()) {
-						finish();
-					} else {
-						showFailurePopup();
-					}
-				}
-			}
-		});
+		CallReceivingActivity.startActivity(this, true, call);
+
 	}
 
 	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {

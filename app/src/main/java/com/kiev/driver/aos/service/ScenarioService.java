@@ -96,34 +96,34 @@ import androidx.lifecycle.Observer;
 
 public class ScenarioService extends LifecycleService {
 
-    //----------------------------------------------------------------------------------------
-    // fields
-    //----------------------------------------------------------------------------------------
-    public static final int MSG_PERIOD = 1;
-    public static final int MSG_LIVE = 2;
-    public static final int MSG_EMERGENCY = 3;
-    public static final int MSG_AREA_CHECK = 4;
-    public static final int MSG_REPORT = 5;
-    public static final int MSG_ACK = 6;
-    public static final int MSG_SERVICE_ACK = 7;
-    public static final int MSG_DEVICE_WATCH = 8;
-    public static final int MSG_REQ_WAIT_AREA_STATE = 9;
-    public static final String SERVICE_NAME = ScenarioService.class.getSimpleName();
+	//----------------------------------------------------------------------------------------
+	// fields
+	//----------------------------------------------------------------------------------------
+	public static final int MSG_PERIOD = 1;
+	public static final int MSG_LIVE = 2;
+	public static final int MSG_EMERGENCY = 3;
+	public static final int MSG_AREA_CHECK = 4;
+	public static final int MSG_REPORT = 5;
+	public static final int MSG_ACK = 6;
+	public static final int MSG_SERVICE_ACK = 7;
+	public static final int MSG_DEVICE_WATCH = 8;
+	public static final int MSG_REQ_WAIT_AREA_STATE = 9;
+	public static final String SERVICE_NAME = ScenarioService.class.getSimpleName();
 
-    private NetworkManager networkManager;
-    private GpsHelper gpsHelper;
-    private Packets.BoardType boardType; // 승차 상태
-    private Packets.RestType restType; // 휴식 상태
-    private Packets.EmergencyType emergencyType; // 긴급상황 상태
-    private boolean hasCertification; // 서비스 인증 성공 여부
-    private boolean isAvailableNetwork, isValidPort; // DebugWindow에 네트워크 상태, Port 상태를 표시하기 위함
-    private int reportRetryCount, ackRetryCount;
-    // 전체 화면 Activity 팝업(공지사항, 메시지 등)이 보여질 때 이전 상태가 Background 였는지 저장 한다.
-    // 이전 상태가 Background 였다면 MainActivity가 보여지지 않도록 아이나비를 한번 더 호출해 준다.
-    //private boolean isPrevStatusBackground;
-    // 모바일 배차를 받고 승차보고가 올라가기 전까지는 주기 전송 시간을 cfgLoader.getRc()로 한다.
-    // 모바일 배차 승차보고 후 주기 시간을 정상적으로 되돌리기 위해 사용 한다
-    private int periodTerm;
+	private NetworkManager networkManager;
+	private GpsHelper gpsHelper;
+	private Packets.BoardType boardType; // 승차 상태
+	private Packets.RestType restType; // 휴식 상태
+	private Packets.EmergencyType emergencyType; // 긴급상황 상태
+	private boolean hasCertification; // 서비스 인증 성공 여부
+	private boolean isAvailableNetwork, isValidPort; // DebugWindow에 네트워크 상태, Port 상태를 표시하기 위함
+	private int reportRetryCount, ackRetryCount;
+	// 전체 화면 Activity 팝업(공지사항, 메시지 등)이 보여질 때 이전 상태가 Background 였는지 저장 한다.
+	// 이전 상태가 Background 였다면 MainActivity가 보여지지 않도록 아이나비를 한번 더 호출해 준다.
+	//private boolean isPrevStatusBackground;
+	// 모바일 배차를 받고 승차보고가 올라가기 전까지는 주기 전송 시간을 cfgLoader.getRc()로 한다.
+	// 모바일 배차 승차보고 후 주기 시간을 정상적으로 되돌리기 위해 사용 한다
+	private int periodTerm;
 	private boolean isUsedDestination; // 목적지 정보 사용여부
 
 
@@ -132,57 +132,68 @@ public class ScenarioService extends LifecycleService {
 	private Configuration mConfiguration;
 
 	private MutableLiveData<ServiceRequestResultPacket> mServiceResultPacket;
-	public MutableLiveData<ServiceRequestResultPacket> getLoginResultData () {
+
+	public MutableLiveData<ServiceRequestResultPacket> getLoginResultData() {
 		return mServiceResultPacket;
 	}
 
 	private MutableLiveData<ResponseSMSPacket> mResponseSMSPacket;
-	public MutableLiveData<ResponseSMSPacket> getResponseSMSPacket () {
+
+	public MutableLiveData<ResponseSMSPacket> getResponseSMSPacket() {
 		return mResponseSMSPacket;
 	}
 
 	private MutableLiveData<ResponseMyInfoPacket> mResponseMyInfo;
-	public MutableLiveData<ResponseMyInfoPacket> getResponseMyInfo () {
+
+	public MutableLiveData<ResponseMyInfoPacket> getResponseMyInfo() {
 		return mResponseMyInfo;
 	}
 
 	private MutableLiveData<ResponseWaitCallListPacket> mResponseWaitCallListPacket;
+
 	public MutableLiveData<ResponseWaitCallListPacket> getResponseWaitCallListPacket() {
 		return mResponseWaitCallListPacket;
 	}
 
 	private MutableLiveData<ResponseWaitCallOrderInfoPacket> mResponseWaitCallOrderInfoPacket;
+
 	public MutableLiveData<ResponseWaitCallOrderInfoPacket> getResponseWaitCallOrderInfoPacket() {
 		return mResponseWaitCallOrderInfoPacket;
 	}
 
 	private MutableLiveData<ResponseNoticeListPacket> mNoticeListPacket;
+
 	public MutableLiveData<ResponseNoticeListPacket> getNoticeListPacket() {
 		return mNoticeListPacket;
 	}
 
 	private MutableLiveData<ResponseStatisticsPacket> mStatisticPacket;
+
 	public MutableLiveData<ResponseStatisticsPacket> getStatisticPacket() {
 		return mStatisticPacket;
 	}
 
 
 	private MutableLiveData<ResponseStatisticsDetailPacket> mStatisticDetailPacket;
+
 	public MutableLiveData<ResponseStatisticsDetailPacket> getStatisticDetailPacket() {
 		return mStatisticDetailPacket;
 	}
 
 	private MutableLiveData<ResponseWaitAreaNewPacket> mWaitArea;
+
 	public MutableLiveData<ResponseWaitAreaNewPacket> getWaitAreaPacket() {
 		return mWaitArea;
 	}
 
 	private MutableLiveData<ResponseWaitDecisionNewPacket> mWaitDecision;
+
 	public MutableLiveData<ResponseWaitDecisionNewPacket> getWaitDecisionPacket() {
 		return mWaitDecision;
 	}
 
 	private MutableLiveData<ResponseWaitCancelPacket> mWaitCancel;
+
 	public MutableLiveData<ResponseWaitCancelPacket> getWaitCancelPacket() {
 		return mWaitCancel;
 	}
@@ -209,69 +220,70 @@ public class ScenarioService extends LifecycleService {
 	}
 
 	private Call mCallInfo;
-    //----------------------------------------------------------------------------------------
-    // life-cycle
-    //----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------
+	// life-cycle
+	//----------------------------------------------------------------------------------------
 
 	private final IBinder binder = new ScenarioService.LocalBinder();
+
 	public class LocalBinder extends Binder {
-        public ScenarioService getService() {
-	        LogHelper.d(">> getService()");
-            return ScenarioService.this;
-        }
-    }
+		public ScenarioService getService() {
+			LogHelper.d(">> getService()");
+			return ScenarioService.this;
+		}
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        LogHelper.d(">> onCreate()");
-        mMainApplication = (MainApplication)getApplication();
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		LogHelper.d(">> onCreate()");
+		mMainApplication = (MainApplication) getApplication();
 
-	    boardType = Packets.BoardType.Empty;
-	    restType = Packets.RestType.Working;
-	    emergencyType = Packets.EmergencyType.End;
+		boardType = Packets.BoardType.Empty;
+		restType = Packets.RestType.Working;
+		emergencyType = Packets.EmergencyType.End;
 
-	    mRepository = mMainApplication.getRepository();
-	    mRepository.getConfigLive().observe(this, new Observer<Configuration>() {
-		    @Override
-		    public void onChanged(Configuration configuration) {
-			    mConfiguration = configuration;
-			    periodTerm = configuration.getPst();
-			    LogHelper.e("Scenario onChanged : " + configuration.toString());
+		mRepository = mMainApplication.getRepository();
+		mRepository.getConfigLive().observe(this, new Observer<Configuration>() {
+			@Override
+			public void onChanged(Configuration configuration) {
+				mConfiguration = configuration;
+				periodTerm = configuration.getPst();
+				LogHelper.e("Scenario onChanged : " + configuration.toString());
 
-			    if (networkManager == null) {
-				    networkManager = NetworkManager.getInstance(mMainApplication);
-				    networkManager.addNetworkListener(networkListener);
-				    //networkManager.connect(cfgLoader.getCallServerIp(), cfgLoader.getCallServerPort());
-			    }
+				if (networkManager == null) {
+					networkManager = NetworkManager.getInstance(mMainApplication);
+					networkManager.addNetworkListener(networkListener);
+					//networkManager.connect(cfgLoader.getCallServerIp(), cfgLoader.getCallServerPort());
+				}
 
-			    boolean isLocationPermissionGranted = TedPermission.isGranted(getApplicationContext()
-					    , Manifest.permission.ACCESS_COARSE_LOCATION
-					    , Manifest.permission.ACCESS_FINE_LOCATION);
-			    LogHelper.e("permission granted : " + isLocationPermissionGranted);
-			    if (isLocationPermissionGranted && gpsHelper == null) {
-				    gpsHelper = new GpsHelper(getApplicationContext());
-			    } else {
-				    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+				boolean isLocationPermissionGranted = TedPermission.isGranted(getApplicationContext()
+						, Manifest.permission.ACCESS_COARSE_LOCATION
+						, Manifest.permission.ACCESS_FINE_LOCATION);
+				LogHelper.e("permission granted : " + isLocationPermissionGranted);
+				if (isLocationPermissionGranted && gpsHelper == null) {
+					gpsHelper = new GpsHelper(getApplicationContext());
+				} else {
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 						gpsHelper = new GpsHelper(getApplicationContext());
-				    }
-			    }
-		    }
-	    });
+					}
+				}
+			}
+		});
 
-	    mRepository.getCallInfoLive().observe(this, new Observer<Call>() {
-		    @Override
-		    public void onChanged(Call call) {
-		    	LogHelper.e("onChanged-Call");
-			    if (call != null) {
-				    mCallInfo = call;
-				    boardType = call.getCallStatus() == Constants.CALL_STATUS_BOARDED
-						    ? Packets.BoardType.Boarding
-						    : Packets.BoardType.Empty;
-			    }
-		    }
-	    });
-    }
+		mRepository.getCallInfoLive().observe(this, new Observer<Call>() {
+			@Override
+			public void onChanged(Call call) {
+				LogHelper.e("onChanged-Call");
+				if (call != null) {
+					mCallInfo = call;
+					boardType = call.getCallStatus() == Constants.CALL_STATUS_BOARDED
+							? Packets.BoardType.Boarding
+							: Packets.BoardType.Empty;
+				}
+			}
+		});
+	}
 
 //	@Override
 //	public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
@@ -311,20 +323,20 @@ public class ScenarioService extends LifecycleService {
 	}
 
 	@Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
+	@Override
+	public IBinder onBind(Intent intent) {
 		super.onBind(intent);
-        LogHelper.d(">> onBind()");
-        return binder;
-    }
+		LogHelper.d(">> onBind()");
+		return binder;
+	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LogHelper.d(">> onDestroy()");
-	    this.stopSelf();
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		LogHelper.d(">> onDestroy()");
+		this.stopSelf();
 
-    }
+	}
 
 	@Override
 	public void onTaskRemoved(Intent rootIntent) {
@@ -724,6 +736,7 @@ public class ScenarioService extends LifecycleService {
 	 * 대기배차고객정보 요청 패킷을 요청한다.
 	 */
 	public void requestWaitPassengerInfo() {
+		LogHelper.e("requestWaitPassengerInfo()");
 		RequestCallerInfoPacket packet = new RequestCallerInfoPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -770,7 +783,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
-		packet.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+		packet.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 		packet.setOrderCount(call.getCallOrderCount());
 		request(packet);
 	}
@@ -869,8 +882,8 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
-		LogHelper.e("distance : " + callInfo.getDistance());
 		packet.setDistance(callInfo.getDistance());
+
 		packet.setOrderKind(Packets.OrderKind.WaitCall);
 		request(packet);
 	}
@@ -949,10 +962,6 @@ public class ScenarioService extends LifecycleService {
 	}
 
 
-
-
-
-
 	/**
 	 * 배차 데이터를 아래의 순서로 업데이트 한다.
 	 * 1. 전달 받은 콜넘버와 저장 받은 배차데이터를 비교하여
@@ -1000,7 +1009,7 @@ public class ScenarioService extends LifecycleService {
 			//승차중 배차 데이터를 배차 상태로 UI에 표시한다.
 			Call call = new Call(_getOn);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance((int)gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+			call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 			mRepository.updateCallInfo(call);
 		}
 	}
@@ -1017,7 +1026,7 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.e("승차중 배차 존재, 배차 상태로 UI 변경");
 			Call call = new Call(normal);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance((int)(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong())));
+			call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 			mRepository.updateCallInfo(call);
 		} else {
 			LogHelper.e(">> doesn't have passenger info.");
@@ -1114,6 +1123,17 @@ public class ScenarioService extends LifecycleService {
 								requestNotice();
 							}
 						}
+
+
+						WaitingZone waitingZone = mRepository.getWaitingZone();
+						WaitOrderInfoPacket waitOrderInfoPacket = mRepository.loadWaitCallInfo();
+						if (waitOrderInfoPacket != null && boardType != Packets.BoardType.Boarding) {
+							// 1. 미리 저장되어 있는 대기요청고객정보가 있다면 해당 정보를 보여준다.
+						} else if (waitingZone != null) {
+							// 2. 저장 되어 있는 대기요청고객정보가 없지만 대기요청 상태의 경우 0x1517 대기배차고객정보 요청해서 정보를 가져온다.
+							LogHelper.e("requestWaitPassengerInfo()");
+							requestWaitPassengerInfo();
+						}
 					}
 					break;
 				}
@@ -1170,21 +1190,21 @@ public class ScenarioService extends LifecycleService {
 						if (orderInfoPacket == null) {
 							LogHelper.e("orderInfoPacket is null");
 							requestCallInfo(packet.getCallNumber());
-						} else {
-							// FIXME: 2019-09-17 배차 정보가 있으나, 화면을 보여주지 못하는 경우에 대한 처리 필요..
-							// 기존은 배차 정보가 없을 경우에만 서버에 다시 요청하여 응답 받아 화면을 표시함.
-							LogHelper.e("orderInfoPacker not null : " + orderInfoPacket.toString());
-							LogHelper.e("mCallInfo.getCallStatus() : " + mCallInfo.getCallStatus());
-							if (orderInfoPacket.getOrderKind() == Packets.OrderKind.GetOnOrder
-									&& mCallInfo.getCallStatus() != Constants.CALL_STATUS_ALLOCATED) {
-								LogHelper.e("orderInfoPacket not null but not showing allocated fragment");
-
-								// FIXME: 2019-09-20 1차 테스트 완료, checkReservation 테스트 후 검증 필요
-								mCallInfo.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-								Call call = new Call(orderInfoPacket);
-								call.setDistance((int)gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
-								mRepository.updateCallInfo(call);
-							}
+//						} else {
+//							// FIXME: 2019-09-17 배차 정보가 있으나, 화면을 보여주지 못하는 경우에 대한 처리 필요..
+//							// 기존은 배차 정보가 없을 경우에만 서버에 다시 요청하여 응답 받아 화면을 표시함.
+//							LogHelper.e("orderInfoPacker not null : " + orderInfoPacket.toString());
+//							LogHelper.e("mCallInfo.getCallStatus() : " + mCallInfo.getCallStatus());
+//							if (orderInfoPacket.getOrderKind() == Packets.OrderKind.GetOnOrder
+//									&& mCallInfo.getCallStatus() != Constants.CALL_STATUS_ALLOCATED) {
+//								LogHelper.e("orderInfoPacket not null but not showing allocated fragment");
+//
+//								// FIXME: 2019-09-20 1차 테스트 완료, checkReservation 테스트 후 검증 필요
+//								mCallInfo.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
+//								Call call = new Call(orderInfoPacket);
+//								call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
+//								mRepository.updateCallInfo(call);
+//							}
 						}
 					}
 				}
@@ -1230,7 +1250,7 @@ public class ScenarioService extends LifecycleService {
 						mCallInfo.setCallStatus(Constants.CALL_STATUS_ALIGHTED);
 						mRepository.updateCallInfo(mCallInfo);
 
-						((MainApplication)getApplication()).setCurrentActivity(null);
+						((MainApplication) getApplication()).setCurrentActivity(null);
 						refreshSavedPassengerInfo(packet.getCallNumber());
 						checkReservation();
 					}
@@ -1241,6 +1261,7 @@ public class ScenarioService extends LifecycleService {
 						LogHelper.write("#### 하차 보고 -> callNo : " + packet.getCallNumber());
 					} else if (reportKind == Packets.ReportKind.Failed) {
 						LogHelper.write("#### 탑승 실패 보고 -> callNo : " + packet.getCallNumber());
+						mRepository.clearWaitingZone();
 					}
 				}
 				break;
@@ -1252,14 +1273,13 @@ public class ScenarioService extends LifecycleService {
 					Notice message = new Notice("", packet.getMessage(), String.valueOf(System.currentTimeMillis()), false);
 					mRepository.insertNotice(message);
 
-
-					Popup popup = new Popup
-							.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_MESSAGE)
-							.setTitle(getString(R.string.common_message))
-							.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
-							.setContent(packet.getMessage())
-							.build();
 					if (hasCertification) {
+						Popup popup = new Popup
+								.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_MESSAGE)
+								.setTitle(getString(R.string.common_message))
+								.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
+								.setContent(packet.getMessage())
+								.build();
 						PopupActivity.startActivity(ScenarioService.this, popup);
 						WavResourcePlayer.getInstance(ScenarioService.this).play(R.raw.voice_142);
 					}
@@ -1349,6 +1369,24 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
+				case Packets.WAIT_ORDER_INFO: { // 대기배차고객정보 응답
+					LogHelper.e("WAIT_ORDER_INFO~~~~~");
+					WaitOrderInfoPacket resp = (WaitOrderInfoPacket) response;
+					if (resp.getCallNumber() > 0) {
+						//WavResourcePlayer.getInstance(context).play(R.raw.voice_132);
+						// 서버에 Packet을 한번 요청하면 데이터가 초기화 되기 때문에 콜번호가 유효한 경우에만 저장을 한다.
+						mRepository.saveWaitCallInfo(resp);
+
+						// 대기 배차 완료시 서버의 대기목록에서 빠지므로 로컬 파일 지우도록 한다.
+						mRepository.clearWaitingZone();
+
+						requestAck(resp.getMessageType(), mConfiguration.getServiceNumber(), resp.getCallNumber());
+
+						LogHelper.write("#### 콜 수락(대기) -> callNo : " + resp.getCallNumber());
+					}
+				}
+				break;
+
 				case Packets.CALLER_INFO_RESEND:
 				case Packets.CALLER_INFO_RESEND_DES: { // 고객정보재전송 응답
 					LogHelper.e("CALLER INFO RESEND~~~~");
@@ -1379,12 +1417,13 @@ public class ScenarioService extends LifecycleService {
 								updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
 							}
 						} else {
-							LogHelper.e("CALLER INFO RESEND~~~~3 : " + (p.getOrderKind() == Packets.OrderKind.GetOnOrder));
+							LogHelper.e("CALLER INFO RESEND~~~~3 : " + p.getOrderKind());
 
 							OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 							if (normal != null && normal.getCallNumber() == p.getCallNumber()) {
 								updateCallInfoToUi(normal, Constants.CALL_STATUS_ALLOCATED);
 							} else {
+								// 주기 전송에서 hasOrder가 true로 내려오지만, 해당 콜 종류를 알 수 없어 normal을 기준으로 판단하므로, normal 콜에 대기배차 고객정보를 저장함.
 								OrderInfoPacket orderInfo = new OrderInfoPacket(p);
 								mRepository.saveCallInfoWithOrderKind(orderInfo, Packets.OrderKind.Normal);
 								updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
@@ -1493,6 +1532,9 @@ public class ScenarioService extends LifecycleService {
 					ResponseWaitCancelPacket resPacket = (ResponseWaitCancelPacket) response;
 					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
 					mWaitCancel.postValue(resPacket);
+					if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Success) {
+						mRepository.clearWaitingZone();
+					}
 				}
 				break;
 			}
@@ -1558,7 +1600,7 @@ public class ScenarioService extends LifecycleService {
 			if (boardType != Packets.BoardType.Boarding) {
 				// 주행 중이 아닐 때는 고객 정보 창에서 음성이 나온다.
 				updateCallInfoToUi(tempPacket, status);
-				if(mMainApplication.isBackground()) {
+				if (mMainApplication.isBackground()) {
 					showCallReceivingActivity(false);
 				}
 			} else {
@@ -1587,7 +1629,7 @@ public class ScenarioService extends LifecycleService {
 		Call call = new Call(packet);
 		if (callStatus != -1)
 			call.setCallStatus(callStatus);
-		call.setDistance((int)gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+		call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 		mRepository.updateCallInfo(call);
 	}
 
@@ -1638,7 +1680,7 @@ public class ScenarioService extends LifecycleService {
 		}
 	}
 
-	private void startActivityWithPendingIntent(Intent intent){
+	private void startActivityWithPendingIntent(Intent intent) {
 		PendingIntent pendingIntent = PendingIntent.getActivity(ScenarioService.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		long now = Calendar.getInstance().getTimeInMillis();
@@ -1683,6 +1725,13 @@ public class ScenarioService extends LifecycleService {
 							LogHelper.d(">> Wait Area : Out of area");
 							removeMessages(MSG_AREA_CHECK);
 							requestWaitCancel(waitingZone.getWaitingZoneId());
+							Popup popup = new Popup
+									.Builder(Popup.TYPE_ONE_BTN_NORMAL, Constants.DIALOG_TAG_EXIT_WAITING_ZONE)
+									.setContent(getString(R.string.wz_msg_exit_waiting_zone))
+									.setBtnLabel(getString(R.string.common_confirm), null)
+									.setDismissSecond(3)
+									.build();
+							PopupActivity.startActivity(ScenarioService.this, popup);
 							return;
 						}
 					}

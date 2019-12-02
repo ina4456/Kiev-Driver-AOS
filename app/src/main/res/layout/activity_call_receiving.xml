@@ -7,9 +7,9 @@
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
         <import type="android.view.Gravity"/>
-        <variable
-            name="viewModel"
-            type="com.kiev.driver.aos.viewmodel.MainViewModel"/>
+<!--        <variable-->
+<!--            name="viewModel"-->
+<!--            type="com.kiev.driver.aos.viewmodel.MainViewModel"/>-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,10 +74,11 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_departure_poi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
+
+<!--        android:text="@{viewModel.callInfo.getCallDistanceToDeparture()}"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_distance"
             tools:text="500m"
-            android:text="@{viewModel.callInfo.getCallDistanceToDeparture()}"
             android:textSize="18dp"
             android:textColor="@color/colorGray01"
             android:gravity="center_vertical|start"
@@ -90,19 +91,19 @@
             android:layout_height="wrap_content"/>
 
         <!--도착지-->
+<!--        android:text="@{viewModel.callInfo.getDeparturePoi()}"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_departure_poi"
             tools:text="삼환하이펙스 A동\n두줄두줄두줄두줄"
-            android:text="@{viewModel.callInfo.getDeparturePoi()}"
             style="@style/AllocationPoiTextStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tv_departure_addr"
             app:layout_constraintTop_toBottomOf="@+id/tv_here"/>
+<!--        android:text="@{viewModel.callInfo.getDepartureAddr()}"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_departure_addr"
             tools:text="분당구 삼평동"
-            android:text="@{viewModel.callInfo.getDepartureAddr()}"
             style="@style/AllocationSubPoiTextStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -136,10 +137,10 @@
 
 <!--        {TextUtils.isEmpty-->
         <!--목적지-->
+<!--        android:text="@{viewModel.callInfo.getDestinationPoi() == null ? (viewModel.callInfo.getDestinationAddr() ?? @string/alloc_no_destination) : TextUtils.isEmpty(viewModel.callInfo.getDestinationPoi()) ? @string/alloc_no_destination : viewModel.callInfo.getDestinationPoi()}"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_destination_poi"
             tools:text="판교 현대백화점"
-            android:text="@{viewModel.callInfo.getDestinationPoi() == null ? (viewModel.callInfo.getDestinationAddr() ?? @string/alloc_no_destination) : TextUtils.isEmpty(viewModel.callInfo.getDestinationPoi()) ? @string/alloc_no_destination : viewModel.callInfo.getDestinationPoi()}"
             android:textColor="@color/colorYellow"
             android:layout_marginTop="0dp"
             style="@style/AllocationPoiTextStyle"
@@ -148,10 +149,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tv_destination_addr"
             app:layout_constraintTop_toBottomOf="@+id/gl_half"/>
+<!--        android:text="@{viewModel.callInfo.getDestinationAddr()}"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_destination_addr"
             tools:text="분당구 백현동"
-            android:text="@{viewModel.callInfo.getDestinationAddr()}"
             android:textColor="@color/colorYellow"
             style="@style/AllocationSubPoiTextStyle"
             app:layout_constraintStart_toStartOf="parent"

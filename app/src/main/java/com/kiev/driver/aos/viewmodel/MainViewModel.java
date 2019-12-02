@@ -158,15 +158,11 @@ public class MainViewModel extends AndroidViewModel {
 	}
 
 	public void setWaitingZone(WaitingZone waitingZone, boolean isSave) {
-		int callStatus;
 		if (isSave) {
 			mRepository.saveWaitArea(waitingZone);
-//			callStatus = Constants.CALL_STATUS_VACANCY_IN_WAITING_ZONE;
 		} else {
 			mRepository.clearWaitingZone();
-//			callStatus = Constants.CALL_STATUS_VACANCY;
 		}
-//		mRepository.changeCallStatus(callStatus);
 	}
 
 
@@ -252,8 +248,7 @@ public class MainViewModel extends AndroidViewModel {
 		mRepository.requestAcceptOrRefuse(decisionType);
 	}
 
-	public void requestCancelCall(String cancelReason) {
-		// TODO: 2019-09-09 취소 사유 전달 받아 패킷 세팅 필요
+	public void requestCancelCall(Packets.ReportKind cancelReason) {
 		mRepository.requestCancelCall(cancelReason);
 	}
 

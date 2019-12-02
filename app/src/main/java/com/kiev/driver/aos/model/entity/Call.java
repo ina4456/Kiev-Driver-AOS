@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 
 
 @Entity(tableName = "call_table")
-public class Call implements Parcelable{
+public class Call implements Parcelable {
 
 	@PrimaryKey(autoGenerate = true)
 	private int id;
@@ -78,7 +78,7 @@ public class Call implements Parcelable{
 	private boolean useWheelchair;
 
 	private boolean isReported; // 운행보고 여부 (Local에서만 사용하는 값이다.)
-	private int distance;
+	private float distance;
 
 
 	public Call() {
@@ -133,11 +133,54 @@ public class Call implements Parcelable{
 		parcel.writeInt(callType);
 		parcel.writeByte((byte)(callIsTemp ? 1 : 0));
 		parcel.writeInt(callClass);
+		parcel.writeInt(callOrderCount);
+		parcel.writeString(callReceivedDate);
+		parcel.writeInt(callStatus);
+		parcel.writeFloat(distance);
+		parcel.writeString(callDistanceToDeparture);
+		parcel.writeString(waitingZoneId);
+		parcel.writeString(waitingZoneName);
+		parcel.writeString(departurePoi);
+		parcel.writeString(departureAddr);
+		parcel.writeDouble(departureLat);
+		parcel.writeDouble(departureLong);
+		parcel.writeString(destinationPoi);
+		parcel.writeString(destinationAddr);
+		parcel.writeDouble(destinationLat);
+		parcel.writeDouble(destinationLong);
+		parcel.writeString(passengerPhoneNumber);
+		parcel.writeString(handicapCode);
+		parcel.writeString(passengerPhoneNumber);
+		parcel.writeByte((byte)(useWheelchair ? 1 : 0));
 
 	}
 
 	private void readFromParcel(Parcel in) {
-//		customerPhoneNumber = in.readString();
+		id = in.readInt();
+		callNumber = in.readInt();
+		callType = in.readInt();
+		callIsTemp = in.readByte() != 0;
+		callClass = in.readInt();
+		callOrderCount = in.readInt();
+		callReceivedDate = in.readString();
+		callStatus = in.readInt();
+		distance = in.readFloat();
+		callDistanceToDeparture = in.readString();
+		waitingZoneId = in.readString();
+		waitingZoneName = in.readString();
+		departurePoi = in.readString();
+		departureAddr = in.readString();
+		departureLat = in.readDouble();
+		departureLong = in.readDouble();
+		destinationPoi = in.readString();
+		destinationAddr = in.readString();
+		destinationLat = in.readDouble();
+		destinationLong = in.readDouble();
+		passengerPhoneNumber = in.readString();
+
+		passengerName = in.readString();
+		handicapCode = in.readString();
+		useWheelchair = in.readByte() != 0;
 	}
 
 	public int getId() {
@@ -294,23 +337,26 @@ public class Call implements Parcelable{
 		this.callDistanceToDeparture = callDistanceToDeparture;
 	}
 
-	public int getDistance() {
+	public float getDistance() {
 		return distance;
 	}
 
-	public void setDistance(int distance) {
+	public void setDistance(float distance) {
+		//LogHelper.e("distance : " + distance);
 		this.distance = distance;
 		String distanceStr;
-		float distanceFloat = 0f;
+		float distanceTemp;
 
 		if (distance < 1000) {
-			distanceStr = distance + "m";
+			distanceStr = (int)distance + "m";
 		} else {
-			distanceFloat = distance / 1000;
-			distanceFloat = distanceFloat + ((distance - (distanceFloat * 1000)) / 1000);
-			distanceStr = String.format("%.1f", distanceFloat);
+			distanceTemp = distance / 1000;
+			distanceTemp = distanceTemp + ((distance - (distanceTemp * 1000)) / 1000);
+			distanceStr = String.format("%.1f", distanceTemp);
 			distanceStr = distanceStr + "km";
 		}
+		//LogHelper.e("distanceStr : " + distanceStr);
+
 		this.setCallDistanceToDeparture(distanceStr);
 	}
 

@@ -171,44 +171,6 @@ public class NetworkManager {
 		    }
 	    }
     }
-    public synchronized void request(RequestPacket packet, SocketRequestCallback callback) {
-        LogHelper.write(">> REQ " + packet);
-        // 연결이 끊어지는 케이스
-        // 1. 단말의 네트워크 오류 : API 이용
-        // 2. 서버의 소켓이 닫히는 경우 : Buffer Write시 Exception으로 판단
-        // 3. 단말의 소켓이 닫히는 경우 : Socket의 isConnected()로 판단
-        // 주기전송과 Live 패킷이 polling 되므로 위 3개의 케이스로 연결 상태 판단 가능하다.
-
-
-        // 2017. 08. 17 - 권석범
-        // Live 패킷 전송 별도 서버로 분기 처리 및 livePacketConnect, livePacketDisconnect 메서드 추가
-        if ( packet instanceof LivePacket) {
-            if (livePacketConnector == null
-                    || !livePacketConnector.isConnected()) {
-                    //|| !isAvailableNetwork(context)) {
-                livePacketDisconnect();
-                port = mConfiguration.getCallServerPort();
-                livePacketConnect(IP_LIVE_PACKET, port);
-            }
-            if (livePacketConnector != null) {
-                livePacketConnector.request(packet.toBytes());
-            }
-        } else {
-            if (connector == null
-                    || !connector.isConnected()) {
-                    //|| !isAvailableNetwork(context)) {
-                disconnect();
-	            // FIXME: 2019-11-15 test
-	            ip = mConfiguration.getCallServerIp();
-	            port = mConfiguration.getCallServerPort();
-                connect(ip, port);
-            }
-            if (connector != null) {
-	            addCallbackListener(packet.getMessageType(), callback);
-	            connector.request(packet.toBytes());
-            }
-        }
-    }
 
     /**
      * 네트워크 상태 체크

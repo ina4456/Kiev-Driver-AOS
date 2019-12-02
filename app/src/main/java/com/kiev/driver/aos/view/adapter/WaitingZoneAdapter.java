@@ -61,7 +61,7 @@ public class WaitingZoneAdapter extends RecyclerView.Adapter<WaitingZoneAdapter.
 	public void addData(ArrayList<WaitingZone> waitingZones) {
 		int curSize = getItemCount();
 		mItems.addAll(waitingZones);
-		notifyItemRangeInserted(curSize, waitingZones.size() - 1);
+		notifyItemRangeInserted(curSize, waitingZones.size());
 	}
 
 	public void setViewsAsWaitingOrNot(boolean isWaiting, ViewHolder vh, int index, int waitOrder) {

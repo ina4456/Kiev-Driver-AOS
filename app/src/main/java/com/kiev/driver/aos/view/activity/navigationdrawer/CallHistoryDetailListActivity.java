@@ -31,6 +31,8 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
+	private boolean isLoading = false;
+
 	private Packets.StatisticPeriodType currentPeriodType;
 	private Packets.StatisticListType currentListType;
 
@@ -152,6 +154,7 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 	}
 
 	private void requestHistoryList(Packets.StatisticListType listType, Packets.StatisticPeriodType periodType, int startIndex) {
+		isLoading = true;
 		startLoadingProgress();
 
 		if (startIndex == START_INDEX) {
@@ -167,6 +170,8 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 			public void onChanged(ResponseStatisticsDetailPacket response) {
 				//LogHelper.e("UI 리스폰스 전달: " + response);
 				liveData.removeObserver(this);
+				isLoading = false;
+
 				finishLoadingProgress();
 
 				if (response != null) {
@@ -200,17 +205,21 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 								history.setCallId(Integer.parseInt(callNumbers[i]));
 								history.setCallTypeStr(callTypes[i]);
 								history.setDate(callReceiptDates[i]);
-								history.setDeparture(departures[i]);
+								history.setDeparture(departures[i] + "[" + i + "]");
 								history.setDestination(destinations[i]);
 								history.setStartTime(boardedTimes[i]);
 								history.setEndTime(alightedTimes[i]);
 								history.setPassengerPhoneNumber(hasData(phoneNumbers) ? phoneNumbers[i] : "0");
 								historyList.add(history);
+								LogHelper.e("history : " + history);
 							}
 
+							LogHelper.e("history : " + historyList.size());
 							if (startIndex == START_INDEX) {
+								LogHelper.e("refresh");
 								mCallHistoryAdapter.refreshData(historyList);
 							} else {
+								LogHelper.e("adddata");
 								mCallHistoryAdapter.addData(historyList);
 							}
 
@@ -245,7 +254,7 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 					int totalItemCount = layoutManager.getItemCount();
 					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
 
-					if (lastVisible >= totalItemCount - 1) {
+					if (lastVisible >= totalItemCount - 1 && !isLoading) {
 						LogHelper.e("lastVisibled : " + totalItemCount);
 						requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
 					}

@@ -303,12 +303,13 @@ public class Repository {
 	}
 
 	//콜 취소
-	public void requestCancelCall(String cancelReason) {
+	public void requestCancelCall(Packets.ReportKind cancelReason) {
 		WaitOrderInfoPacket wait = mSharedPreferenceManager.getWaitOrderInfo();
 		if (wait != null) {
 			mScenarioService.requestReport(
 					wait.getCallNumber(), wait.getOrderCount(),
 					wait.getOrderKind(), wait.getCallReceiptDate(),
+//					cancelReason, 0, 0);
 					Packets.ReportKind.Failed, 0, 0);
 		} else {
 			OrderInfoPacket normal = mSharedPreferenceManager.getNormalCallInfo();
@@ -316,7 +317,8 @@ public class Repository {
 				mScenarioService.requestReport(
 						normal.getCallNumber(), normal.getOrderCount(),
 						normal.getOrderKind(), normal.getCallReceiptDate(),
-						Packets.ReportKind.Failed, 0, 0);
+//						cancelReason, 0, 0);
+				Packets.ReportKind.Failed, 0, 0);
 			}
 		}
 	}

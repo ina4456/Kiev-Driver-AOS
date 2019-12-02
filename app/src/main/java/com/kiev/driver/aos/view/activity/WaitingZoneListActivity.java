@@ -17,6 +17,7 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCanc
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingZoneAdapter;
+import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -33,7 +34,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.kiev.driver.aos.view.activity.CallReceivingActivity.DIALOG_TAG_FAILURE;
 
-public class WaitingZoneListActivity extends BaseActivity implements View.OnClickListener, WaitingZoneAdapter.WaitingZoneListCallback {
+public class WaitingZoneListActivity extends BaseActivity implements View.OnClickListener
+		, WaitingZoneAdapter.WaitingZoneListCallback
+		, PopupDialogFragment.PopupDialogListener {
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
@@ -213,7 +216,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 						liveData.removeObserver(this);
 						LogHelper.e("대기 결정 응답 :  " + response);
 						if (response.getWaitProcType() == Packets.WaitProcType.Success) {
-							mViewModel.setWaitingZone(item, isRequest);
+							mViewModel.setWaitingZone(item, true);
 							requestWaitZoneList(START_INDEX);
 						} else {
 							showFailurePopup(isRequest);
@@ -228,7 +231,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 						liveData.removeObserver(this);
 						LogHelper.e("대기 취소 응답 :  " + response);
 						if (response.getWaitCancelType() == Packets.WaitCancelType.Success) {
-							mViewModel.setWaitingZone(item, isRequest);
+							mViewModel.setWaitingZone(item, false);
 							requestWaitZoneList(START_INDEX);
 						} else {
 							showFailurePopup(isRequest);
@@ -278,5 +281,10 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 				.setDismissSecond(3)
 				.build();
 		showPopupDialog(popup);
+	}
+
+	@Override
+	public void onDismissPopupDialog(String tag, Intent intent) {
+
 	}
 }

@@ -145,7 +145,11 @@ public class Packets {
 		GetOn(0x01), // 승차보고
 		GetOff(0x02), // 하차보고
 		Failed(0x03), // 탑승실패
-		GetOnOrder(0x04); // 승차중 배차
+		GetOnOrder(0x04), // 승차중 배차
+		FailedPassengerCancel(0x05), // 탑승실패(손님이 취소)
+		FailedNoShow(0x06), // 탑승실패(손님과 통화불가)
+		FailedUseAnotherTaxi(0x07), // 탑승실패(손님이 다른 차량 이용)
+		FailedEtc(0x08); // 탑승실패(기타 영업 장애)
 
 		public int value;
 

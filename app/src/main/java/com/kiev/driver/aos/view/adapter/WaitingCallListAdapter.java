@@ -64,7 +64,7 @@ public class WaitingCallListAdapter extends RecyclerView.Adapter<WaitingCallList
 		LogHelper.e("@@@@ addData");
 		int curSize = getItemCount();
 		mItems.addAll(calls);
-		notifyItemRangeInserted(curSize, calls.size() - 1);
+		notifyItemRangeInserted(curSize, calls.size());
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

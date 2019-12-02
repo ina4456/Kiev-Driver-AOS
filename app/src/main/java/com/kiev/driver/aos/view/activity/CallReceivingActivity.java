@@ -19,6 +19,7 @@ import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
@@ -30,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,7 +41,8 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 	public static final String DIALOG_TAG_ALLOCATED = "dialog_tag_allocated";
 	public static final String DIALOG_TAG_FAILURE = "dialog_tag_failure";
-	private static final String INTENT_KEY_IS_FROM_WAITING_CALL_LIST = "INTENT_KEY_IS_FROM_WAITING_CALL_LIST";
+	private static final String INTENT_KEY_IS_WC = "intent_key_is_wc";
+	private static final String INTENT_KEY_CALL_INFO = "intent_key_call_info";
 
 	private MainViewModel mMainViewModel;
 	private ActivityCallReceivingBinding mBinding;
@@ -47,11 +50,13 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 	private CountDownTimer countDownTimer;
 	private boolean hasGotResponse = false;
 	private boolean needToRequestToRefuseWhenCloseActivity = true;
+	boolean isFromWaitingCallList;
 
-	public static void startActivity(Context context, boolean isFromWaitingCallList) {
+	public static void startActivity(Context context, boolean isFromWaitingCallList, Call callInfo) {
 		final Intent intent = new Intent(context, CallReceivingActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		intent.putExtra(INTENT_KEY_IS_FROM_WAITING_CALL_LIST, isFromWaitingCallList);
+		intent.putExtra(INTENT_KEY_IS_WC, isFromWaitingCallList);
+		intent.putExtra(INTENT_KEY_CALL_INFO, callInfo);
 		context.startActivity(intent);
 	}
 
@@ -64,10 +69,15 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 				.get(MainViewModel.class);
 		mBinding = DataBindingUtil.setContentView(this, R.layout.activity_call_receiving);
 		mBinding.setLifecycleOwner(this);
-		mBinding.setViewModel(mMainViewModel);
+		//mBinding.setViewModel(mMainViewModel);
 
-		initViews();
-		subscribeViewModel(mMainViewModel);
+		Intent passedIntent = getIntent();
+		isFromWaitingCallList = passedIntent.getBooleanExtra(INTENT_KEY_IS_WC, false);
+		Call callInfoFromWaitingCallList = passedIntent.getParcelableExtra(INTENT_KEY_CALL_INFO);
+
+		initViews(callInfoFromWaitingCallList);
+		subscribeViewModel(mMainViewModel, callInfoFromWaitingCallList);
+
 	}
 
 	@Override
@@ -87,7 +97,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		super.onPause();
 		LogHelper.e("onPause()");
 
-		if(countDownTimer != null) {
+		if (countDownTimer != null) {
 			countDownTimer.cancel();
 		}
 
@@ -108,28 +118,18 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		boolean wasBackground = mMainApplication.wasBackground();
 		//백그라운드 상태에서 진입 했을 경우, 백버튼 누를시 task 전체를 백그라운드로 이동.
 		//그 외의 경우 콜 수신 화면만 닫음.
-		if(wasBackground) {
+		if (wasBackground) {
 			moveTaskToBack(true);
 		} else {
 			super.onBackPressed();
 		}
 	}
 
-//fixme
-//	@Override
-//	public void onBackPressed() {
-//		//super.onBackPressed();
-//		if (!isRequesting) {
-//			rejectCall(true);
-//		}
-//	}
 
-
-	private void initViews() {
+	private void initViews(Call call) {
 		mBinding.btnReject.setOnClickListener(this);
 		mBinding.btnRequest.setOnClickListener(this);
 
-		boolean isFromWaitingCallList = getIntent().getBooleanExtra(INTENT_KEY_IS_FROM_WAITING_CALL_LIST, false);
 		if (!isFromWaitingCallList) {
 			int displayTime = mMainViewModel.getTimeForDisplayingCallBroadcast();
 			LogHelper.e("displayTime : " + displayTime);
@@ -138,7 +138,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			}
 			startCountDown(displayTime);
 		} else {
-			setViewsAsWaitingResponse();
+			setViewsAsWaitingResponse(call);
 		}
 
 		//RatingBar
@@ -148,7 +148,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		setRatingStarColor(stars.getDrawable(0), ContextCompat.getColor(this, R.color.colorGray07));
 	}
 
-	private void subscribeViewModel(MainViewModel mainViewModel) {
+	private void subscribeViewModel(MainViewModel mainViewModel, Call callInfoFromWaitingCallList) {
 		LiveData<Call> callInfo = mainViewModel.getCallInfo();
 		callInfo.observe(this, new Observer<Call>() {
 			@Override
@@ -187,18 +187,20 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 						case Constants.CALL_STATUS_DRIVING:
 						case Constants.CALL_STATUS_VACANCY:
 							//배차 방송 수신 중에 미터기 조작이 된다면, 수신된 배차 방송을 거절 처리하고 닫는다.
-							LogHelper.i("onChanged-Call : status : " +status);
-							WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_126);
-							needToRequestToRefuseWhenCloseActivity = false;
-							requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
-							if (status == Constants.CALL_STATUS_VACANCY) {
-								mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_VACANCY);
-							} else {
-								mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_BOARDED);
-							}
+							LogHelper.i("onChanged-Call : status : " + status);
+							if (!isFromWaitingCallList) {
+								WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_126);
+								needToRequestToRefuseWhenCloseActivity = false;
+								requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+								if (status == Constants.CALL_STATUS_VACANCY) {
+									mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_VACANCY);
+								} else {
+									mMainViewModel.resetCallInfoForUi(Constants.CALL_STATUS_BOARDED);
+								}
 
-							finish();
-							callInfo.removeObserver(this);
+								finish();
+								callInfo.removeObserver(this);
+							}
 
 							break;
 
@@ -210,17 +212,22 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 							break;
 					}
 
-					//거리 표시
-					int distance = mainViewModel.getDistance(call.getDepartureLat(), call.getDepartureLong());
-					LogHelper.e("distance : " + distance);
-					mBinding.tvDistance.setText(String.valueOf(distance));
+					if (!isFromWaitingCallList) {
+						setDataToViews(call);
 
-					//콜 등급 표시
-					//테스트 call.setCallClass(new Ranom().nextInt(5));
-					if (call.getCallClass() == 0) {
-						mBinding.rbCallGrade.setVisibility(View.GONE);
-					} else {
-						mBinding.rbCallGrade.setRating(call.getCallClass());
+						//거리 표시
+						int distance = mainViewModel.getDistance(call.getDepartureLat(), call.getDepartureLong());
+						//LogHelper.e("distance : " + distance);
+						mBinding.tvDistance.setText(String.valueOf(distance));
+
+
+						//콜 등급 표시
+						//테스트 call.setCallClass(new Ranom().nextInt(5));
+						if (call.getCallClass() == 0) {
+							mBinding.rbCallGrade.setVisibility(View.GONE);
+						} else {
+							mBinding.rbCallGrade.setRating(call.getCallClass());
+						}
 					}
 				}
 			}
@@ -239,6 +246,26 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 				mBinding.tvDestinationAddr.setTextSize(COMPLEX_UNIT_DIP, configuration.getFontSizeFromSetting(subPoiNameTextSize));
 			}
 		});
+
+
+		if (isFromWaitingCallList && callInfoFromWaitingCallList != null) {
+			LogHelper.e("callInfoFromWaitingCallList..");
+			MutableLiveData<ResponseWaitCallOrderInfoPacket> waitingCallInfo = mMainViewModel.requestWaitingCallOrder(callInfoFromWaitingCallList);
+			waitingCallInfo.observe(this, new Observer<ResponseWaitCallOrderInfoPacket>() {
+				@Override
+				public void onChanged(ResponseWaitCallOrderInfoPacket response) {
+					LogHelper.e("responseWaitCallOrderInfoPacket : " + response);
+					waitingCallInfo.removeObserver(this);
+					if (response != null) {
+						if (response.isSuccess()) {
+							//finish();
+						} else {
+							showFailurePopup();
+						}
+					}
+				}
+			});
+		}
 	}
 
 	private void setRatingStarColor(Drawable drawable, @ColorInt int color) {
@@ -260,12 +287,13 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		}
 	}
 
-	private void startCountDown(int dismissSecond){
+	private void startCountDown(int dismissSecond) {
 		countDownTimer = new CountDownTimer((dismissSecond + 1) * COUNT_DOWN_INTERVAL, COUNT_DOWN_INTERVAL) {
 			@Override
 			public void onTick(long l) {
-				setTextWithCount((int)(l/1000));
+				setTextWithCount((int) (l / 1000));
 			}
+
 			@Override
 			public void onFinish() {
 				LogHelper.e("onFinish()");
@@ -287,7 +315,9 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		}
 	}
 
-	private void setViewsAsWaitingResponse() {
+	private void setViewsAsWaitingResponse(Call call) {
+		LogHelper.e("call :  " + call);
+		startLoadingProgress();
 		mBinding.tvCallState.setText(R.string.alloc_step_requesting_call);
 		mBinding.btnRequest.setEnabled(false);
 		mBinding.btnReject.setEnabled(false);
@@ -295,6 +325,30 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		if (countDownTimer != null) {
 			countDownTimer.cancel();
 		}
+
+		if (call != null) {
+			setDataToViews(call);
+		}
+	}
+
+	private void setDataToViews(Call call) {
+		LogHelper.e("setDataToViews : " + call);
+		mBinding.tvDistance.setText(call.getCallDistanceToDeparture());
+		mBinding.tvDeparturePoi.setText(call.getDeparturePoi());
+		mBinding.tvDepartureAddr.setText(call.getDepartureAddr());
+
+
+		String destinationPoi = call.getDestinationPoi();
+		String destinationAddr = call.getDestinationAddr();
+		if (destinationPoi == null || destinationPoi.isEmpty()) {
+			if (destinationAddr != null && !destinationAddr.isEmpty()) {
+				destinationPoi = destinationAddr;
+			} else {
+				destinationPoi = getString(R.string.alloc_no_destination);
+			}
+		}
+		mBinding.tvDestinationPoi.setText(destinationPoi);
+		mBinding.tvDestinationAddr.setText(call.getDestinationAddr());
 	}
 
 	private void resetCallInfo() {
@@ -304,8 +358,11 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 	private void requestAcceptOrRefuse(Packets.OrderDecisionType decisionType) {
 		mMainViewModel.requestAcceptOrRefuse(decisionType);
-		if (decisionType == Packets.OrderDecisionType.Reject)
+		if (decisionType == Packets.OrderDecisionType.Reject) {
 			mMainViewModel.clearTempCallInfo();
+			mMainViewModel.setWaitingZone(null, false);
+		}
+
 	}
 
 	private void showAllocatedPopup() {
@@ -363,7 +420,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			//배차 요청
 			case R.id.btn_request:
 				super.startLoadingProgress();
-				setViewsAsWaitingResponse();
+				setViewsAsWaitingResponse(null);
 				WavResourcePlayer.getInstance(this).play(R.raw.voice_124);
 				this.requestAcceptOrRefuse(Packets.OrderDecisionType.Request);
 				needToRequestToRefuseWhenCloseActivity = false;

@@ -62,10 +62,9 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 	}
 
 	public void addData(ArrayList<CallHistory> calls) {
-		LogHelper.e("@@@@ addData");
 		int curSize = getItemCount();
 		mItems.addAll(calls);
-		notifyItemRangeInserted(curSize, calls.size() - 1);
+		notifyItemRangeInserted(curSize, calls.size());
 	}
 
 

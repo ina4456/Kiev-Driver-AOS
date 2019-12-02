@@ -15,6 +15,7 @@ import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
@@ -179,7 +180,12 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 				mBinding.tvCallState.setText(getString(R.string.alloc_step_allocated_call));
 				mBinding.btnAlighting.setVisibility(View.GONE);
 				mBinding.btnRouting.setBackgroundResource(R.drawable.selector_bg_route_passenger_btn);
-				WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_120);
+
+				if (callInfo.getCallTypeEnum() == Packets.OrderKind.WaitCall) {
+					WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_120);
+				} else {
+					WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_132);
+				}
 
 				//탑승후
 			} else {
@@ -310,7 +316,6 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 						mMainViewModel.executeNavigation(getContext());
 					} else {
 						LogHelper.e("설정에서 선택된 내비 설치되어 있지 않음. - 설치 팝업 표출");
-						// TODO: 2019. 3. 11. 설정창에 설치된 다른 내비게이션을 선택하라는 문구 필요할 듯.
 						showSelectionNaviInstallPopup();
 					}
 				}
@@ -332,34 +337,6 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 				super.startLoadingProgress();
 				LogHelper.e("탑승");
 				mMainViewModel.changeCallStatus(Constants.CALL_STATUS_BOARDED);
-
-
-				// TODO: 2019. 3. 11. 서버로 탑승 상태 전송
-				/*Call call = mMainViewModel.getCallInfo().getValue();
-				if (call != null
-						&& call.getDestinationLat() != 0d
-						&& call.getDestinationLong() != 0d) {
-					LogHelper.e("목적지 좌표 있음");
-
-					LogHelper.e("isUseAutoRouteToDestination() : " + configuration.isUseAutoRouteToDestination());
-					boolean isNaviInstalled = mMainViewModel.isNavigationInstalled(getContext(), configuration.getNavigation());
-					if (configuration.isUseAutoRouteToDestination() && isNaviInstalled) {
-						//showAutoRouteToDestinationPopup();
-						showRoutingPopup(false);
-					} else {
-						mMainViewModel.changeCallStatus(Constants.CALL_STATUS_BOARDED);
-					}
-
-					mMainViewModel.changeCallStatus(Constants.CALL_STATUS_BOARDED);
-
-
-				} else {
-					LogHelper.e("목적지 정보 없음");
-					mMainViewModel.changeCallStatus(Constants.CALL_STATUS_BOARDED_WITHOUT_DESTINATION);
-					// TODO: 2019. 3. 11.  목적지 좌표가 잘못된 경우에 대한 예외 처리 필요
-				}*/
-
-
 				break;
 
 			case R.id.btn_alighting:
@@ -392,17 +369,6 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 	}
 
 	private void showRoutingPopup(boolean isBoarded) {
-//		FragmentManager fm = getFragmentManager();
-//		PopupDialogFragment myFragment = (PopupDialogFragment)fm.findFragmentByTag(Constants.DIALOG_TAG_ALIGHTED);
-//		LogHelper.e("fragment : " + (myFragment != null));
-//		if (myFragment != null && myFragment.isVisible()) {
-//			LogHelper.e("fragment : " + myFragment.isVisible() );
-//
-//			LogHelper.e("close fragment");
-//			fm.beginTransaction().remove(myFragment);
-//		}
-
-
 		boolean isUseAutoRoutingToTarget = mMainViewModel.isUseAutoRoutingToTarget(!isBoarded);
 		if (isUseAutoRoutingToTarget) {
 			String dialogTag = !isBoarded ? Constants.DIALOG_TAG_ROUTING_TO_DEPARTURE
@@ -479,38 +445,25 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 				if (intent != null) {
 					//탑승 실패 처리
 					String cancelReason = intent.getStringExtra(Constants.DIALOG_INTENT_KEY_SELECTED_ITEM);
+					Packets.ReportKind reason = Packets.ReportKind.Failed;
 					LogHelper.e("cancelResason : " + cancelReason);
 					if (cancelReason != null) {
-						// TODO: 2019-09-09 인솔라인 탑승실패 요청 패킷 확정 시 수정 필요
-						/*String reason = INTENT_VALUE_TAG_CANCEL_CUSTOMER_CANCEL;
-						if (reason.equals(getString(R.string.allocation_cancel_reason_using_another_taxi))) {
-							reason = INTENT_VALUE_TAG_CANCEL_USING_ANOTHER_TAXI;
-						} else if (reason.equals(getString(R.string.allocation_cancel_reason_etc))) {
-							reason = INTENT_VALUE_TAG_CANCEL_ETC;
-						} else if (reason.equals(getString(R.string.allocation_cancel_reason_not_available_call))) {
-							reason = INTENT_VALUE_TAG_CANCEL_NOT_AVAILABLE_CALL;
-						}*/
+						if (cancelReason.equals(getString(R.string.alloc_cancel_reason_passenger))) {
+							reason = Packets.ReportKind.FailedPassengerCancel;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_no_show))) {
+							reason = Packets.ReportKind.FailedNoShow;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_using_other_car))) {
+							reason = Packets.ReportKind.FailedUseAnotherTaxi;
+						} else if (reason.equals(getString(R.string.alloc_cancel_reason_etc))) {
+							reason = Packets.ReportKind.FailedEtc;
+						}
 
-						mMainViewModel.requestCancelCall(cancelReason);
+						mMainViewModel.requestCancelCall(reason);
 					}
 				}
 				break;
 
-
-			/*//콜 취소
-			case Constants.DIALOG_TAG_CANCEL_CALL:
-				// TODO: 2019. 3. 4. 탑승실패 서버 전송 처리 추가 필요
-				if (intent != null) {
-					WavResourcePlayer.getInstance(getActivity()).play(R.raw.voice_151);
-					String selectedItem = intent.getStringExtra(Constants.DIALOG_INTENT_KEY_SELECTED_ITEM);
-					LogHelper.e("selectedItem : " + selectedItem);
-					showNormalMsgPopup(Constants.DIALOG_TAG_CANCEL_REASON_SELECTION, getString(R.string.alloc_msg_complete));
-				}
-
-				break;*/
-
 			//목적지로 자동 길안내
-
 			case Constants.DIALOG_TAG_ROUTING_TO_DEPARTURE:
 			case Constants.DIALOG_TAG_ROUTING_TO_DESTINATION:
 				WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_128);

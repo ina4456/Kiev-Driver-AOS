@@ -24,6 +24,7 @@ public class Constants {
 	public static final String DIALOG_TAG_MESSAGE = "dialog_tag_message";
 	public static final String DIALOG_TAG_MESSAGE_WILL_DISMISS = "dialog_tag_message_will_dismiss";
 	public static final String DIALOG_TAG_MESSAGE_FROM_LIST = "dialog_tag_message_from_list";
+	public static final String DIALOG_TAG_EXIT_WAITING_ZONE = "dialog_tag_exit_waiting_zone";
 
 
 	public static final String DIALOG_INTENT_KEY_PRESSED_POSITIVE_BTN = "dialog_intent_key_pressed_positive_btn";

@@ -1199,7 +1199,7 @@ public class ScenarioService extends LifecycleService {
 //									&& mCallInfo.getCallStatus() != Constants.CALL_STATUS_ALLOCATED) {
 //								LogHelper.e("orderInfoPacket not null but not showing allocated fragment");
 //
-//								// FIXME: 2019-09-20 1차 테스트 완료, checkReservation 테스트 후 검증 필요
+//								// FIXME: checkReservation 테스트 후 검증 필요
 //								mCallInfo.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
 //								Call call = new Call(orderInfoPacket);
 //								call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
@@ -1375,12 +1375,18 @@ public class ScenarioService extends LifecycleService {
 					if (resp.getCallNumber() > 0) {
 						//WavResourcePlayer.getInstance(context).play(R.raw.voice_132);
 						// 서버에 Packet을 한번 요청하면 데이터가 초기화 되기 때문에 콜번호가 유효한 경우에만 저장을 한다.
-						mRepository.saveWaitCallInfo(resp);
+						//mRepository.saveWaitCallInfo(resp);
 
 						// 대기 배차 완료시 서버의 대기목록에서 빠지므로 로컬 파일 지우도록 한다.
 						mRepository.clearWaitingZone();
-
+						mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Wait);
+						mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.WaitOrder);
+						mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.WaitCall);
 						requestAck(resp.getMessageType(), mConfiguration.getServiceNumber(), resp.getCallNumber());
+
+						OrderInfoPacket orderInfo = new OrderInfoPacket(resp);
+						mRepository.saveCallInfoWithOrderKind(orderInfo, Packets.OrderKind.Normal);
+						updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
 
 						LogHelper.write("#### 콜 수락(대기) -> callNo : " + resp.getCallNumber());
 					}

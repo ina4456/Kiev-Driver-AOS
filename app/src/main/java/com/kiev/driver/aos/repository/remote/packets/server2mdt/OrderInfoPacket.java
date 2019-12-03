@@ -122,6 +122,24 @@ public class OrderInfoPacket extends ResponsePacket {
 	}
 
 
+	public OrderInfoPacket(WaitOrderInfoPacket p) {
+		super(new byte[p.getMessageType()]);
+		LogHelper.e("packet msg type : " + p.getMessageType());
+
+		carId = p.getCarId();
+		orderKind = p.getOrderKind();
+		callReceiptDate = p.getCallReceiptDate();
+		callNumber = p.getCallNumber();
+		longitude = p.getLongitude();
+		latitude = p.getLatitude();
+		callerPhone = p.getCallerPhone();
+		place = p.getPlace();
+		placeExplanation = p.getPlaceExplanation();
+		orderCount = p.getOrderCount();
+		allocBoundary = 0;
+	}
+
+
 	public int getCorporationCode() {
 		return corporationCode;
 	}

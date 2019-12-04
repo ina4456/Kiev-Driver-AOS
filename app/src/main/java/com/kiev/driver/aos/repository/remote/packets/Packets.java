@@ -8,40 +8,36 @@ public class Packets {
 	//----------------------------------------------------------------------------------------
 	// MDT -> Server : 16
 	//----------------------------------------------------------------------------------------
-	public static final int ACK = 0xF111; // ACK
-	public static final int DRIVER_APP_REQUEST_SERVICE = 0x1131; // 서비스요청
-//	public static final int REQUEST_SERVICE = 0x1111; // 서비스요청
-	public static final int REQUEST_NOTICE = 0x1113; // 공지사항요청
-	public static final int REQUEST_CONFIG = 0x1115; // 환경설정요청
-	public static final int DRIVER_APP_PERIOD_SENDING = 0x1231; // 주기전송
-//	public static final int PERIOD_SENDING = 0x1211; // 주기전송
-	public static final int DRIVER_SERVICE_REPORT = 0x1421; // 운행보고
-//	public static final int SERVICE_REPORT = 0x1411; // 운행보고
-	public static final int REQUEST_WAIT_AREA = 0x1511; // 대기지역요청
-	public static final int WAIT_DECISION = 0x1513; // 대기결정
-	public static final int WAIT_CANCEL = 0x1515; // 대기취소
-	public static final int REQUEST_CALLER_INFO = 0x1517; // 대기배차고객정보 요청
-	public static final int REQUEST_WAIT_AREA_STATE = 0x1519; //대기지역 현황 정보 요청
-	public static final int REQUEST_ACCOUNT = 0x1611; // 콜 정산 요청
-	public static final int REQUEST_EMERGENCY = 0x1711; // Emergency 요청
-	public static final int REQUEST_MESSAGE = 0x1811; // 메시지요청
-	public static final int DRIVER_APP_ORDER_REALTIME = 0x1931; // 실시간 위치 및 배차요청
-//	public static final int REQUEST_ORDER_REALTIME = 0x1911; // 실시간 위치 및 배차요청
-	public static final int REQUEST_REST = 0x1B11; // 휴식/운행재개
-	public static final int LIVE = 0xF1F1; // Live 패킷
-	public static final int REQUEST_CALL_INFO = 0x1A11; // 배차정보요청 (추가 2017. 12. 19 - 권석범)
-	public static final int REQUEST_CALL_INFO_DES = 0x1A21; // 배차정보요청 (목적지 추가)
+	public static final int ACK = 0xE111; // ACK
+	public static final int DRIVER_APP_REQUEST_SERVICE = 0x5111; // 서비스요청
+	public static final int REQUEST_NOTICE = 0x5113; // 공지사항요청
+	public static final int REQUEST_CONFIG = 0x5115; // 환경설정요청
+	public static final int DRIVER_APP_PERIOD_SENDING = 0x5211; // 주기전송
+	public static final int DRIVER_SERVICE_REPORT = 0x5411; // 운행보고
+	public static final int REQUEST_WAIT_AREA = 0x5511; // 대기지역요청 todo 삭제
+	public static final int WAIT_DECISION = 0x5513; // 대기결정 todo 삭제
+	public static final int WAIT_CANCEL = 0x5527; // 대기취소
+	public static final int REQUEST_CALLER_INFO = 0x5517; // 대기배차고객정보 요청
+	public static final int REQUEST_WAIT_AREA_STATE = 0x5519; //대기지역 현황 정보 요청
+	public static final int REQUEST_ACCOUNT = 0x5611; // 콜 정산 요청 todo 삭제
+	public static final int REQUEST_EMERGENCY = 0x5711; // Emergency 요청 todo 삭제
+	public static final int REQUEST_MESSAGE = 0x5811; // 메시지요청
+	public static final int DRIVER_APP_ORDER_REALTIME = 0x5911; // 실시간 위치 및 배차요청
+	public static final int REQUEST_REST = 0x5B11; // 휴식/운행재개
+	public static final int LIVE = 0xE1F1; // Live 패킷
+	public static final int REQUEST_CALL_INFO = 0x5A11; // 배차정보요청 (추가 2017. 12. 19 - 권석범) todo 삭제
+	public static final int REQUEST_CALL_INFO_DES = 0x5A21; // 배차정보요청 (목적지 추가)
 
 	//2019.11 신규 패킷 추가
-	public static final int REQUEST_SEND_SMS = 0x1813; // SMS 전송 요청
-	public static final int REQUEST_MY_INFO = 0x1E11; // 내 정보 요청
-	public static final int REQUEST_WAIT_CALL_LIST = 0x1D11; // 대기콜 리스트 요청
-	public static final int REQUEST_WAIT_CALL_ORDER = 0x1913; // 대기콜 배차 요청
-	public static final int REQUEST_NOTICE_LIST = 0x1137; // 공지사항 리스트 요청
-	public static final int REQUEST_STATISTICS = 0x1613; // 콜정산 통계 요청
-	public static final int REQUEST_STATISTICS_DETAIL = 0x1915; // 탑승 이력 요청
-	public static final int REQUEST_WAIT_AREA_NEW = 0x1521; // 대기장소현황 요청
-	public static final int REQUEST_WAIT_DECISION_NEW = 0x1523; // 대기장소 대기 요청
+	public static final int REQUEST_SEND_SMS = 0x5813; // SMS 전송 요청
+	public static final int REQUEST_MY_INFO = 0x5E11; // 내 정보 요청
+	public static final int REQUEST_WAIT_CALL_LIST = 0x5D11; // 대기콜 리스트 요청
+	public static final int REQUEST_WAIT_CALL_ORDER = 0x5913; // 대기콜 배차 요청
+	public static final int REQUEST_NOTICE_LIST = 0x5137; // 공지사항 리스트 요청
+	public static final int REQUEST_STATISTICS = 0x5613; // 운행이력 통계 요청
+	public static final int REQUEST_STATISTICS_DETAIL = 0x5915; // 운행이력 상세 요청
+	public static final int REQUEST_WAIT_AREA_NEW = 0x5521; // 대기장소현황 요청
+	public static final int REQUEST_WAIT_DECISION_NEW = 0x5523; // 대기장소 대기 요청
 
 
 
@@ -50,37 +46,37 @@ public class Packets {
 	//----------------------------------------------------------------------------------------
 	// Server -> MDT : 19
 	//----------------------------------------------------------------------------------------
-	public static final int RESPONSE_ACK = 0xFF11; // 접속종료 (ACK의 응답 목적으로 사용 한다.)
-	public static final int SERVICE_REQUEST_RESULT = 0x1112; // 서비스요청결과
-	public static final int NOTICES = 0x1114; // 공지사항
-	public static final int SERVICE_CONFIG = 0x1116; // 환경설정
-	public static final int RESPONSE_PERIOD_SENDING = 0x1212; // 주기응답
-	public static final int ORDER_INFO_DES = 0x1311; // 배차데이터 (목적지 추가)
-	public static final int ORDER_INFO = 0x1312; // 배차데이터
-	public static final int ORDER_INFO_PROC = 0x1314; // 배차데이터 처리
-	public static final int RESPONSE_SERVICE_REPORT = 0x1412; // 운행보고응답
-	public static final int WAIT_PLACE_INFO = 0x1512; // 대기지역정보
-	public static final int RESPONSE_WAIT_DECISION = 0x1514; // 대기결정응답
-	public static final int RESPONSE_WAIT_CANCEL = 0x1516; // 대기취소응답
-	public static final int WAIT_ORDER_INFO = 0x1518; // 대기배차고객정보
-	public static final int RESPONSE_WAIT_AREA_STATE = 0x151A; //대기지역 현황 정보 응답
-	public static final int RESPONSE_ACCOUNT = 0x1612; // 콜정산정보
-	public static final int CANCEL_EMERGENCY = 0x1712; // Emergency 응답
-	public static final int RESPONSE_MESSAGE = 0x1812; // 메시지 응답
-	public static final int CALLER_INFO_RESEND_DES = 0x1A22; // 고객정보재전송 (목적지 추가)
-	public static final int CALLER_INFO_RESEND = 0x1A12; // 고객정보재전송
-	public static final int RESPONSE_REST = 0x1B12; // 휴식/운행응답
+	public static final int RESPONSE_ACK = 0xEF11; // 접속종료 (ACK의 응답 목적으로 사용 한다.)
+	public static final int SERVICE_REQUEST_RESULT = 0x5112; // 서비스요청결과
+	public static final int NOTICES = 0x5114; // 공지사항
+	public static final int SERVICE_CONFIG = 0x5116; // 환경설정
+	public static final int RESPONSE_PERIOD_SENDING = 0x5212; // 주기응답
+	public static final int ORDER_INFO_DES = 0x5311; // 배차데이터 (목적지 추가)
+	public static final int ORDER_INFO = 0x5312; // 배차데이터 todo 삭제
+	public static final int ORDER_INFO_PROC = 0x5314; // 배차데이터 처리
+	public static final int RESPONSE_SERVICE_REPORT = 0x5412; // 운행보고응답
+	public static final int WAIT_PLACE_INFO = 0x5512; // 대기지역정보 todo 삭제
+	public static final int RESPONSE_WAIT_DECISION = 0x5514; // 대기결정응답 todo 삭제
+	public static final int RESPONSE_WAIT_CANCEL = 0x5516; // 대기취소응답
+	public static final int WAIT_ORDER_INFO = 0x5518; // 대기배차고객정보
+	public static final int RESPONSE_WAIT_AREA_STATE = 0x551A; //대기지역 현황 정보 응답 todo 삭제
+	public static final int RESPONSE_ACCOUNT = 0x5612; // 콜정산정보 todo 삭제
+	public static final int CANCEL_EMERGENCY = 0x5712; // Emergency 응답 todo 삭제
+	public static final int RESPONSE_MESSAGE = 0x5812; // 메시지 응답
+	public static final int CALLER_INFO_RESEND_DES = 0x5A22; // 고객정보재전송 (목적지 추가)
+	public static final int CALLER_INFO_RESEND = 0x5A12; // 고객정보재전송 todo 삭제
+	public static final int RESPONSE_REST = 0x5B12; // 휴식/운행응답
 
 	//2019.11 신규 패킷 추가
-	public static final int RESPONSE_SEND_SMS = 0x1814; // SMS 전송 요청 응답
-	public static final int RESPONSE_MY_INFO = 0x1E12; // 내 정보 요청 응답청
-	public static final int RESPONSE_WAIT_CALL_LIST = 0x1D12; // 내 정보 요청 응답
-	public static final int RESPONSE_WAIT_CALL_ORDER = 0x1914; // 대기콜 배차 요청 응답
-	public static final int RESPONSE_NOTICE_LIST = 0x1138; // 공지사항 리스트 요청 응답
-	public static final int RESPONSE_STATISTICS = 0x1614; // 콜정산 통계 요청 응답
-	public static final int RESPONSE_STATISTICS_DETAIL = 0x1916; // 탑승 이력 요청 응답
-	public static final int RESPONSE_WAIT_AREA_NEW = 0x1522; // 대기장소현황 요청 응답
-	public static final int RESPONSE_WAIT_DECISION_NEW = 0x1524; // 대기장소 대기 요청 응답
+	public static final int RESPONSE_SEND_SMS = 0x5814; // SMS 전송 요청 응답
+	public static final int RESPONSE_MY_INFO = 0x5E12; // 내 정보 요청 응답청
+	public static final int RESPONSE_WAIT_CALL_LIST = 0x5D12; // 내 정보 요청 응답
+	public static final int RESPONSE_WAIT_CALL_ORDER = 0x5914; // 대기콜 배차 요청 응답
+	public static final int RESPONSE_NOTICE_LIST = 0x5138; // 공지사항 리스트 요청 응답
+	public static final int RESPONSE_STATISTICS = 0x5614; // 운행이력 통계 요청 응답
+	public static final int RESPONSE_STATISTICS_DETAIL = 0x5916; // 운행이력 상세 요청 응답
+	public static final int RESPONSE_WAIT_AREA_NEW = 0x5522; // 대기장소현황 요청 응답
+	public static final int RESPONSE_WAIT_DECISION_NEW = 0x5524; // 대기장소 대기 요청 응답
 
 
 

@@ -217,8 +217,9 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 						//거리 표시
 						int distance = mainViewModel.getDistance(call.getDepartureLat(), call.getDepartureLong());
+						call.setDistance(distance);
 						//LogHelper.e("distance : " + distance);
-						mBinding.tvDistance.setText(String.valueOf(distance));
+						mBinding.tvDistance.setText(call.getCallDistanceToDeparture());
 
 
 						//콜 등급 표시

@@ -1126,13 +1126,14 @@ public class ScenarioService extends LifecycleService {
 
 
 						WaitingZone waitingZone = mRepository.getWaitingZone();
-						WaitOrderInfoPacket waitOrderInfoPacket = mRepository.loadWaitCallInfo();
-						if (waitOrderInfoPacket != null && boardType != Packets.BoardType.Boarding) {
-							// 1. 미리 저장되어 있는 대기요청고객정보가 있다면 해당 정보를 보여준다.
-						} else if (waitingZone != null) {
+						//if (waitOrderInfoPacket != null && boardType != Packets.BoardType.Boarding) {
+						LogHelper.e("normal : " + normal);
+						if (waitingZone != null && normal == null) {
 							// 2. 저장 되어 있는 대기요청고객정보가 없지만 대기요청 상태의 경우 0x1517 대기배차고객정보 요청해서 정보를 가져온다.
 							LogHelper.e("requestWaitPassengerInfo()");
 							requestWaitPassengerInfo();
+						} else if (waitingZone == null) {
+							mRepository.clearWaitingZone();
 						}
 					}
 					break;
@@ -1536,7 +1537,7 @@ public class ScenarioService extends LifecycleService {
 
 				case Packets.RESPONSE_WAIT_CANCEL: {
 					ResponseWaitCancelPacket resPacket = (ResponseWaitCancelPacket) response;
-					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+					LogHelper.e("RESPONSE_WAIT_CANCEL : " + resPacket);
 					mWaitCancel.postValue(resPacket);
 					if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Success) {
 						mRepository.clearWaitingZone();

@@ -68,11 +68,11 @@
 
 
     <!--메인-->
-    <string name="main_state_vacancy_msg">콜 대기중 입니다.</string>
-    <string name="main_state_boarding_msg">손님이 탑승 중입니다.</string>
-    <string name="main_state_resting_msg">휴식 중입니다.</string>중
+    <string name="main_state_vacancy_msg">콜 대기중</string>
+    <string name="main_state_boarding_msg">손님 탑승중</string>
+    <string name="main_state_resting_msg">휴식중</string>
     <string name="main_state_resting_msg2">콜을 받지 않습니다.</string>
-    <string name="main_state_waiting_msg">\[%s\]\n대기중 입니다.</string>
+    <string name="main_state_waiting_msg">\[%s\]\n대기중</string>
     <string name="main_btn_boarding">손님탑승</string>
     <string name="main_btn_boarding2">손님승차</string>
     <string name="main_btn_alighting">손님하차</string>

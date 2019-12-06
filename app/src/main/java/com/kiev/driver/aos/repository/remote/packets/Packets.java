@@ -20,7 +20,7 @@ public class Packets {
 	public static final int REQUEST_CALLER_INFO = 0x5517; // 대기배차고객정보 요청
 	public static final int REQUEST_WAIT_AREA_STATE = 0x5519; //대기지역 현황 정보 요청
 	public static final int REQUEST_ACCOUNT = 0x5611; // 콜 정산 요청 todo 삭제
-	public static final int REQUEST_EMERGENCY = 0x5711; // Emergency 요청 todo 삭제
+	public static final int REQUEST_EMERGENCY = 0x5711; // Emergency 요청
 	public static final int REQUEST_MESSAGE = 0x5811; // 메시지요청
 	public static final int DRIVER_APP_ORDER_REALTIME = 0x5911; // 실시간 위치 및 배차요청
 	public static final int REQUEST_REST = 0x5B11; // 휴식/운행재개
@@ -61,7 +61,7 @@ public class Packets {
 	public static final int WAIT_ORDER_INFO = 0x5518; // 대기배차고객정보
 	public static final int RESPONSE_WAIT_AREA_STATE = 0x551A; //대기지역 현황 정보 응답 todo 삭제
 	public static final int RESPONSE_ACCOUNT = 0x5612; // 콜정산정보 todo 삭제
-	public static final int CANCEL_EMERGENCY = 0x5712; // Emergency 응답 todo 삭제
+	public static final int CANCEL_EMERGENCY = 0x5712; // Emergency 응답
 	public static final int RESPONSE_MESSAGE = 0x5812; // 메시지 응답
 	public static final int CALLER_INFO_RESEND_DES = 0x5A22; // 고객정보재전송 (목적지 추가)
 	public static final int CALLER_INFO_RESEND = 0x5A12; // 고객정보재전송 todo 삭제

@@ -309,16 +309,16 @@ public class Repository {
 			mScenarioService.requestReport(
 					wait.getCallNumber(), wait.getOrderCount(),
 					wait.getOrderKind(), wait.getCallReceiptDate(),
-//					cancelReason, 0, 0);
-					Packets.ReportKind.Failed, 0, 0);
+					cancelReason, 0, 0);
+//					Packets.ReportKind.Failed, 0, 0);
 		} else {
 			OrderInfoPacket normal = mSharedPreferenceManager.getNormalCallInfo();
 			if (normal != null) {
 				mScenarioService.requestReport(
 						normal.getCallNumber(), normal.getOrderCount(),
 						normal.getOrderKind(), normal.getCallReceiptDate(),
-//						cancelReason, 0, 0);
-				Packets.ReportKind.Failed, 0, 0);
+						cancelReason, 0, 0);
+//				Packets.ReportKind.Failed, 0, 0);
 			}
 		}
 	}

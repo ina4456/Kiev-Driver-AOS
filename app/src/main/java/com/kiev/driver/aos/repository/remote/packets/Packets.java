@@ -16,7 +16,7 @@ public class Packets {
 	public static final int DRIVER_SERVICE_REPORT = 0x5411; // 운행보고
 	public static final int REQUEST_WAIT_AREA = 0x5511; // 대기지역요청 todo 삭제
 	public static final int WAIT_DECISION = 0x5513; // 대기결정 todo 삭제
-	public static final int WAIT_CANCEL = 0x5527; // 대기취소
+	public static final int WAIT_CANCEL = 0x5515; // 대기취소
 	public static final int REQUEST_CALLER_INFO = 0x5517; // 대기배차고객정보 요청
 	public static final int REQUEST_WAIT_AREA_STATE = 0x5519; //대기지역 현황 정보 요청
 	public static final int REQUEST_ACCOUNT = 0x5611; // 콜 정산 요청 todo 삭제

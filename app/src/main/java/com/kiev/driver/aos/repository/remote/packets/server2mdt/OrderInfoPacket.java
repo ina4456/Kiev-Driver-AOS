@@ -2,6 +2,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
@@ -137,6 +138,10 @@ public class OrderInfoPacket extends ResponsePacket {
 		placeExplanation = p.getPlaceExplanation();
 		orderCount = p.getOrderCount();
 		allocBoundary = 0;
+
+		destination = p.getDestination();
+		destLatitude = p.getDestinationLatitude();
+		destLongitude = p.getDestinationLongitude();
 	}
 
 
@@ -265,8 +270,12 @@ public class OrderInfoPacket extends ResponsePacket {
 		}
 		callReceiptDate = readString(11);
 		callNumber = readInt(2);
-		longitude = readFloat(4);
-		latitude = readFloat(4);
+
+		String departLongitudeStr = EncryptUtil.decodeStr(readString(30));
+		String departLatitudeStr = EncryptUtil.decodeStr(readString(30));
+		longitude = Float.parseFloat(departLongitudeStr.isEmpty() ? "0" : departLongitudeStr);
+		latitude = Float.parseFloat(departLatitudeStr.isEmpty() ? "0" : departLatitudeStr);
+
 		callerPhone = readString(13);
 		place = readString(41);
 		placeExplanation = readString(101);
@@ -277,8 +286,12 @@ public class OrderInfoPacket extends ResponsePacket {
 
 		if (messageType == Packets.ORDER_INFO_DES) {
 			destName = readString(41);
-			destLongitude = readFloat(4);
-			destLatitude = readFloat(4);
+
+			String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
+			String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
+			destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);
+			destLatitude = Float.parseFloat(destLatitudeStr.isEmpty() ? "0" : destLatitudeStr);
+
 			callClass = readInt(1);
 		} else {
 			if (buffers.length != BYTE_LENGTH_FOR_NORMAL) {

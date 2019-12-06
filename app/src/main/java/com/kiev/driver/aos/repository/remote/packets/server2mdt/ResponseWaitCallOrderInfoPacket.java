@@ -23,8 +23,8 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 	private String place; // 탑승지 (41)
 	private String placeExplanation; // 탑승지 설명 (101)
 	private String destName;// 목적지 장소명 (41)
-	private float destLongitude; // 목적지 경도 (4)
-	private float destLatitude; // 목적지 위도 (4)
+	private float destLongitude; // 목적지 경도 (30)
+	private float destLatitude; // 목적지 위도 (30)
 	private Packets.OrderKind orderKind; // 배차 구분 (1)
 
 	public ResponseWaitCallOrderInfoPacket(byte[] bytes) {
@@ -154,17 +154,13 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 			isSuccess = success == 0x01;
 			callReceiptDate = readString(11);
 			callNumber = readInt(2);
-//			String longitudeStr = readString(30);
-//			String latitudeStr = readString(30);
-//			if (longitudeStr != null && latitudeStr != null && !longitudeStr.isEmpty() && !latitudeStr.isEmpty()) {
-//				longitude = Float.parseFloat(EncryptUtil.decodeStr(longitudeStr));
-//				latitude = Float.parseFloat(EncryptUtil.decodeStr(latitudeStr));
-//			}
-			longitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-			latitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+
+			String departLongitudeStr = EncryptUtil.decodeStr(readString(30));
+			String departLatitudeStr = EncryptUtil.decodeStr(readString(30));
+			longitude = Float.parseFloat(departLongitudeStr.isEmpty() ? "0" : departLongitudeStr);
+			latitude = Float.parseFloat(departLatitudeStr.isEmpty() ? "0" : departLatitudeStr);
 
 			callerPhone = EncryptUtil.decodeStr("" + readString(30));
-
 			place = readString(41);
 			placeExplanation = readString(101);
 			destName = readString(41);

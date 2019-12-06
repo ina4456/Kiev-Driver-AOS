@@ -385,7 +385,7 @@ public class Packets {
 			case RESPONSE_PERIOD_SENDING: // 주기응답
 				return 8;
 			case ORDER_INFO_DES: // 배차데이터 (목적지 추가)
-				return 236;
+				return 357;
 			case ORDER_INFO: // 배차데이터
 				return 186 + 64;
 			case ORDER_INFO_PROC: // 배차데이터 처리
@@ -399,7 +399,7 @@ public class Packets {
 			case RESPONSE_WAIT_CANCEL: // 대기취소응답
 				return 5;
 			case WAIT_ORDER_INFO: // 대기배차고객정보
-				return 182;
+				return 352;
 			case RESPONSE_ACCOUNT: // 콜정산정보
 				return 148;
 			case CANCEL_EMERGENCY: // Emergency 응답

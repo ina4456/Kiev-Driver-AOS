@@ -57,7 +57,7 @@ public class MyInfoViewModel extends AndroidViewModel {
 	public void changeVehicleNumber(String vehicleNumber) {
 		Configuration configuration = mRepository.getConfig();
 		if (configuration != null) {
-			vehicleNumber = vehicleNumber.trim();
+			vehicleNumber = "3" + vehicleNumber.trim();
 			configuration.setCarId(Integer.parseInt(vehicleNumber));
 			mRepository.updateConfig(configuration);
 		}

@@ -169,8 +169,11 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 			placeExplanation = readString(101);
 			destName = readString(41);
 
-			destLongitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
-			destLatitude = Float.parseFloat(EncryptUtil.decodeStr("" + readString(30)));
+			String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
+			String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
+			destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);
+			destLatitude = Float.parseFloat(destLatitudeStr.isEmpty() ? "0" : destLatitudeStr);
+			
 			int order = readInt(1);
 			if (Packets.OrderKind.Normal.value == order) {
 				orderKind = Packets.OrderKind.Normal;

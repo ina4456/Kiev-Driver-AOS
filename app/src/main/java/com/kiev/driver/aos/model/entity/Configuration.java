@@ -386,6 +386,14 @@ public class Configuration {
 		return carId;
 	}
 
+	public int getCarIdForUI() {
+		if (carId > 30000) {
+			return carId - 30000;
+		} else {
+			return carId;
+		}
+	}
+
 	public void setCarId(int carId) {
 		this.carId = carId;
 	}

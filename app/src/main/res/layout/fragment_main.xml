@@ -62,7 +62,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_number_plate"
             tools:text="20바8282"
-            android:text="@{Integer.toString(viewModel.configuration.getCarId())}"
+            android:text="@{Integer.toString(viewModel.configuration.getCarIdForUI())}"
             android:textColor="@color/colorYellow01"
             android:textSize="22dp"
             android:gravity="center"

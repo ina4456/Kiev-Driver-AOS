@@ -24,7 +24,7 @@ android {
         releaseConfig {
             keyAlias 'houston'
             keyPassword 'houston1234!@#$'
-            storeFile file('/Users/sbkwon/Work/workspace/00_Thinkware/11_aintel/com.anyall-taxi.driver.aos/doc/houstonReleaseKey')
+            storeFile file('/Users/sbkwon/Work/workspace/00_Thinkware/19_02_Kiev/Kiev-Driver-AOS/doc/houstonReleaseKey')
             storePassword 'houston1234!@#$'
         }
     }

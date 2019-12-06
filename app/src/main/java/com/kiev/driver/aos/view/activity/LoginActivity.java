@@ -221,7 +221,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 	private void setPhoneAndVehicleNumber(Configuration configuration) {
 		mBinding.etPhoneNumber.setText(configuration.getDriverPhoneNumber());
-		String carId = String.valueOf(configuration.getCarId());
+		String carId = String.valueOf(configuration.getCarIdForUI());
 		LogHelper.e("carId : " + carId);
 		if (configuration.getCarId() > 0) {
 			mBinding.etVehicleNumber.setText(carId);
@@ -270,8 +270,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 		if (!phoneNumber.isEmpty() && !vehicleNumber.isEmpty()) {
 			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + vehicleNumber);
+			final String vehicleNumForMobile = "3" + vehicleNumber;
 			super.startLoadingProgress();
-			mLoginViewModel.login(phoneNumber, vehicleNumber).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
+			mLoginViewModel.login(phoneNumber, vehicleNumForMobile).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
 				@Override
 				public void onChanged(ServiceRequestResultPacket result) {
 					LogHelper.e("RES-onChanged : ");
@@ -281,9 +282,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 					if (result != null) {
 						if (result.getCertificationResult() == Packets.CertificationResult.Success) {
 							String phoneNum = mBinding.etPhoneNumber.getText().toString();
-							String vehicleNum = mBinding.etVehicleNumber.getText().toString();
 
-							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, vehicleNum);
+							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, vehicleNumForMobile);
 							WavResourcePlayer.getInstance(getApplicationContext()).play(R.raw.voice_102);
 
 							MainActivity.startActivity(LoginActivity.this);

@@ -17,7 +17,7 @@ public class RequestServicePacket extends RequestPacket {
     private String phoneNumber; // Phone Number (30)
     private Packets.CorporationType corporationType; // 개인법인체크 (1)
     private int programVersion; // 프로그램 버전 (2)
-    private String modemNumber; // 모뎀 번호 (13)
+    private String modemNumber; // 모뎀 번호 (30)
 
     public RequestServicePacket() {
 //        super(Packets.REQUEST_SERVICE);
@@ -90,7 +90,7 @@ public class RequestServicePacket extends RequestPacket {
 	    writeString(EncryptUtil.encodeStr(phoneNumber), 30);
         writeInt(corporationType.value, 1);
         writeInt(programVersion, 2);
-        writeString(modemNumber, 13);
+        writeString(EncryptUtil.encodeStr(modemNumber), 30);
         return buffers;
     }
 

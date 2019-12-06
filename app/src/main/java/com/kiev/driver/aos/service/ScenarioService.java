@@ -1531,6 +1531,7 @@ public class ScenarioService extends LifecycleService {
 				case Packets.RESPONSE_WAIT_DECISION_NEW: {
 					ResponseWaitDecisionNewPacket resPacket = (ResponseWaitDecisionNewPacket) response;
 					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+
 					mWaitDecision.postValue(resPacket);
 				}
 				break;

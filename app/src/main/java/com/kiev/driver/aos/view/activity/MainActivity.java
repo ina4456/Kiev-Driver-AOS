@@ -168,7 +168,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 				@Override
 				public void onChanged(Configuration configuration) {
 					LogHelper.e("onChanged()-configuration");
-					mBinding.navViewBody.tvVehicleNumber.setText(String.valueOf(configuration.getCarId()));
+					mBinding.navViewBody.tvVehicleNumber.setText(String.valueOf(configuration.getCarIdForUI()));
 				}
 			});
 

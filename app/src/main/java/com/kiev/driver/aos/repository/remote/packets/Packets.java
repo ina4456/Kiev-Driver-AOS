@@ -33,7 +33,7 @@ public class Packets {
 	public static final int REQUEST_MY_INFO = 0x5E11; // 내 정보 요청
 	public static final int REQUEST_WAIT_CALL_LIST = 0x5D11; // 대기콜 리스트 요청
 	public static final int REQUEST_WAIT_CALL_ORDER = 0x5913; // 대기콜 배차 요청
-	public static final int REQUEST_NOTICE_LIST = 0x5137; // 공지사항 리스트 요청
+	public static final int REQUEST_NOTICE_LIST   = 0x5137; // 공지사항 리스트 요청
 	public static final int REQUEST_STATISTICS = 0x5613; // 운행이력 통계 요청
 	public static final int REQUEST_STATISTICS_DETAIL = 0x5915; // 운행이력 상세 요청
 	public static final int REQUEST_WAIT_AREA_NEW = 0x5521; // 대기장소현황 요청
@@ -339,7 +339,7 @@ public class Packets {
 //			case REQUEST_SERVICE: // 서비스요청
 //				return 36;
 			case DRIVER_APP_REQUEST_SERVICE: // 서비스요청
-				return 36 + 17;
+				return 70;
 			case REQUEST_NOTICE: // 공지사항요청
 				return 7;
 			case REQUEST_CONFIG: // 환경설정요청

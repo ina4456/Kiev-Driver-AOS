@@ -97,7 +97,6 @@ public class PeriodSendingPacket extends RequestPacket {
         return speed;
     }
 
-	// FIXME: 2019-09-05 개발 서버 에러로 스피드 71이하로 보내야 정상적인 리턴 확인 가능, 서버 수정 필요
     public void setSpeed(int speed) {
         this.speed = speed;
     }
@@ -127,8 +126,6 @@ public class PeriodSendingPacket extends RequestPacket {
         writeDateTime(sendingTime, 6);
         writeDateTime(gpsTime, 6);
         writeInt(direction, 2);
-//        writeFloat(longitude, 4);
-//        writeFloat(latitude, 4);
 	    writeString(EncryptUtil.encodeStr("" + longitude), 30);
 	    writeString(EncryptUtil.encodeStr("" + latitude), 30);
         writeInt(speed, 1);

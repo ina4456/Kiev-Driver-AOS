@@ -47,14 +47,12 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePa
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallOrderPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.CallerInfoResendPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.NoticesPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
@@ -132,7 +130,6 @@ public class ScenarioService extends LifecycleService {
 	private Configuration mConfiguration;
 
 	private MutableLiveData<ServiceRequestResultPacket> mServiceResultPacket;
-
 	public MutableLiveData<ServiceRequestResultPacket> getLoginResultData() {
 		return mServiceResultPacket;
 	}
@@ -225,7 +222,6 @@ public class ScenarioService extends LifecycleService {
 	//----------------------------------------------------------------------------------------
 
 	private final IBinder binder = new ScenarioService.LocalBinder();
-
 	public class LocalBinder extends Binder {
 		public ScenarioService getService() {
 			LogHelper.d(">> getService()");
@@ -284,12 +280,6 @@ public class ScenarioService extends LifecycleService {
 			}
 		});
 	}
-
-//	@Override
-//	public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-//		super.onStartCommand(intent, flags, startId);
-//		return START_NOT_STICKY;
-//	}
 
 	public void changeCallStatus(int callStatus) {
 		LogHelper.e("changeCallStatus() : " + callStatus);
@@ -429,7 +419,6 @@ public class ScenarioService extends LifecycleService {
 	 * Ack 패킷을 요청 한다. Retry로직이 포함되어 있다.(최대 3회 5초간격)
 	 */
 	public void requestAck(final int messageType, final int serviceNo, final int callNo) {
-		LogHelper.e("requestAct!@#@!#@!#@!#@!");
 		ackRetryCount = 0;
 
 		AckPacket packet = new AckPacket();
@@ -453,7 +442,6 @@ public class ScenarioService extends LifecycleService {
 	 */
 	public void requestServicePacket(String phoneNumber, String vehicleNumber, boolean withTimer) {
 		LogHelper.e("REQ-LOGIN : requestServicePacket() : " + mConfiguration);
-		mServiceResultPacket = null;
 		mServiceResultPacket = new MutableLiveData<>();
 
 
@@ -513,7 +501,6 @@ public class ScenarioService extends LifecycleService {
 	 * 주기전송 패킷을 요청한다.
 	 */
 	private void requestPeriod() {
-		LogHelper.e("requestPeriod()");
 		PeriodSendingPacket packet = new PeriodSendingPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -680,31 +667,38 @@ public class ScenarioService extends LifecycleService {
 	/**
 	 * 대기지역요청 패킷을 요청한다.
 	 */
-	public void requestWaitAreas() {
-		RequestWaitAreaPacket packet = new RequestWaitAreaPacket();
+	public void requestWaitAreaNew(Packets.WaitAreaRequestType requestType, int startIndex) {
+		mWaitArea = new MutableLiveData<>();
+
+		RequestWaitAreaNewPacket packet = new RequestWaitAreaNewPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
-		packet.setGpsTime(gpsHelper.getTime());
+		packet.setRequestType(requestType);
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
-		packet.setTaxiState(boardType);
+		packet.setStartIndex(startIndex);
+		packet.setRequestCount(10);
+
 		request(packet);
 	}
 
 	/**
 	 * 대기결정 패킷을 요청한다.
 	 */
-	public void requestWait(String waitPlaceCode) {
-		WaitDecisionPacket packet = new WaitDecisionPacket();
+	public void requestWaitDecisionNew(String waitAreaId) {
+		mWaitDecision = new MutableLiveData<>();
+
+		RequestWaitDecisionPacket packet = new RequestWaitDecisionPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
-		packet.setDriverNumber(mConfiguration.getDriverPhoneNumber());
+		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
 		packet.setGpsTime(gpsHelper.getTime());
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
-		packet.setDecisionAreaCode(waitPlaceCode);
+		packet.setWaitAreaId(waitAreaId);
+
 		request(packet);
 	}
 
@@ -736,7 +730,6 @@ public class ScenarioService extends LifecycleService {
 	 * 대기배차고객정보 요청 패킷을 요청한다.
 	 */
 	public void requestWaitPassengerInfo() {
-		LogHelper.e("requestWaitPassengerInfo()");
 		RequestCallerInfoPacket packet = new RequestCallerInfoPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
@@ -783,7 +776,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setLongitude(gpsHelper.getLongitude());
 		packet.setLatitude(gpsHelper.getLatitude());
 		packet.setSpeed(gpsHelper.getSpeed());
-		packet.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
+		packet.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
 		packet.setOrderCount(call.getCallOrderCount());
 		request(packet);
 	}
@@ -928,38 +921,6 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
-	public void requestWaitAreaNew(Packets.WaitAreaRequestType requestType, int startIndex) {
-		mWaitArea = new MutableLiveData<>();
-
-		RequestWaitAreaNewPacket packet = new RequestWaitAreaNewPacket();
-		packet.setServiceNumber(mConfiguration.getServiceNumber());
-		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		packet.setCarId(mConfiguration.getCarId());
-		packet.setRequestType(requestType);
-		packet.setLongitude(gpsHelper.getLongitude());
-		packet.setLatitude(gpsHelper.getLatitude());
-		packet.setStartIndex(startIndex);
-		packet.setRequestCount(10);
-
-		request(packet);
-	}
-
-
-	public void requestWaitDecisionNew(String waitAreaId) {
-		mWaitDecision = new MutableLiveData<>();
-
-		RequestWaitDecisionPacket packet = new RequestWaitDecisionPacket();
-		packet.setServiceNumber(mConfiguration.getServiceNumber());
-		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		packet.setCarId(mConfiguration.getCarId());
-		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
-		packet.setGpsTime(gpsHelper.getTime());
-		packet.setLongitude(gpsHelper.getLongitude());
-		packet.setLatitude(gpsHelper.getLatitude());
-		packet.setWaitAreaId(waitAreaId);
-
-		request(packet);
-	}
 
 
 	/**
@@ -1009,7 +970,7 @@ public class ScenarioService extends LifecycleService {
 			//승차중 배차 데이터를 배차 상태로 UI에 표시한다.
 			Call call = new Call(_getOn);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
+			call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
 			mRepository.updateCallInfo(call);
 		}
 	}
@@ -1026,7 +987,7 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.e("승차중 배차 존재, 배차 상태로 UI 변경");
 			Call call = new Call(normal);
 			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
+			call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
 			mRepository.updateCallInfo(call);
 		} else {
 			LogHelper.e(">> doesn't have passenger info.");
@@ -1056,8 +1017,9 @@ public class ScenarioService extends LifecycleService {
 		public void onReceivedPacket(@NonNull ResponsePacket response) {
 			LogHelper.write(">> RES " + response);
 
-			mConfiguration = mRepository.getConfig();
 			Context context = getApplication();
+			mConfiguration = mRepository.getConfig();
+
 			int messageType = response.getMessageType();
 
 			if (messageType != Packets.SERVICE_REQUEST_RESULT
@@ -1102,7 +1064,6 @@ public class ScenarioService extends LifecycleService {
 						if (resPacket.getConfigurationVersion() > mConfiguration.getConfigurationVersion()) {
 							// 환경 설정 버전이 높을 경우 환경 설정을 요청한다
 							// 응답 후 파일로 저장하고 IP를 변경하도록 한다.
-							LogHelper.e("requestConfig : " + mConfiguration.toString());
 							requestConfig(mConfiguration.getConfigurationVersion());
 						}
 
@@ -1251,7 +1212,7 @@ public class ScenarioService extends LifecycleService {
 						mCallInfo.setCallStatus(Constants.CALL_STATUS_ALIGHTED);
 						mRepository.updateCallInfo(mCallInfo);
 
-						((MainApplication) getApplication()).setCurrentActivity(null);
+						((MainApplication)getApplication()).setCurrentActivity(null);
 						refreshSavedPassengerInfo(packet.getCallNumber());
 						checkReservation();
 					}

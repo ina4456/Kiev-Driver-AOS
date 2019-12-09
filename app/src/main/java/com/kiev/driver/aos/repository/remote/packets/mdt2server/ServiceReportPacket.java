@@ -20,8 +20,8 @@ public class ServiceReportPacket extends RequestPacket {
     private Packets.ReportKind reportKind; // 운행보고구분 (1)
     private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
     private int direction; // 주행방향 (2)ㅁ
-    private float longitude; // 경도 (4)
-    private float latitude; // 위도 (4)
+    private float longitude; // 경도 (30)
+    private float latitude; // 위도 (30)
     private int speed; // 속도 (1)
     private Packets.BoardType taxiState; // 택시상태 (1)
     private int fare; // 요금정보 (4)
@@ -176,14 +176,12 @@ public class ServiceReportPacket extends RequestPacket {
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
         writeInt(carId, 2);
-//        writeString(phoneNumber, 13);
-        writeString(callReceiptDate, 11);
+	    writeString(EncryptUtil.encodeStr(""+phoneNumber), 30);
+	    writeString(callReceiptDate, 11);
         writeInt(callNumber, 2);
         writeInt(reportKind.value, 1);
         writeDateTime(gpsTime, 6);
         writeInt(direction, 2);
-//        writeFloat(longitude, 4);
-//        writeFloat(latitude, 4);
 	    writeString(EncryptUtil.encodeStr(""+longitude), 30);
 	    writeString(EncryptUtil.encodeStr(""+latitude), 30);
         writeInt(speed, 1);

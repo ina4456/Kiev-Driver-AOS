@@ -35,7 +35,6 @@ public class CallHistoryActivity extends BaseActivity implements View.OnClickLis
 		mViewModel = new ViewModelProvider(this, new CallHistoryViewModel.Factory(getApplication()))
 				.get(CallHistoryViewModel.class);
 		mBinding.setLifecycleOwner(this);
-		mBinding.setViewModel(mViewModel);
 
 
 		subscribeViewModel();

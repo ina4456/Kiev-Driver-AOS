@@ -147,7 +147,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 			});
 
 
-			// TODO: 2019. 3. 6. 내비게이션드로워 기사 정보 set
 			MutableLiveData<ResponseMyInfoPacket> myInfo = mainViewModel.requestMyInfo();
 			myInfo.observe(this, new Observer<ResponseMyInfoPacket>() {
 				@Override

@@ -33,8 +33,6 @@ import static com.kiev.driver.aos.repository.remote.packets.Packets.WaitCallList
 import static com.kiev.driver.aos.view.activity.CallReceivingActivity.DIALOG_TAG_FAILURE;
 
 
-// TODO: 2019. 3. 11. 배차 요청 후 실패 및 리스트 갱신에 대한 처리 필요
-
 public class WaitingCallListActivity extends BaseActivity implements View.OnClickListener
 		, WaitingCallListAdapter.CallListCallback, PopupDialogFragment.PopupDialogListener {
 

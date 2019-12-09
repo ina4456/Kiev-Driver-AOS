@@ -351,7 +351,7 @@ public class Packets {
 //			case SERVICE_REPORT: // 운행보고
 //				return 62;
 			case DRIVER_SERVICE_REPORT: // 운행보고
-				return 101;
+				return 131;
 			case REQUEST_WAIT_AREA: // 대기지역요청
 				return 22;
 			case WAIT_DECISION: // 대기결정

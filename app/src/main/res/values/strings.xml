@@ -130,7 +130,7 @@
     <string name="wz_msg_cancel_failed">대기 취소에 실패하였습니다.</string>
 
     <!--대기장소-->
-    <string name="wc_msg_no_waiting_call">대기콜이 없습니다.</string>
+    <string name="wc_msg_no_waiting_call">대기중인 콜이 없습니다.</string>
 
     <!--메뉴-->
     <string name="d_menu_driver_name">%s 기사님</string>

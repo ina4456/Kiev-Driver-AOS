@@ -106,7 +106,6 @@ public class Repository {
 		if (mScenarioService == null) {
 			mScenarioService = mMainApplication.getScenarioService();
 		}
-		LogHelper.e("scenarioService : " + (mScenarioService == null));
 
 		final MutableLiveData<ServiceRequestResultPacket> data = new MutableLiveData<>();
 		if (mScenarioService != null) {

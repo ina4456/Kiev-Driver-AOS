@@ -3,12 +3,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <import type="android.view.View"/>
-        <variable
-            name="viewModel"
-            type="com.kiev.driver.aos.viewmodel.CallHistoryViewModel"/>
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

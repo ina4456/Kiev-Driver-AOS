@@ -205,7 +205,7 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 								history.setCallId(Integer.parseInt(callNumbers[i]));
 								history.setCallTypeStr(callTypes[i]);
 								history.setDate(callReceiptDates[i]);
-								history.setDeparture(departures[i] + "[" + i + "]");
+								history.setDeparture(departures[i]);
 								history.setDestination(destinations[i]);
 								history.setStartTime(boardedTimes[i]);
 								history.setEndTime(alightedTimes[i]);

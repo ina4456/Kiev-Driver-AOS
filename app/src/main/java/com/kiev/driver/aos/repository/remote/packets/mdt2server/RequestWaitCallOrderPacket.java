@@ -27,7 +27,7 @@ public class RequestWaitCallOrderPacket extends RequestPacket {
 
 
     public RequestWaitCallOrderPacket() {
-	    super(Packets.REQUEST_WAIT_CALL_ORDER);
+	    super(Packets.REQ_WAIT_CALL_ORDER);
     }
 
     public int getServiceNumber() {

@@ -10,7 +10,7 @@ import com.kiev.driver.aos.util.LogHelper;
  * 대기배차고객정보 (GT-1518) 182 Byte
  * Server -> MDT
  */
-public class WaitOrderInfoPacket extends ResponsePacket {
+public class ResponseWaitAreaOrderInfoPacket extends ResponsePacket {
 
 	private int carId; // Car ID (2)
 	private Packets.OrderKind orderKind; // 배차구분 (1)
@@ -27,7 +27,7 @@ public class WaitOrderInfoPacket extends ResponsePacket {
 	private float destinationLatitude; // 고객 위도 (30)
 	private boolean isReported; // 운행보고 여부 (Local에서만 사용하는 값이다.)
 
-	public WaitOrderInfoPacket(byte[] bytes) {
+	public ResponseWaitAreaOrderInfoPacket(byte[] bytes) {
 		super(bytes);
 	}
 

@@ -20,7 +20,7 @@ public class RequestStatisticsDetailPacket extends RequestPacket {
 
 
 	public RequestStatisticsDetailPacket() {
-		super(Packets.REQUEST_STATISTICS_DETAIL);
+		super(Packets.REQ_STATISTICS_DETAIL);
 	}
 
 	public int getCorporationCode() {

@@ -8,7 +8,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
  * Created by hoonlee on 2017. 5. 31..
  */
 
-public class RequestWaitDecisionPacket extends RequestPacket {
+public class RequestWaitAreaDecisionPacket extends RequestPacket {
 	private int serviceNumber; // 서비스번호 (1)
 	private int corporationCode; // 법인코드 (2)
 	private int carId; // Car ID (2)
@@ -18,8 +18,8 @@ public class RequestWaitDecisionPacket extends RequestPacket {
 	private float latitude; // 위도 (30)
 	private String waitAreaId; //대기배차결정 지역코드 (4)
 
-	public RequestWaitDecisionPacket() {
-		super(Packets.REQUEST_WAIT_DECISION_NEW);
+	public RequestWaitAreaDecisionPacket() {
+		super(Packets.REQ_WAIT_AREA_DECISION);
 	}
 
 	public int getServiceNumber() {

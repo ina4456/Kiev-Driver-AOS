@@ -10,7 +10,7 @@ import com.kiev.driver.aos.util.LogHelper;
  * 대기결정응답 (GT-1514) 19 Byte
  * Server -> MDT
  */
-public class ResponseWaitDecisionNewPacket extends ResponsePacket {
+public class ResponseWaitAreaDecisionPacket extends ResponsePacket {
 
 	private int carId; // Car ID (2)
 	private Packets.WaitProcType waitProcType; // 대기처리 구분 (1)
@@ -20,7 +20,7 @@ public class ResponseWaitDecisionNewPacket extends ResponsePacket {
 	private int waitRange; // 대기범위 (2)
 	private int waitOrder; // 대기순위 (2)
 
-	public ResponseWaitDecisionNewPacket(byte[] bytes) {
+	public ResponseWaitAreaDecisionPacket(byte[] bytes) {
 		super(bytes);
 	}
 

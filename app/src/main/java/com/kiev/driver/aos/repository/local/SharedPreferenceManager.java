@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
 import java.lang.reflect.Type;
@@ -164,15 +164,15 @@ public class SharedPreferenceManager {
 	 * ===================================================================
 	 * 대기배차 정보 저장
 	 */
-	public void setWaitOrderInfo(@NonNull WaitOrderInfoPacket packet) {
+	public void setWaitOrderInfo(@NonNull ResponseWaitAreaOrderInfoPacket packet) {
 		LogHelper.write("==> [대기배차 정보 저장] : " + packet);
 		setDataAsJson(SP_KEY_CALL_INFO_WAIT, new Gson().toJson(packet));
 	}
 	/**
 	 * @return 대기배차 정보
 	 */
-	public WaitOrderInfoPacket getWaitOrderInfo() {
-		return getDataAsJson(SP_KEY_CALL_INFO_WAIT, WaitOrderInfoPacket.class);
+	public ResponseWaitAreaOrderInfoPacket getWaitOrderInfo() {
+		return getDataAsJson(SP_KEY_CALL_INFO_WAIT, ResponseWaitAreaOrderInfoPacket.class);
 	}
 	/**
 	 * 대기배차 정보 삭제

@@ -16,7 +16,7 @@ public class RequestMyInfoPacket extends RequestPacket {
 
 
 	public RequestMyInfoPacket() {
-		super(Packets.REQUEST_MY_INFO);
+		super(Packets.REQ_MY_INFO);
 
 	}
 

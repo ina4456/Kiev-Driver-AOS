@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * 대기지역요청 (GT-1D11) 77 Byte
+ * 대기콜 리스트 (GT-1D11) 77 Byte
  * MDT -> Server
  */
 public class RequestWaitCallListPacket extends RequestPacket {
@@ -21,7 +21,7 @@ public class RequestWaitCallListPacket extends RequestPacket {
     private float latitude; // 위도 (30)
 
     public RequestWaitCallListPacket() {
-        super(Packets.REQUEST_WAIT_CALL_LIST);
+        super(Packets.REQ_WAIT_CALL_LIST);
     }
 
 	public int getCorporationCode() {

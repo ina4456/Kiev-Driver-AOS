@@ -31,7 +31,7 @@ public class ServiceReportPacket extends RequestPacket {
 
     public ServiceReportPacket() {
 //        super(Packets.SERVICE_REPORT);
-	    super(Packets.DRIVER_SERVICE_REPORT);
+	    super(Packets.REQ_REPORT);
     }
 
     public int getServiceNumber() {

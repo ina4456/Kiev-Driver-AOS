@@ -95,14 +95,8 @@ public class Call implements Parcelable {
 		this.setDepartureAddr(packet.getPlaceExplanation());
 		this.setDestinationLat(packet.getDestLatitude());
 		this.setDestinationLong(packet.getDestLongitude());
-		this.setDestinationPoi(packet.getDestName());
-		this.setDestinationAddr(packet.getDestination());
-
-		//복지콜
-		this.setPassengerName(packet.getCallerName());
-		this.setHandicapCode(packet.getErrorCode());
+		this.setDestinationPoi(packet.getDestination());
 		this.setCallOrderCount(packet.getOrderCount());
-		this.setUseWheelchair(packet.isWheelChair().equals("Y"));
 	}
 
 	private Call(Parcel in) {

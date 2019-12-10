@@ -14,7 +14,7 @@ public class RequestNoticeListPacket extends RequestPacket {
 	private int listType; //리스트 구분 (1)
 
     public RequestNoticeListPacket() {
-        super(Packets.REQUEST_NOTICE_LIST);
+        super(Packets.REQ_NOTICE_LIST);
     }
 
     public int getTargetServer() {

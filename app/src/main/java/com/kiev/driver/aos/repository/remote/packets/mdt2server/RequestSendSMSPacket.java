@@ -18,7 +18,7 @@ public class RequestSendSMSPacket extends RequestPacket {
 	private String content; // 내용 (80)
 
     public RequestSendSMSPacket() {
-	    super(Packets.REQUEST_SEND_SMS);
+	    super(Packets.REQ_SEND_SMS);
 
     }
 

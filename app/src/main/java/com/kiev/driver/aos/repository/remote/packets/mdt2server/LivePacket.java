@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * Live패킷 (GT-F1F1) 4 Byte
+ * Live패킷 (GT-E1F1) 4 Byte
  * MDT -> Server
  */
 public class LivePacket extends RequestPacket {
@@ -14,7 +13,7 @@ public class LivePacket extends RequestPacket {
     private int carId; // Car ID (2)
 
     public LivePacket() {
-        super(Packets.LIVE);
+        super(Packets.REQ_LIVE);
     }
 
     public int getCarId() {

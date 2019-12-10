@@ -12,9 +12,9 @@ import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.adapter.WaitingZoneAdapter;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
@@ -115,10 +115,10 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 			}
 		}
 
-		MutableLiveData<ResponseWaitAreaNewPacket> liveData = mViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, startIndex);
-		liveData.observe(this, new Observer<ResponseWaitAreaNewPacket>() {
+		MutableLiveData<ResponseWaitAreaListPacket> liveData = mViewModel.requestWaitArea(Packets.WaitAreaRequestType.Normal, startIndex);
+		liveData.observe(this, new Observer<ResponseWaitAreaListPacket>() {
 			@Override
-			public void onChanged(ResponseWaitAreaNewPacket response) {
+			public void onChanged(ResponseWaitAreaListPacket response) {
 				LogHelper.e("responseWaitCallListPacket : " + response);
 				liveData.removeObserver(this);
 				isLoading = false;
@@ -151,16 +151,17 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
 
 								waitingZoneList.add(waitZone);
-
-								hasOrder = waitZone.getMyWaitingOrder() != 0;
-							}
-
-							if (hasOrder) {
-								mViewModel.setWaitingZone(null, false);
 							}
 
 							if (startIndex == START_INDEX) {
 								mWaitingZoneAdapter.refreshData(waitingZoneList);
+								for (WaitingZone waitingZone : waitingZoneList) {
+									hasOrder = waitingZone.getMyWaitingOrder() != 0;
+									break;
+								}
+								if (!hasOrder) {
+									mViewModel.setWaitingZone(null, false);
+								}
 							} else {
 								mWaitingZoneAdapter.addData(waitingZoneList);
 							}
@@ -216,10 +217,10 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 		LogHelper.e("item : " + item + " / " + isRequest);
 		if (item != null) {
 			if (isRequest) {
-				MutableLiveData<ResponseWaitDecisionNewPacket> liveData = mViewModel.requestWaitDecision(item.getWaitingZoneId());
-				liveData.observe(this, new Observer<ResponseWaitDecisionNewPacket>() {
+				MutableLiveData<ResponseWaitAreaDecisionPacket> liveData = mViewModel.requestWaitDecision(item.getWaitingZoneId());
+				liveData.observe(this, new Observer<ResponseWaitAreaDecisionPacket>() {
 					@Override
-					public void onChanged(ResponseWaitDecisionNewPacket response) {
+					public void onChanged(ResponseWaitAreaDecisionPacket response) {
 						liveData.removeObserver(this);
 						LogHelper.e("대기 결정 응답 :  " + response);
 						if (response.getWaitProcType() == Packets.WaitProcType.Success) {
@@ -231,10 +232,10 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 					}
 				});
 			} else {
-				MutableLiveData<ResponseWaitCancelPacket> liveData = mViewModel.requestWaitCancel(item.getWaitingZoneId());
-				liveData.observe(this, new Observer<ResponseWaitCancelPacket>() {
+				MutableLiveData<ResponseWaitAreaCancelPacket> liveData = mViewModel.requestWaitCancel(item.getWaitingZoneId());
+				liveData.observe(this, new Observer<ResponseWaitAreaCancelPacket>() {
 					@Override
-					public void onChanged(ResponseWaitCancelPacket response) {
+					public void onChanged(ResponseWaitAreaCancelPacket response) {
 						mViewModel.setWaitingZone(null, false);
 						liveData.removeObserver(this);
 						LogHelper.e("대기 취소 응답 :  " + response);

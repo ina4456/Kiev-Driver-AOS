@@ -28,7 +28,7 @@ public class RequestOrderRealtimePacket extends RequestPacket {
     private int orderCount; // 배차횟수 (1) (배차데이터(GT-1312)에서 받은 횟수)
 
     public RequestOrderRealtimePacket() {
-	    super(Packets.DRIVER_APP_ORDER_REALTIME);
+	    super(Packets.REQ_ORDER_REALTIME);
     }
 
     public int getServiceNumber() {

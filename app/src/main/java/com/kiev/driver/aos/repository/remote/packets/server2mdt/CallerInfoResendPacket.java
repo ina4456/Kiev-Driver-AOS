@@ -11,9 +11,6 @@ import com.kiev.driver.aos.util.LogHelper;
  */
 public class CallerInfoResendPacket extends ResponsePacket {
 
-	private final static int BYTE_LENGTH_FOR_DISABLED_PERSON = 250;
-	private final static int BYTE_LENGTH_FOR_DISABLED_PERSON_WITH_DEST = 300;
-
 	private int corporationCode; // 법인코드 (2)
 	private int carId; // Car ID (2)
 	private Packets.OrderKind orderKind; // 배차구분 (1)
@@ -27,17 +24,10 @@ public class CallerInfoResendPacket extends ResponsePacket {
 	private int allocBoundary; // 배차범위 (2)
 	private int orderCount; // 배차횟수 (1)
 
-	private String callerName; // 고객이름 (11)
-	private String errorCode; // 장애코드 (11)
-	private String destination; // 목적지 (41)
-	private boolean isWheelChair; // 휠체어여부 (1)
-
-	private String destName;// 목적지 장소명 (41)
+	private String destination;// 목적지 장소명 (41)
 	private float destLongitude; // 목적지 경도 (30)
 	private float destLatitude; // 목적지 위도 (30)
 	private int callClass; // 콜 등급 (1)
-
-	private boolean isCallForDisabledPerson; //복지콜 여부
 
 	public CallerInfoResendPacket(byte[] bytes) {
 		super(bytes);
@@ -91,24 +81,8 @@ public class CallerInfoResendPacket extends ResponsePacket {
 		return orderCount;
 	}
 
-	public String getCallerName() {
-		return callerName;
-	}
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
 	public String getDestination() {
 		return destination;
-	}
-
-	public boolean isWheelChair() {
-		return isWheelChair;
-	}
-
-	public String getDestName() {
-		return destName;
 	}
 
 	public float getDestLongitude() {
@@ -123,9 +97,6 @@ public class CallerInfoResendPacket extends ResponsePacket {
 		return callClass;
 	}
 
-	public boolean isCallForDisabledPerson() {
-		return isCallForDisabledPerson;
-	}
 
 	@Override
 	public void parse(byte[] buffers) {
@@ -165,7 +136,7 @@ public class CallerInfoResendPacket extends ResponsePacket {
 			allocBoundary = readInt(2);
 			orderCount = readInt(1);
 
-			destName = readString(41);
+			destination = readString(41);
 			String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
 			String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
 			destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);
@@ -193,7 +164,7 @@ public class CallerInfoResendPacket extends ResponsePacket {
 				", placeExplanation='" + placeExplanation + '\'' +
 				", allocBoundary=" + allocBoundary +
 				", orderCount=" + orderCount +
-				", destName='" + destName + '\'' +
+				", destination='" + destination + '\'' +
 				", destLongitude='" + destLongitude + '\'' +
 				", destLatitude='" + destLatitude + '\'' +
 				", callClass=" + callClass +

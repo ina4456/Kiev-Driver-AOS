@@ -8,12 +8,12 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  * 대기취소응답 (GT-1516) 5 Byte
  * Server -> MDT
  */
-public class ResponseWaitCancelPacket extends ResponsePacket {
+public class ResponseWaitAreaCancelPacket extends ResponsePacket {
 
     private int carId; // Car ID (2)
     private Packets.WaitCancelType waitCancelType; // 대기취소처리 구분 (1)
 
-    public ResponseWaitCancelPacket(byte[] bytes) {
+    public ResponseWaitAreaCancelPacket(byte[] bytes) {
         super(bytes);
     }
 

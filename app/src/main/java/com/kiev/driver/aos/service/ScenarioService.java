@@ -31,9 +31,8 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.AckPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.LivePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.PeriodSendingPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestAccountPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestCallInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestCallerInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestEmergencyPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessagePacket;
@@ -46,13 +45,12 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPa
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaStatePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallOrderPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitDecisionPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.WaitCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.CallerInfoResendPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.NoticesPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
@@ -66,14 +64,14 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.util.GpsHelper;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
@@ -177,21 +175,21 @@ public class ScenarioService extends LifecycleService {
 		return mStatisticDetailPacket;
 	}
 
-	private MutableLiveData<ResponseWaitAreaNewPacket> mWaitArea;
+	private MutableLiveData<ResponseWaitAreaListPacket> mWaitArea;
 
-	public MutableLiveData<ResponseWaitAreaNewPacket> getWaitAreaPacket() {
+	public MutableLiveData<ResponseWaitAreaListPacket> getWaitAreaPacket() {
 		return mWaitArea;
 	}
 
-	private MutableLiveData<ResponseWaitDecisionNewPacket> mWaitDecision;
+	private MutableLiveData<ResponseWaitAreaDecisionPacket> mWaitDecision;
 
-	public MutableLiveData<ResponseWaitDecisionNewPacket> getWaitDecisionPacket() {
+	public MutableLiveData<ResponseWaitAreaDecisionPacket> getWaitDecisionPacket() {
 		return mWaitDecision;
 	}
 
-	private MutableLiveData<ResponseWaitCancelPacket> mWaitCancel;
+	private MutableLiveData<ResponseWaitAreaCancelPacket> mWaitCancel;
 
-	public MutableLiveData<ResponseWaitCancelPacket> getWaitCancelPacket() {
+	public MutableLiveData<ResponseWaitAreaCancelPacket> getWaitCancelPacket() {
 		return mWaitCancel;
 	}
 
@@ -563,20 +561,6 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
-	/**
-	 * 콜정산 요청 패킷을 요청한다.
-	 */
-	public void requestAccount(String begin, String end) {
-		RequestAccountPacket packet = new RequestAccountPacket();
-		packet.setServiceNumber(mConfiguration.getServiceNumber());
-		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		packet.setCarId(mConfiguration.getCarId());
-		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
-		packet.setAccountType(Packets.AccountType.Period);
-		packet.setBeginDate(begin);
-		packet.setEndDate(end);
-		request(packet);
-	}
 
 	/**
 	 * 운행보고 패킷을 요청 한다. Retry 로직이 포함되어 있다. (최대 3회 5초 간격)
@@ -622,7 +606,7 @@ public class ScenarioService extends LifecycleService {
 	 */
 	public void requestBoardState(Packets.ReportKind kind, int fare, int mileage) {
 		LogHelper.e("requestBoardState kind : " + kind);
-		WaitOrderInfoPacket wait = mRepository.loadWaitCallInfo();
+		ResponseWaitAreaOrderInfoPacket wait = mRepository.loadWaitCallInfo();
 		OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 
 		if (wait == null && normal == null) {
@@ -670,7 +654,7 @@ public class ScenarioService extends LifecycleService {
 	public void requestWaitAreaNew(Packets.WaitAreaRequestType requestType, int startIndex) {
 		mWaitArea = new MutableLiveData<>();
 
-		RequestWaitAreaNewPacket packet = new RequestWaitAreaNewPacket();
+		RequestWaitAreaListPacket packet = new RequestWaitAreaListPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
@@ -689,7 +673,7 @@ public class ScenarioService extends LifecycleService {
 	public void requestWaitDecisionNew(String waitAreaId) {
 		mWaitDecision = new MutableLiveData<>();
 
-		RequestWaitDecisionPacket packet = new RequestWaitDecisionPacket();
+		RequestWaitAreaDecisionPacket packet = new RequestWaitAreaDecisionPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
@@ -708,7 +692,7 @@ public class ScenarioService extends LifecycleService {
 	public void requestWaitCancel(String waitPlaceCode) {
 		mWaitCancel = new MutableLiveData<>();
 		// 저장된 대기지역이 있는데 대기지역을 다시 요청하는 경우는 취소의 케이스로 간주한다.
-		WaitOrderInfoPacket wait = mRepository.loadWaitCallInfo();
+		ResponseWaitAreaOrderInfoPacket wait = mRepository.loadWaitCallInfo();
 		if (wait != null) {
 			requestReport(
 					wait.getCallNumber(),
@@ -717,7 +701,7 @@ public class ScenarioService extends LifecycleService {
 					wait.getCallReceiptDate(),
 					Packets.ReportKind.Failed, 0, 0);
 		}
-		WaitCancelPacket packet = new WaitCancelPacket();
+		RequestWaitAreaCancelPacket packet = new RequestWaitAreaCancelPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
@@ -730,7 +714,7 @@ public class ScenarioService extends LifecycleService {
 	 * 대기배차고객정보 요청 패킷을 요청한다.
 	 */
 	public void requestWaitPassengerInfo() {
-		RequestCallerInfoPacket packet = new RequestCallerInfoPacket();
+		RequestWaitAreaOrderInfoPacket packet = new RequestWaitAreaOrderInfoPacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
@@ -781,37 +765,10 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
-	public void requestWaitAreaState() {
-		//pollingHandler.removeMessages(MSG_REQ_WAIT_AREA_STATE);
-		//pollingHandler.sendEmptyMessage(MSG_REQ_WAIT_AREA_STATE);
-		RequestWaitAreaStatePacket packet = new RequestWaitAreaStatePacket();
-		packet.setCarId(mConfiguration.getCarId());
-		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		packet.setServiceNumber(mConfiguration.getServiceNumber());
-		LogHelper.write("requestWaitAreaState --- " + packet.toString());
-		request(packet);
-	}
-
-	private void requestWaitAreaStateInner() {
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				RequestWaitAreaStatePacket packet = new RequestWaitAreaStatePacket();
-				packet.setCarId(mConfiguration.getCarId());
-				packet.setCorporationCode(mConfiguration.getCorporationCode());
-				packet.setServiceNumber(mConfiguration.getServiceNumber());
-				LogHelper.write("requestWaitAreaStateInner --- " + packet.toString());
-				request(packet);
-			}
-		}).start();
-	}
-
 	// 2017. 12. 19 - 권석범
 	// 배차상태 & 저장된 고객정보가 없을 경우 배차정보요청 패킷(GT-1A11) 전송
 	public void requestCallInfo(int callNumber) {
-		RequestCallInfoPacket packet = new RequestCallInfoPacket(
-				isUsedDestination ? Packets.REQUEST_CALL_INFO_DES : Packets.REQUEST_CALL_INFO);
+		RequestCallInfoPacket packet = new RequestCallInfoPacket();
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		packet.setCarId(mConfiguration.getCarId());
 		Calendar calendar = Calendar.getInstance();
@@ -934,7 +891,7 @@ public class ScenarioService extends LifecycleService {
 	 */
 	private void refreshSavedPassengerInfo(int callNo) {
 		LogHelper.d(">> refreshSavedPassengerInfo-callNo : " + callNo);
-		WaitOrderInfoPacket wait = mRepository.loadWaitCallInfo();
+		ResponseWaitAreaOrderInfoPacket wait = mRepository.loadWaitCallInfo();
 		if (wait != null && wait.getCallNumber() == callNo) {
 			LogHelper.d(">> refreshSavedPassengerInfo - 1");
 
@@ -1022,14 +979,14 @@ public class ScenarioService extends LifecycleService {
 
 			int messageType = response.getMessageType();
 
-			if (messageType != Packets.SERVICE_REQUEST_RESULT
+			if (messageType != Packets.RES_SERVICE
 					&& !hasCertification) {
 				LogHelper.d(">> Skip received packet. Invalid service certification.");
 				return;
 			}
 
 			switch (messageType) {
-				case Packets.SERVICE_REQUEST_RESULT: { // 서비스 요청 응답
+				case Packets.RES_SERVICE: { // 서비스 요청 응답
 					pollingHandler.removeMessages(MSG_SERVICE_ACK);
 					LogHelper.e("서비스 요청 응답");
 
@@ -1048,7 +1005,7 @@ public class ScenarioService extends LifecycleService {
 						isUsedDestination = resPacket.isUsedDestination();
 
 						periodTerm = mConfiguration.getPst();
-						WaitOrderInfoPacket wait = mRepository.loadWaitCallInfo();
+						ResponseWaitAreaOrderInfoPacket wait = mRepository.loadWaitCallInfo();
 						OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 						if (wait != null
 								&& wait.getOrderKind() == Packets.OrderKind.Mobile
@@ -1100,7 +1057,7 @@ public class ScenarioService extends LifecycleService {
 					break;
 				}
 
-				case Packets.SERVICE_CONFIG: { // 환경 설정 응답
+				case Packets.RES_CONFIG: { // 환경 설정 응답
 					ServiceConfigPacket packet = (ServiceConfigPacket) response;
 					//mConfiguration.setCarId(packet.getCarId());
 					mConfiguration.setConfigurationVersion(packet.getVersion());
@@ -1126,7 +1083,7 @@ public class ScenarioService extends LifecycleService {
 				break;
 
 
-				case Packets.NOTICES: { // 공지사항
+				case Packets.RES_NOTICE: { // 공지사항
 					NoticesPacket packet = (NoticesPacket) response;
 					Notice notice = new Notice();
 					notice.setId(packet.getNoticeCode());
@@ -1137,7 +1094,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RESPONSE_PERIOD_SENDING: { // 주기 전송 응답
+				case Packets.RES_PERIOD: { // 주기 전송 응답
 					ResponsePeriodSendingPacket packet = (ResponsePeriodSendingPacket) response;
 					// 메시지 존재하는 경우
 					if (packet.hasMessage()) {
@@ -1172,7 +1129,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RESPONSE_REST: { // 휴식/운행재개
+				case Packets.RES_REST: { // 휴식/운행재개
 					Packets.RestType restType = ((ResponseRestPacket) response).getRestType();
 					LogHelper.e("RESPONSE : " + response.toString());
 					if (restType != null &&
@@ -1192,7 +1149,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RESPONSE_SERVICE_REPORT: { // 운행보고 응답
+				case Packets.RES_REPORT: { // 운행보고 응답
 					pollingHandler.removeMessages(MSG_REPORT);
 					mMainApplication.setWasBackground(mMainApplication.isBackground());
 
@@ -1228,7 +1185,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RESPONSE_MESSAGE: { // 메시지 응답
+				case Packets.RES_MESSAGE: { // 메시지 응답
 					WavResourcePlayer.getInstance(context).play(R.raw.voice_142);
 
 					ResponseMessagePacket packet = (ResponseMessagePacket) response;
@@ -1248,8 +1205,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.ORDER_INFO_DES: // 배차데이터 (목적지 추가)
-				case Packets.ORDER_INFO: { // 배차데이터
+				case Packets.RES_ORDER_INFO_BROADCAST: {// 배차데이터 (목적지 추가)
 					if (emergencyType == Packets.EmergencyType.Begin
 							|| restType == Packets.RestType.Rest) {
 						// 응급 상황 중이면 콜 수신을 무시한다.
@@ -1263,7 +1219,7 @@ public class ScenarioService extends LifecycleService {
 
 					int serviceNumber = mConfiguration.getServiceNumber();
 
-					WaitOrderInfoPacket waitCall = mRepository.loadWaitCallInfo();
+					ResponseWaitAreaOrderInfoPacket waitCall = mRepository.loadWaitCallInfo();
 					OrderInfoPacket normalCall = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 					OrderInfoPacket getOnCall = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
 					LogHelper.e("waitCall : " + (waitCall == null));
@@ -1314,7 +1270,7 @@ public class ScenarioService extends LifecycleService {
 						if (serviceNumber == Constants.AREA_SUNGNAM_BOKJI) {
 							requestOrderRealtime(Packets.OrderDecisionType.Request, packet);
 						} else {
-							if (packet.getMessageType() == Packets.ORDER_INFO_DES
+							if (packet.getMessageType() == Packets.RES_ORDER_INFO_BROADCAST
 									&& packet.getCallClass() > 0) {
 								WavResourcePlayer.getInstance(context).play(R.raw.voice_170);
 							} else {
@@ -1331,9 +1287,9 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.WAIT_ORDER_INFO: { // 대기배차고객정보 응답
-					LogHelper.e("WAIT_ORDER_INFO~~~~~");
-					WaitOrderInfoPacket resp = (WaitOrderInfoPacket) response;
+				case Packets.RES_WAIT_AREA_ORDER_INFO: { // 대기배차고객정보 응답
+					LogHelper.e("RES_WAIT_AREA_ORDER_INFO~~~~~");
+					ResponseWaitAreaOrderInfoPacket resp = (ResponseWaitAreaOrderInfoPacket) response;
 					if (resp.getCallNumber() > 0) {
 						//WavResourcePlayer.getInstance(context).play(R.raw.voice_132);
 						// 서버에 Packet을 한번 요청하면 데이터가 초기화 되기 때문에 콜번호가 유효한 경우에만 저장을 한다.
@@ -1355,8 +1311,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.CALLER_INFO_RESEND:
-				case Packets.CALLER_INFO_RESEND_DES: { // 고객정보재전송 응답
+				case Packets.RES_ORDER_INFO: { // 고객정보재전송 응답
 					LogHelper.e("CALLER INFO RESEND~~~~");
 					CallerInfoResendPacket p = (CallerInfoResendPacket) response;
 
@@ -1399,7 +1354,7 @@ public class ScenarioService extends LifecycleService {
 						}
 					} else {
 						// 임시 저장 패킷이 남아 있는 경우 배차데이터 처리(1314)를 받지 못했다는 뜻이므로
-						// 1314 수신과 동일하게 처리 한다. (Packets.ORDER_INFO_PROC)
+						// 1314 수신과 동일하게 처리 한다. (Packets.RES_ORDER_INFO_PROC)
 
 						boolean isFailed = checkCallValidation(messageType, tempPacket, p.getCallNumber(), p.getCarId());
 						processCallInfo(context, messageType, tempPacket, p.getCallNumber(), isFailed);
@@ -1407,7 +1362,7 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.ORDER_INFO_PROC: { // 배차데이터 처리
+				case Packets.RES_ORDER_INFO_PROC: { // 배차데이터 처리
 					OrderInfoPacket tempPacket = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Temp);
 					OrderInfoProcPacket p = (OrderInfoProcPacket) response;
 					boolean isFailed;
@@ -1427,32 +1382,32 @@ public class ScenarioService extends LifecycleService {
 				break;
 
 
-				case Packets.RESPONSE_SEND_SMS: {
+				case Packets.RES_SEND_SMS: {
 					ResponseSMSPacket resPacket = (ResponseSMSPacket) response;
-					LogHelper.e("RESPONSE_SEND_SMS : " + resPacket);
+					LogHelper.e("RES_SEND_SMS : " + resPacket);
 					mResponseSMSPacket.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_MY_INFO: {
+				case Packets.RES_MY_INFO: {
 					ResponseMyInfoPacket resPacket = (ResponseMyInfoPacket) response;
-					LogHelper.e("RESPONSE_MY_INFO : " + resPacket);
+					LogHelper.e("RES_MY_INFO : " + resPacket);
 					mResponseMyInfo.postValue(resPacket);
 				}
 				break;
 
 
-				case Packets.RESPONSE_WAIT_CALL_LIST: {
+				case Packets.RES_WAIT_CALL_LIST: {
 					ResponseWaitCallListPacket resPacket = (ResponseWaitCallListPacket) response;
-					LogHelper.e("RESPONSE_WAIT_CALL_LIST : " + resPacket);
+					LogHelper.e("RES_WAIT_CALL_LIST : " + resPacket);
 					mResponseWaitCallListPacket.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_WAIT_CALL_ORDER: {
+				case Packets.RES_WAIT_CALL_ORDER: {
 					ResponseWaitCallOrderInfoPacket resPacket = (ResponseWaitCallOrderInfoPacket) response;
 					mResponseWaitCallOrderInfoPacket.postValue(resPacket);
-					LogHelper.e("RESPONSE_WAIT_CALL_ORDER : " + resPacket);
+					LogHelper.e("RES_WAIT_CALL_ORDER : " + resPacket);
 
 
 					OrderInfoPacket tempPacket = new OrderInfoPacket(resPacket);
@@ -1461,45 +1416,45 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RESPONSE_NOTICE_LIST: {
+				case Packets.RES_NOTICE_LIST: {
 					ResponseNoticeListPacket resPacket = (ResponseNoticeListPacket) response;
-					LogHelper.e("RESPONSE_NOTICE_LIST : " + resPacket);
+					LogHelper.e("RES_NOTICE_LIST : " + resPacket);
 					mNoticeListPacket.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_STATISTICS: {
+				case Packets.RES_STATISTICS: {
 					ResponseStatisticsPacket resPacket = (ResponseStatisticsPacket) response;
-					LogHelper.e("RESPONSE_STATISTICS : " + resPacket);
+					LogHelper.e("RES_STATISTICS : " + resPacket);
 					mStatisticPacket.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_STATISTICS_DETAIL: {
+				case Packets.RES_STATISTICS_DETAIL: {
 					ResponseStatisticsDetailPacket resPacket = (ResponseStatisticsDetailPacket) response;
-					LogHelper.e("RESPONSE_STATISTICS_DETAIL : " + resPacket);
+					LogHelper.e("RES_STATISTICS_DETAIL : " + resPacket);
 					mStatisticDetailPacket.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_WAIT_AREA_NEW: {
-					ResponseWaitAreaNewPacket resPacket = (ResponseWaitAreaNewPacket) response;
-					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+				case Packets.RES_WAIT_AREA_LIST: {
+					ResponseWaitAreaListPacket resPacket = (ResponseWaitAreaListPacket) response;
+					LogHelper.e("RES_WAIT_AREA_LIST : " + resPacket);
 					mWaitArea.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_WAIT_DECISION_NEW: {
-					ResponseWaitDecisionNewPacket resPacket = (ResponseWaitDecisionNewPacket) response;
-					LogHelper.e("RESPONSE_WAIT_AREA_NEW : " + resPacket);
+				case Packets.RES_WAIT_AREA_DECISION: {
+					ResponseWaitAreaDecisionPacket resPacket = (ResponseWaitAreaDecisionPacket) response;
+					LogHelper.e("RES_WAIT_AREA_LIST : " + resPacket);
 
 					mWaitDecision.postValue(resPacket);
 				}
 				break;
 
-				case Packets.RESPONSE_WAIT_CANCEL: {
-					ResponseWaitCancelPacket resPacket = (ResponseWaitCancelPacket) response;
-					LogHelper.e("RESPONSE_WAIT_CANCEL : " + resPacket);
+				case Packets.RES_WAIT_AREA_CANCEL: {
+					ResponseWaitAreaCancelPacket resPacket = (ResponseWaitAreaCancelPacket) response;
+					LogHelper.e("RES_WAIT_AREA_CANCEL : " + resPacket);
 					mWaitCancel.postValue(resPacket);
 					if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Success) {
 						mRepository.clearWaitingZone();
@@ -1513,11 +1468,11 @@ public class ScenarioService extends LifecycleService {
 	private boolean checkCallValidation(int messageType, OrderInfoPacket tempPacket, int callNumber, int carId) {
 		boolean isFailed;
 		if (tempPacket.getCallNumber() != callNumber) {
-			// 실시간 위치 및 배차요청으로 올린 콜넘버와 응답의 콜넘버가 다른 겨우 서비스 넘버 97로 ACK
+			// 실시간 위치 및 배차요청으로 올린 콜넘버와 응답의 콜넘버가 다른 겨우 서비스 넘버 97로 REQ_ACK
 			requestAck(messageType, 97, callNumber);
 			isFailed = true;
 		} else if (tempPacket.getCarId() != carId) {
-			// 실시간 위치 및 배차요청으로 올린 콜ID와 응답의 콜ID가 다른 겨우 서비스 넘버 98로 ACK
+			// 실시간 위치 및 배차요청으로 올린 콜ID와 응답의 콜ID가 다른 겨우 서비스 넘버 98로 REQ_ACK
 			requestAck(messageType, 98, callNumber);
 			isFailed = true;
 		} else if (tempPacket.getOrderKind() != Packets.OrderKind.GetOnOrder

@@ -18,7 +18,7 @@ public class RequestStatisticsPacket extends RequestPacket {
 
 
 	public RequestStatisticsPacket() {
-		super(Packets.REQUEST_STATISTICS);
+		super(Packets.REQ_STATISTICS);
 
 	}
 

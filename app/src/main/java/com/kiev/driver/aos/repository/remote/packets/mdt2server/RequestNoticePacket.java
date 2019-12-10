@@ -15,7 +15,7 @@ public class RequestNoticePacket extends RequestPacket {
     private int carId; // Car ID (2)
 
     public RequestNoticePacket() {
-        super(Packets.REQUEST_NOTICE);
+        super(Packets.REQ_NOTICE);
     }
 
     public int getServiceNumber() {

@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 주기전송 (GT-1211) 32 Byte
+ * 주기전송 (GT-5211) 84 Byte
  * MDT -> Server
  */
 public class PeriodSendingPacket extends RequestPacket {
@@ -17,16 +16,14 @@ public class PeriodSendingPacket extends RequestPacket {
     private String sendingTime; // 전송시간 (6) (년월일시분초 - ex : 090805112134)
     private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
     private int direction; // 주행방향 (2)
-    private float longitude; // 경도 (4)
-    private float latitude; // 위도 (4)
+    private float longitude; // 경도 (30)
+    private float latitude; // 위도 (30)
     private int speed; // 속도 (1)
     private Packets.BoardType boardState; // 승차상태 (1)
     private Packets.RestType restState; // 휴식상태 (1)
 
     public PeriodSendingPacket() {
-//        super(Packets.PERIOD_SENDING);
-	    super(Packets.DRIVER_APP_PERIOD_SENDING);
-
+	    super(Packets.REQ_PERIOD);
     }
 
     public int getServiceNumber() {

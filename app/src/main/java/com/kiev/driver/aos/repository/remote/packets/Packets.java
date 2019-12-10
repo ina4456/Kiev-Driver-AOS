@@ -8,36 +8,36 @@ public class Packets {
 	//----------------------------------------------------------------------------------------
 	// MDT -> Server : 16
 	//----------------------------------------------------------------------------------------
-	public static final int ACK = 0xE111; // ACK
-	public static final int DRIVER_APP_REQUEST_SERVICE = 0x5111; // 서비스요청
-	public static final int REQUEST_NOTICE = 0x5113; // 공지사항요청
-	public static final int REQUEST_CONFIG = 0x5115; // 환경설정요청
-	public static final int DRIVER_APP_PERIOD_SENDING = 0x5211; // 주기전송
-	public static final int DRIVER_SERVICE_REPORT = 0x5411; // 운행보고
-	public static final int REQUEST_WAIT_AREA = 0x5511; // 대기지역요청 todo 삭제
-	public static final int WAIT_DECISION = 0x5513; // 대기결정 todo 삭제
-	public static final int WAIT_CANCEL = 0x5515; // 대기취소
-	public static final int REQUEST_CALLER_INFO = 0x5517; // 대기배차고객정보 요청
-	public static final int REQUEST_WAIT_AREA_STATE = 0x5519; //대기지역 현황 정보 요청
-	public static final int REQUEST_ACCOUNT = 0x5611; // 콜 정산 요청 todo 삭제
-	public static final int REQUEST_EMERGENCY = 0x5711; // Emergency 요청
-	public static final int REQUEST_MESSAGE = 0x5811; // 메시지요청
-	public static final int DRIVER_APP_ORDER_REALTIME = 0x5911; // 실시간 위치 및 배차요청
-	public static final int REQUEST_REST = 0x5B11; // 휴식/운행재개
-	public static final int LIVE = 0xE1F1; // Live 패킷
-	public static final int REQUEST_CALL_INFO = 0x5A11; // 배차정보요청 (추가 2017. 12. 19 - 권석범) todo 삭제
-	public static final int REQUEST_CALL_INFO_DES = 0x5A21; // 배차정보요청 (목적지 추가)
+	public static final int REQ_ACK = 0xE111; // REQ_ACK
+	public static final int REQ_SERVICE = 0x5111; // 서비스요청
+	public static final int REQ_NOTICE = 0x5113; // 공지사항요청
+	public static final int REQ_CONFIG = 0x5115; // 환경설정요청
+	public static final int REQ_PERIOD = 0x5211; // 주기전송
+	public static final int REQ_REPORT = 0x5411; // 운행보고
 
-	//2019.11 신규 패킷 추가
-	public static final int REQUEST_SEND_SMS = 0x5813; // SMS 전송 요청
-	public static final int REQUEST_MY_INFO = 0x5E11; // 내 정보 요청
-	public static final int REQUEST_WAIT_CALL_LIST = 0x5D11; // 대기콜 리스트 요청
-	public static final int REQUEST_WAIT_CALL_ORDER = 0x5913; // 대기콜 배차 요청
-	public static final int REQUEST_NOTICE_LIST   = 0x5137; // 공지사항 리스트 요청
-	public static final int REQUEST_STATISTICS = 0x5613; // 운행이력 통계 요청
-	public static final int REQUEST_STATISTICS_DETAIL = 0x5915; // 운행이력 상세 요청
-	public static final int REQUEST_WAIT_AREA_NEW = 0x5521; // 대기장소현황 요청
-	public static final int REQUEST_WAIT_DECISION_NEW = 0x5523; // 대기장소 대기 요청
+	public static final int REQ_MESSAGE = 0x5811; // 메시지요청
+	public static final int REQ_SEND_SMS = 0x5813; // SMS 전송 요청
+
+	public static final int REQ_ORDER_REALTIME = 0x5911; // 실시간 위치 및 배차요청
+	public static final int REQ_ORDER_INFO = 0x5A21; // 배차정보요청 (목적지 추가)
+
+	public static final int REQ_EMERGENCY = 0x5711; // Emergency 요청
+	public static final int REQ_REST = 0x5B11; // 휴식/운행재개
+	public static final int REQ_LIVE = 0xE1F1; // Live 패킷
+
+	public static final int REQ_MY_INFO = 0x5E11; // 내 정보 요청
+	public static final int REQ_NOTICE_LIST = 0x5137; // 공지사항 리스트 요청
+
+	public static final int REQ_WAIT_AREA_LIST = 0x5521; // 대기장소현황 요청
+	public static final int REQ_WAIT_AREA_DECISION = 0x5523; // 대기장소 대기 요청
+	public static final int REQ_WAIT_AREA_CANCEL = 0x5515; // 대기취소
+	public static final int REQ_WAIT_AREA_ORDER_INFO = 0x5517; // 대기배차고객정보 요청
+
+	public static final int REQ_WAIT_CALL_LIST = 0x5D11; // 대기콜 리스트 요청
+	public static final int REQ_WAIT_CALL_ORDER = 0x5913; // 대기콜 배차 요청
+
+	public static final int REQ_STATISTICS = 0x5613; // 운행이력 통계 요청
+	public static final int REQ_STATISTICS_DETAIL = 0x5915; // 운행이력 상세 요청
 
 
 
@@ -46,37 +46,37 @@ public class Packets {
 	//----------------------------------------------------------------------------------------
 	// Server -> MDT : 19
 	//----------------------------------------------------------------------------------------
-	public static final int RESPONSE_ACK = 0xEF11; // 접속종료 (ACK의 응답 목적으로 사용 한다.)
-	public static final int SERVICE_REQUEST_RESULT = 0x5112; // 서비스요청결과
-	public static final int NOTICES = 0x5114; // 공지사항
-	public static final int SERVICE_CONFIG = 0x5116; // 환경설정
-	public static final int RESPONSE_PERIOD_SENDING = 0x5212; // 주기응답
-	public static final int ORDER_INFO_DES = 0x5311; // 배차데이터 (목적지 추가)
-	public static final int ORDER_INFO = 0x5312; // 배차데이터 todo 삭제
-	public static final int ORDER_INFO_PROC = 0x5314; // 배차데이터 처리
-	public static final int RESPONSE_SERVICE_REPORT = 0x5412; // 운행보고응답
-	public static final int WAIT_PLACE_INFO = 0x5512; // 대기지역정보 todo 삭제
-	public static final int RESPONSE_WAIT_DECISION = 0x5514; // 대기결정응답 todo 삭제
-	public static final int RESPONSE_WAIT_CANCEL = 0x5516; // 대기취소응답
-	public static final int WAIT_ORDER_INFO = 0x5518; // 대기배차고객정보
-	public static final int RESPONSE_WAIT_AREA_STATE = 0x551A; //대기지역 현황 정보 응답 todo 삭제
-	public static final int RESPONSE_ACCOUNT = 0x5612; // 콜정산정보 todo 삭제
-	public static final int CANCEL_EMERGENCY = 0x5712; // Emergency 응답
-	public static final int RESPONSE_MESSAGE = 0x5812; // 메시지 응답
-	public static final int CALLER_INFO_RESEND_DES = 0x5A22; // 고객정보재전송 (목적지 추가)
-	public static final int CALLER_INFO_RESEND = 0x5A12; // 고객정보재전송 todo 삭제
-	public static final int RESPONSE_REST = 0x5B12; // 휴식/운행응답
+	public static final int RES_ACK = 0xEF11; // 접속종료 (ACK의 응답 목적으로 사용 한다.)
+	public static final int RES_SERVICE = 0x5112; // 서비스요청결과
+	public static final int RES_NOTICE = 0x5114; // 공지사항
+	public static final int RES_CONFIG = 0x5116; // 환경설정
+	public static final int RES_PERIOD = 0x5212; // 주기응답
+	public static final int RES_REPORT = 0x5412; // 운행보고응답
 
-	//2019.11 신규 패킷 추가
-	public static final int RESPONSE_SEND_SMS = 0x5814; // SMS 전송 요청 응답
-	public static final int RESPONSE_MY_INFO = 0x5E12; // 내 정보 요청 응답청
-	public static final int RESPONSE_WAIT_CALL_LIST = 0x5D12; // 내 정보 요청 응답
-	public static final int RESPONSE_WAIT_CALL_ORDER = 0x5914; // 대기콜 배차 요청 응답
-	public static final int RESPONSE_NOTICE_LIST = 0x5138; // 공지사항 리스트 요청 응답
-	public static final int RESPONSE_STATISTICS = 0x5614; // 운행이력 통계 요청 응답
-	public static final int RESPONSE_STATISTICS_DETAIL = 0x5916; // 운행이력 상세 요청 응답
-	public static final int RESPONSE_WAIT_AREA_NEW = 0x5522; // 대기장소현황 요청 응답
-	public static final int RESPONSE_WAIT_DECISION_NEW = 0x5524; // 대기장소 대기 요청 응답
+	public static final int RES_MESSAGE = 0x5812; // 메시지 응답
+	public static final int RES_SEND_SMS = 0x5814; // SMS 전송 요청 응답
+
+	public static final int RES_ORDER_INFO_BROADCAST = 0x5311; // 배차데이터 (목적지 추가)
+	public static final int RES_ORDER_INFO = 0x5A22; // 고객정보재전송 (목적지 추가)
+	public static final int RES_ORDER_INFO_PROC = 0x5314; // 배차데이터 처리
+
+	public static final int RES_EMERGENCY_CANCEL = 0x5712; // Emergency 응답
+	public static final int RES_REST = 0x5B12; // 휴식/운행응답
+
+	public static final int RES_MY_INFO = 0x5E12; // 내 정보 요청 응답청
+	public static final int RES_NOTICE_LIST = 0x5138; // 공지사항 리스트 요청 응답
+
+	public static final int RES_WAIT_AREA_LIST = 0x5522; // 대기장소현황 요청 응답
+	public static final int RES_WAIT_AREA_DECISION = 0x5524; // 대기장소 대기 요청 응답
+	public static final int RES_WAIT_AREA_CANCEL = 0x5516; // 대기취소응답
+	public static final int RES_WAIT_AREA_ORDER_INFO = 0x5518; // 대기배차고객정보
+
+	public static final int RES_WAIT_CALL_LIST = 0x5D12; // 대기콜 리스트 요청 응답
+	public static final int RES_WAIT_CALL_ORDER = 0x5914; // 대기콜 배차 요청 응답
+
+	public static final int RES_STATISTICS = 0x5614; // 운행이력 통계 요청 응답
+	public static final int RES_STATISTICS_DETAIL = 0x5916; // 운행이력 상세 요청 응답
+
 
 
 
@@ -334,136 +334,107 @@ public class Packets {
 	//----------------------------------------------------------------------------------------
 	public static int getSize(int type) {
 		switch (type) {
-			case ACK: // ACK
+			case REQ_ACK: // REQ_ACK
 				return 11;
-//			case REQUEST_SERVICE: // 서비스요청
-//				return 36;
-			case DRIVER_APP_REQUEST_SERVICE: // 서비스요청
+			case REQ_SERVICE: // 서비스요청
 				return 70;
-			case REQUEST_NOTICE: // 공지사항요청
+			case REQ_NOTICE: // 공지사항요청
 				return 7;
-			case REQUEST_CONFIG: // 환경설정요청
+			case REQ_CONFIG: // 환경설정요청
 				return 9;
-//			case PERIOD_SENDING: // 주기전송
-//				return 32;
-			case DRIVER_APP_PERIOD_SENDING: // 주기전송
-				return 32 + 26 + 26;
-//			case SERVICE_REPORT: // 운행보고
-//				return 62;
-			case DRIVER_SERVICE_REPORT: // 운행보고
+			case REQ_PERIOD: // 주기전송
+				return 84;
+			case REQ_REPORT: // 운행보고
 				return 131;
-			case REQUEST_WAIT_AREA: // 대기지역요청
-				return 22;
-			case WAIT_DECISION: // 대기결정
-				return 38;
-			case WAIT_CANCEL: // 대기취소
+			case REQ_WAIT_AREA_CANCEL: // 대기취소
 				return 41;
-			case REQUEST_CALLER_INFO: // 대기배차고객정보 요청
+			case REQ_WAIT_AREA_ORDER_INFO: // 대기배차고객정보 요청
 				return 7;
-			case REQUEST_ACCOUNT: // 콜 정산 요청
-				return 27;
-			case REQUEST_EMERGENCY: // Emergency 요청
+			case REQ_EMERGENCY: // Emergency 요청
 				return 26;
-			case REQUEST_MESSAGE: // 메시지요청
+			case REQ_MESSAGE: // 메시지요청
 				return 7;
-			case DRIVER_APP_ORDER_REALTIME: // 실시간 위치 및 배차요청
-				return 62 + 17 + 26 + 26;
-//			case REQUEST_ORDER_REALTIME: // 실시간 위치 및 배차요청
-//				return 62;
-			case REQUEST_REST: // 휴식/운행재개
+			case REQ_ORDER_REALTIME: // 실시간 위치 및 배차요청
+				return 131;
+			case REQ_REST: // 휴식/운행재개
 				return 7;
-			case LIVE: // Live 패킷
+			case REQ_LIVE: // Live 패킷
 				return 4;
-			case RESPONSE_ACK: // 접속종료 (ACK의 응답 목적으로 사용 한다.)
+			case RES_ACK: // 접속종료 (ACK의 응답 목적으로 사용 한다.)
 				return 3;
-			case SERVICE_REQUEST_RESULT: // 서비스요청결과
+			case RES_SERVICE: // 서비스요청결과
 				return 23;
-			case NOTICES: // 공지사항
+			case RES_NOTICE: // 공지사항
 				return 293;
-			case SERVICE_CONFIG: // 환경설정
+			case RES_CONFIG: // 환경설정
 				return 38;
-			case RESPONSE_PERIOD_SENDING: // 주기응답
+			case RES_PERIOD: // 주기응답
 				return 8;
-			case ORDER_INFO_DES: // 배차데이터 (목적지 추가)
+			case RES_ORDER_INFO_BROADCAST: // 배차데이터 (목적지 추가)
 				return 357;
-			case ORDER_INFO: // 배차데이터
-				return 186 + 64;
-			case ORDER_INFO_PROC: // 배차데이터 처리
+			case RES_ORDER_INFO_PROC: // 배차데이터 처리
 				return 7;
-			case RESPONSE_SERVICE_REPORT: // 운행보고응답
+			case RES_REPORT: // 운행보고응답
 				return 7;
-			case WAIT_PLACE_INFO: // 대기지역정보
-				return 51;
-			case RESPONSE_WAIT_DECISION: // 대기결정응답
-				return 19;
-			case RESPONSE_WAIT_CANCEL: // 대기취소응답
+			case RES_WAIT_AREA_CANCEL: // 대기취소응답
 				return 5;
-			case WAIT_ORDER_INFO: // 대기배차고객정보
+			case RES_WAIT_AREA_ORDER_INFO: // 대기배차고객정보
 				return 352;
-			case RESPONSE_ACCOUNT: // 콜정산정보
-				return 148;
-			case CANCEL_EMERGENCY: // Emergency 응답
+			case RES_EMERGENCY_CANCEL: // Emergency 응답
 				return 6;
-			case RESPONSE_MESSAGE: // 메시지 응답
+			case RES_MESSAGE: // 메시지 응답
 				return 207;
-			case CALLER_INFO_RESEND: // 고객정보재전송
-				return 250;
-			case CALLER_INFO_RESEND_DES: // 고객정보 재전송 (목적지 추가)
+			case RES_ORDER_INFO: // 고객정보 재전송 (목적지 추가)
 				return 357;
-			case RESPONSE_REST: // 휴식/운행응답
+			case RES_REST: // 휴식/운행응답
 				return 5;
-			case REQUEST_WAIT_AREA_STATE: //대기지역 현황 정보 요청
-				return 7;
-			case RESPONSE_WAIT_AREA_STATE: //대기지역 현황 정보 응답
-				return 244;
-			case REQUEST_CALL_INFO: // 배차정보 요청
-			case REQUEST_CALL_INFO_DES: // 배차정보 요청 (목적지 추가)
+			case REQ_ORDER_INFO: // 배차정보 요청 (목적지 추가)
 				return 19;
 
 			/*신규 추가 패킷*/
-			case REQUEST_SEND_SMS: // SMS전송 요청
+			case REQ_SEND_SMS: // SMS전송 요청
 				return 180;
-			case RESPONSE_SEND_SMS: // SMS전송 요청 응답
+			case RES_SEND_SMS: // SMS전송 요청 응답
 				return 20;
 
-			case REQUEST_MY_INFO: // 내정보 요청
+			case REQ_MY_INFO: // 내정보 요청
 				return 36;
-			case RESPONSE_MY_INFO: // 내정보 요청 응답
+			case RES_MY_INFO: // 내정보 요청 응답
 				return 94;
 
-			case REQUEST_WAIT_CALL_LIST: // 대기콜 리스트 요청
+			case REQ_WAIT_CALL_LIST: // 대기콜 리스트 요청
 				return 69;
-			case RESPONSE_WAIT_CALL_LIST: // 대기콜 리스트 요청 응답
+			case RES_WAIT_CALL_LIST: // 대기콜 리스트 요청 응답
 				return 1113;
 
-			case REQUEST_WAIT_CALL_ORDER: // 대기콜 배차 요청
+			case REQ_WAIT_CALL_ORDER: // 대기콜 배차 요청
 				return 125;
-			case RESPONSE_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
+			case RES_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
 				return 354;
 
-			case REQUEST_NOTICE_LIST:
+			case REQ_NOTICE_LIST:
 				return 6;
-			case RESPONSE_NOTICE_LIST:
+			case RES_NOTICE_LIST:
 				return 1504;
 
-			case REQUEST_STATISTICS: // 콜 통계 요청
+			case REQ_STATISTICS: // 콜 통계 요청
 				return 67;
-			case RESPONSE_STATISTICS: // 콜 통계 요청 응답
+			case RES_STATISTICS: // 콜 통계 요청 응답
 				return 114;
 
-			case REQUEST_STATISTICS_DETAIL: // 콜 통계 상세 요청
+			case REQ_STATISTICS_DETAIL: // 콜 통계 상세 요청
 				return 40;
-			case RESPONSE_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
+			case RES_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
 				return 818;
 
-			case REQUEST_WAIT_AREA_NEW: // 대기 지역 현황 요청
+			case REQ_WAIT_AREA_LIST: // 대기 지역 현황 요청
 				return 70;
-			case RESPONSE_WAIT_AREA_NEW: // 대기 지역 현황 요청 응답
+			case RES_WAIT_AREA_LIST: // 대기 지역 현황 요청 응답
 				return 509;
 
-			case REQUEST_WAIT_DECISION_NEW: // 대기 지역 대기 요청
+			case REQ_WAIT_AREA_DECISION: // 대기 지역 대기 요청
 				return 107;
-			case RESPONSE_WAIT_DECISION_NEW: // 대기 지역 대기 요청 응답
+			case RES_WAIT_AREA_DECISION: // 대기 지역 대기 요청 응답
 				return 73;
 
 			default:

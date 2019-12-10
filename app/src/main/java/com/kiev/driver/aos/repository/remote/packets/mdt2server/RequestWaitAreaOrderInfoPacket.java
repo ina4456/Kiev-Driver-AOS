@@ -4,16 +4,18 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by hoonlee on 2017. 5. 31..
+ * Created by zic325 on 2016. 9. 8..
+ * 대기배차고객정보 요청 (GT-1517) 7 Byte
+ * MDT -> Server
  */
+public class RequestWaitAreaOrderInfoPacket extends RequestPacket {
 
-public class RequestWaitAreaStatePacket extends RequestPacket {
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
 
-    public RequestWaitAreaStatePacket() {
-        super(Packets.REQUEST_WAIT_AREA_STATE);
+    public RequestWaitAreaOrderInfoPacket() {
+        super(Packets.REQ_WAIT_AREA_ORDER_INFO);
     }
 
     public int getServiceNumber() {
@@ -51,10 +53,9 @@ public class RequestWaitAreaStatePacket extends RequestPacket {
 
     @Override
     public String toString() {
-        return "대기지역현황요청 (0x" + Integer.toHexString(messageType) + ") " +
+        return "대기배차고객정보 요청 (0x" + Integer.toHexString(messageType) + ") " +
                 "serviceNumber=" + serviceNumber +
                 ", corporationCode=" + corporationCode +
                 ", carId=" + carId;
     }
-
 }

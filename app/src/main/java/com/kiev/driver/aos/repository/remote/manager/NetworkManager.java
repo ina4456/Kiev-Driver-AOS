@@ -274,9 +274,9 @@ public class NetworkManager {
 */
 
 		int key = 0;
-		if (messageType == Packets.SERVICE_REQUEST_RESULT) {
+		if (messageType == Packets.RES_SERVICE) {
 //			key = Packets.REQUEST_SERVICE;
-			key = Packets.DRIVER_APP_REQUEST_SERVICE;
+			key = Packets.REQ_SERVICE;
 		}
 
 	    ResponsePacket packet = ResponsePacket.create(messageType, splits);

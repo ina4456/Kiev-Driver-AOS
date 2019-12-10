@@ -15,7 +15,7 @@ public class RequestRestPacket extends RequestPacket {
     private Packets.RestType restType; // 구분 (1)
 
     public RequestRestPacket() {
-        super(Packets.REQUEST_REST);
+        super(Packets.REQ_REST);
     }
 
     public int getCorporationCode() {

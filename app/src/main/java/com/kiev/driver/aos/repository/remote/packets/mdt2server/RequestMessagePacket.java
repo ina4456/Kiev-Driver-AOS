@@ -15,7 +15,7 @@ public class RequestMessagePacket extends RequestPacket {
     private int carId; // Car ID (2)
 
     public RequestMessagePacket() {
-        super(Packets.REQUEST_MESSAGE);
+        super(Packets.REQ_MESSAGE);
     }
 
     public int getServiceNumber() {

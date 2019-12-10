@@ -16,10 +16,12 @@ import com.kiev.driver.aos.view.adapter.NoticeAdapter;
 import com.kiev.driver.aos.viewmodel.NoticeViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -51,7 +53,6 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 		mBinding.setLifecycleOwner(this);
 		mNoticeViewModel = new ViewModelProvider(this, new NoticeViewModel.Factory(getApplication(), isNotice))
 				.get(NoticeViewModel.class);
-//		mBinding.setViewModel(mNoticeViewModel);
 
 		initToolbar(isNotice);
 		initializeView(isNotice);
@@ -87,9 +88,7 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 
 	}
 
-	// FIXME: 2019-09-03 인솔라인 날짜 데이터 형식 확정 후 수정 필요
 	private void subscribeViewModel(boolean isNotice) {
-
 		if (isNotice) {
 			MutableLiveData<ResponseNoticeListPacket> liveData = mNoticeViewModel.getNoticeListFromServer();
 			liveData.observe(this, new Observer<ResponseNoticeListPacket>() {
@@ -136,20 +135,20 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 					}
 				}
 			});
-//		} else {
-//			LiveData<List<Notice>> liveData = mNoticeViewModel.getNoticeList(isNotice);
-//			liveData.observe(this, new Observer<List<Notice>>() {
-//				@Override
-//				public void onChanged(List<Notice> notices) {
-//					if (notices != null && notices.size() > 0) {
-//						liveData.removeObserver(this);
-//						LogHelper.e("notice list : " + notices.size());
-//						//setRecyclerView(new ArrayList(notices));
-//						mAdapter.setGroupList(notices);
-//						showListOrEmptyMsgView();
-//					}
-//				}
-//			});
+		} else {
+			LiveData<List<Notice>> liveData = mNoticeViewModel.getNoticeList(false);
+			liveData.observe(this, new Observer<List<Notice>>() {
+				@Override
+				public void onChanged(List<Notice> notices) {
+					if (notices != null && notices.size() > 0) {
+						liveData.removeObserver(this);
+						LogHelper.e("notice list : " + notices.size());
+						//setRecyclerView(new ArrayList(notices));
+						mAdapter.setGroupList(notices);
+						showListOrEmptyMsgView(false);
+					}
+				}
+			});
 		}
 	}
 

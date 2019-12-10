@@ -1,13 +1,12 @@
 package com.kiev.driver.aos.repository.remote.packets.mdt2server;
 
+import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.ByteUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
- * Created by seok-beom Kwon on 2017. 12. 19..
- * 배차정보 요청 (GT-1A11) 19 Byte
- * 배차정보 요청 목적지 추가 (GT-1A21) 19 Byte
+ * 배차정보 요청 (GT-5A21) 19 Byte
  * MDT -> Server
  */
 public class RequestCallInfoPacket extends RequestPacket {
@@ -17,8 +16,8 @@ public class RequestCallInfoPacket extends RequestPacket {
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
 
-	public RequestCallInfoPacket(int messageType) {
-		super(messageType);
+	public RequestCallInfoPacket() {
+		super(Packets.REQ_ORDER_INFO);
 	}
 
 	public int getCorporationCode() {

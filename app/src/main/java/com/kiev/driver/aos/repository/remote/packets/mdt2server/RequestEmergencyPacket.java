@@ -2,10 +2,11 @@ package com.kiev.driver.aos.repository.remote.packets.mdt2server;
 
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
+import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
  * Created by zic325 on 2016. 9. 8..
- * Emergency 요청 (GT-1711) 26 Byte
+ * Emergency 요청 (GT-5711) 26 Byte
  * MDT -> Server
  */
 public class RequestEmergencyPacket extends RequestPacket {
@@ -16,13 +17,13 @@ public class RequestEmergencyPacket extends RequestPacket {
     private Packets.EmergencyType emergencyType; // Emergency 구분
     private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
     private int direction; // 주행방향 (2)
-    private float longitude; // 경도 (4)
-    private float latitude; // 위도 (4)
+    private float longitude; // 경도 (30)
+    private float latitude; // 위도 (30)
     private int speed; // 속도 (1)
     private Packets.BoardType taxiState; // 택시상태 (1)
 
     public RequestEmergencyPacket() {
-        super(Packets.REQUEST_EMERGENCY);
+        super(Packets.REQ_EMERGENCY);
     }
 
     public int getServiceNumber() {
@@ -114,8 +115,8 @@ public class RequestEmergencyPacket extends RequestPacket {
         writeInt(emergencyType.value, 1);
         writeDateTime(gpsTime, 6);
         writeInt(direction, 2);
-        writeFloat(longitude, 4);
-        writeFloat(latitude, 4);
+	    writeString(EncryptUtil.encodeStr("" + longitude), 30);
+	    writeString(EncryptUtil.encodeStr("" + latitude), 30);
         writeInt(speed, 1);
         writeInt(taxiState.value, 1);
         return buffers;

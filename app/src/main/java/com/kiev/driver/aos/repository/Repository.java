@@ -17,13 +17,13 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeLi
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.service.ScenarioService;
 import com.kiev.driver.aos.util.LogHelper;
 
@@ -190,7 +190,7 @@ public class Repository {
 	}
 
 
-	//UI 업데이트용 LIVE DATA 콜정보
+	//UI 업데이트용 REQ_LIVE DATA 콜정보
 	public LiveData<Call> getCallInfoLive() {
 		LogHelper.e("getCallInfoLive()");
 		return mDatabase.callDao().getCallInfoForUiLive();
@@ -224,12 +224,12 @@ public class Repository {
 		});
 	}
 
-	public WaitOrderInfoPacket loadWaitCallInfo() {
+	public ResponseWaitAreaOrderInfoPacket loadWaitCallInfo() {
 		return mSharedPreferenceManager.getWaitOrderInfo();
 	}
 
-	public void saveWaitCallInfo(WaitOrderInfoPacket waitOrderInfoPacket) {
-		mSharedPreferenceManager.setWaitOrderInfo(waitOrderInfoPacket);
+	public void saveWaitCallInfo(ResponseWaitAreaOrderInfoPacket responseWaitAreaOrderInfoPacket) {
+		mSharedPreferenceManager.setWaitOrderInfo(responseWaitAreaOrderInfoPacket);
 	}
 
 	public void saveWaitArea(WaitingZone waitingZone) {
@@ -303,7 +303,7 @@ public class Repository {
 
 	//콜 취소
 	public void requestCancelCall(Packets.ReportKind cancelReason) {
-		WaitOrderInfoPacket wait = mSharedPreferenceManager.getWaitOrderInfo();
+		ResponseWaitAreaOrderInfoPacket wait = mSharedPreferenceManager.getWaitOrderInfo();
 		if (wait != null) {
 			mScenarioService.requestReport(
 					wait.getCallNumber(), wait.getOrderCount(),
@@ -420,12 +420,12 @@ public class Repository {
 		return data;
 	}
 
-	public MutableLiveData<ResponseWaitAreaNewPacket> requestWaitArea(Packets.WaitAreaRequestType type, int startIndex) {
+	public MutableLiveData<ResponseWaitAreaListPacket> requestWaitArea(Packets.WaitAreaRequestType type, int startIndex) {
 		mScenarioService.requestWaitAreaNew(type, startIndex);
-		final MutableLiveData<ResponseWaitAreaNewPacket> data = mScenarioService.getWaitAreaPacket();
-		data.observeForever(new Observer<ResponseWaitAreaNewPacket>() {
+		final MutableLiveData<ResponseWaitAreaListPacket> data = mScenarioService.getWaitAreaPacket();
+		data.observeForever(new Observer<ResponseWaitAreaListPacket>() {
 			@Override
-			public void onChanged(ResponseWaitAreaNewPacket response) {
+			public void onChanged(ResponseWaitAreaListPacket response) {
 				data.postValue(response);
 				data.removeObserver(this);
 			}
@@ -433,12 +433,12 @@ public class Repository {
 		return data;
 	}
 
-	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(String waitAreaId) {
+	public MutableLiveData<ResponseWaitAreaDecisionPacket> requestWaitDecision(String waitAreaId) {
 		mScenarioService.requestWaitDecisionNew(waitAreaId);
-		final MutableLiveData<ResponseWaitDecisionNewPacket> data = mScenarioService.getWaitDecisionPacket();
-		data.observeForever(new Observer<ResponseWaitDecisionNewPacket>() {
+		final MutableLiveData<ResponseWaitAreaDecisionPacket> data = mScenarioService.getWaitDecisionPacket();
+		data.observeForever(new Observer<ResponseWaitAreaDecisionPacket>() {
 			@Override
-			public void onChanged(ResponseWaitDecisionNewPacket response) {
+			public void onChanged(ResponseWaitAreaDecisionPacket response) {
 				data.postValue(response);
 				data.removeObserver(this);
 			}
@@ -446,12 +446,12 @@ public class Repository {
 		return data;
 	}
 
-	public MutableLiveData<ResponseWaitCancelPacket> requestWaitCancel(String waitAreaId) {
+	public MutableLiveData<ResponseWaitAreaCancelPacket> requestWaitCancel(String waitAreaId) {
 		mScenarioService.requestWaitCancel(waitAreaId);
-		final MutableLiveData<ResponseWaitCancelPacket> data = mScenarioService.getWaitCancelPacket();
-		data.observeForever(new Observer<ResponseWaitCancelPacket>() {
+		final MutableLiveData<ResponseWaitAreaCancelPacket> data = mScenarioService.getWaitCancelPacket();
+		data.observeForever(new Observer<ResponseWaitAreaCancelPacket>() {
 			@Override
-			public void onChanged(ResponseWaitCancelPacket response) {
+			public void onChanged(ResponseWaitAreaCancelPacket response) {
 				data.postValue(response);
 				data.removeObserver(this);
 			}

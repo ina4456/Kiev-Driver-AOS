@@ -8,7 +8,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
  * 대기지역요청 (GT-1511) 22 Byte
  * MDT -> Server
  */
-public class RequestWaitAreaNewPacket extends RequestPacket {
+public class RequestWaitAreaListPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
@@ -19,8 +19,8 @@ public class RequestWaitAreaNewPacket extends RequestPacket {
 	private int startIndex; //시작 인덱스
 	private int requestCount; //요청 개수
 
-    public RequestWaitAreaNewPacket() {
-        super(Packets.REQUEST_WAIT_AREA_NEW);
+    public RequestWaitAreaListPacket() {
+        super(Packets.REQ_WAIT_AREA_LIST);
     }
 
     public int getServiceNumber() {

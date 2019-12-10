@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 7..
- * ACK (GT-F111) 11 Byte
+ * REQ_ACK (GT-E111) 11 Byte
  * MDT -> Server
  * <p>
  * 배차데이터 처리(GT-1314) 응답을 서버에서 받았을 경우에만 사용 된다.
@@ -21,7 +20,7 @@ public class AckPacket extends RequestPacket {
     private int parameter; // 처리인자 (2)
 
     public AckPacket() {
-        super(Packets.ACK);
+        super(Packets.REQ_ACK);
     }
 
     public int getServiceNumber() {

@@ -21,7 +21,7 @@ public class RequestServicePacket extends RequestPacket {
 
     public RequestServicePacket() {
 //        super(Packets.REQUEST_SERVICE);
-	    super(Packets.DRIVER_APP_REQUEST_SERVICE);
+	    super(Packets.REQ_SERVICE);
 
     }
 

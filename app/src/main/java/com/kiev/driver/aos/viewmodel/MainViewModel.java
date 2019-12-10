@@ -18,11 +18,11 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.NavigationExecutor;
@@ -292,15 +292,15 @@ public class MainViewModel extends AndroidViewModel {
 		return mRepository.requestMyInfo();
 	}
 
-	public MutableLiveData<ResponseWaitAreaNewPacket> requestWaitArea(Packets.WaitAreaRequestType requestType, int startIndex) {
+	public MutableLiveData<ResponseWaitAreaListPacket> requestWaitArea(Packets.WaitAreaRequestType requestType, int startIndex) {
 		return mRepository.requestWaitArea(requestType, startIndex);
 	}
 
-	public MutableLiveData<ResponseWaitDecisionNewPacket> requestWaitDecision(String waitAreaId) {
+	public MutableLiveData<ResponseWaitAreaDecisionPacket> requestWaitDecision(String waitAreaId) {
 		return mRepository.requestWaitDecision(waitAreaId);
 	}
 
-	public MutableLiveData<ResponseWaitCancelPacket> requestWaitCancel(String waitAreaId) {
+	public MutableLiveData<ResponseWaitAreaCancelPacket> requestWaitCancel(String waitAreaId) {
 		return mRepository.requestWaitCancel(waitAreaId);
 	}
 

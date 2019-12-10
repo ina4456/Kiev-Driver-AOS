@@ -5,7 +5,6 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.CancelEmergencyP
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.NoticesPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoProcPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseAccountPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseAckPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
@@ -16,17 +15,14 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaStatePacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionNewPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitDecisionPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.WaitPlaceInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
 
@@ -46,65 +42,55 @@ public class ResponsePacket {
 
 	public static ResponsePacket create(int messageType, byte[] bytes) {
 		switch (messageType) {
-			case Packets.RESPONSE_ACK:
+			case Packets.RES_ACK:
 				return new ResponseAckPacket(bytes);
-			case Packets.SERVICE_REQUEST_RESULT:
+			case Packets.RES_SERVICE:
 				return new ServiceRequestResultPacket(bytes);
-			case Packets.NOTICES:
+			case Packets.RES_NOTICE:
 				return new NoticesPacket(bytes);
-			case Packets.SERVICE_CONFIG:
+			case Packets.RES_CONFIG:
 				return new ServiceConfigPacket(bytes);
-			case Packets.RESPONSE_PERIOD_SENDING:
+			case Packets.RES_PERIOD:
 				return new ResponsePeriodSendingPacket(bytes);
-			case Packets.ORDER_INFO_DES:
-			case Packets.ORDER_INFO:
+			case Packets.RES_ORDER_INFO_BROADCAST:
 				return new OrderInfoPacket(bytes);
-			case Packets.ORDER_INFO_PROC:
+			case Packets.RES_ORDER_INFO_PROC:
 				return new OrderInfoProcPacket(bytes);
-			case Packets.RESPONSE_SERVICE_REPORT:
+			case Packets.RES_REPORT:
 				return new ResponseServiceReportPacket(bytes);
-			case Packets.WAIT_PLACE_INFO:
-				return new WaitPlaceInfoPacket(bytes);
-			case Packets.RESPONSE_WAIT_DECISION:
-				return new ResponseWaitDecisionPacket(bytes);
-			case Packets.RESPONSE_WAIT_CANCEL:
-				return new ResponseWaitCancelPacket(bytes);
-			case Packets.WAIT_ORDER_INFO:
-				return new WaitOrderInfoPacket(bytes);
-			case Packets.RESPONSE_ACCOUNT:
-				return new ResponseAccountPacket(bytes);
-			case Packets.CANCEL_EMERGENCY:
+			case Packets.RES_WAIT_AREA_CANCEL:
+				return new ResponseWaitAreaCancelPacket(bytes);
+			case Packets.RES_WAIT_AREA_ORDER_INFO:
+				return new ResponseWaitAreaOrderInfoPacket(bytes);
+			case Packets.RES_EMERGENCY_CANCEL:
 				return new CancelEmergencyPacket(bytes);
-			case Packets.RESPONSE_MESSAGE:
+			case Packets.RES_MESSAGE:
 				return new ResponseMessagePacket(bytes);
-			case Packets.CALLER_INFO_RESEND_DES:
-			case Packets.CALLER_INFO_RESEND:
+			case Packets.RES_ORDER_INFO:
 				return new CallerInfoResendPacket(bytes);
-			case Packets.RESPONSE_REST:
+			case Packets.RES_REST:
 				return new ResponseRestPacket(bytes);
-			case Packets.RESPONSE_WAIT_AREA_STATE:
-				return new ResponseWaitAreaStatePacket(bytes);
 
 
 			/*신규 패킷 추가*/
-			case Packets.RESPONSE_SEND_SMS:
+			case Packets.RES_SEND_SMS:
 				return new ResponseSMSPacket(bytes);
-			case Packets.RESPONSE_MY_INFO:
+			case Packets.RES_MY_INFO:
 				return new ResponseMyInfoPacket(bytes);
-			case Packets.RESPONSE_WAIT_CALL_LIST:
+			case Packets.RES_WAIT_CALL_LIST:
 				return new ResponseWaitCallListPacket(bytes);
-			case Packets.RESPONSE_WAIT_CALL_ORDER:
+			case Packets.RES_WAIT_CALL_ORDER:
 				return new ResponseWaitCallOrderInfoPacket(bytes);
-			case Packets.RESPONSE_NOTICE_LIST:
+			case Packets.RES_NOTICE_LIST:
 				return new ResponseNoticeListPacket(bytes);
-			case Packets.RESPONSE_STATISTICS:
+			case Packets.RES_STATISTICS:
 				return new ResponseStatisticsPacket(bytes);
-			case Packets.RESPONSE_STATISTICS_DETAIL:
+			case Packets.RES_STATISTICS_DETAIL:
 				return new ResponseStatisticsDetailPacket(bytes);
-			case Packets.RESPONSE_WAIT_AREA_NEW:
-				return new ResponseWaitAreaNewPacket(bytes);
-			case Packets.RESPONSE_WAIT_DECISION_NEW:
-				return new ResponseWaitDecisionNewPacket(bytes);
+			case Packets.RES_WAIT_AREA_LIST:
+				return new ResponseWaitAreaListPacket(bytes);
+			case Packets.RES_WAIT_AREA_DECISION:
+				return new ResponseWaitAreaDecisionPacket(bytes);
 			default:
 				return new ResponsePacket(bytes);
 		}

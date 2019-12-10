@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 환경설정요청 (GT-1115) 9 Byte
+ * 환경설정요청 (GT-5115) 9 Byte
  * MDT -> Server
  */
 public class RequestConfigPacket extends RequestPacket {
@@ -16,7 +15,7 @@ public class RequestConfigPacket extends RequestPacket {
     private int configurationCode; // 현재환경설정 코드 (2)
 
     public RequestConfigPacket() {
-        super(Packets.REQUEST_CONFIG);
+        super(Packets.REQ_CONFIG);
     }
 
     public int getServiceNumber() {

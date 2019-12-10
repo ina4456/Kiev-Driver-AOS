@@ -3,7 +3,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 
-public class ResponseWaitAreaNewPacket extends ResponsePacket {
+public class ResponseWaitAreaListPacket extends ResponsePacket {
 
     private int carId; // Car ID (2)
 	private int totalCount; //대기지역 총 개수(2)
@@ -15,7 +15,7 @@ public class ResponseWaitAreaNewPacket extends ResponsePacket {
 	private boolean hasMoreData;
 
 
-    public ResponseWaitAreaNewPacket(byte[] bytes)
+    public ResponseWaitAreaListPacket(byte[] bytes)
     {
         super(bytes);
     }

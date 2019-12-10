@@ -3,8 +3,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 환경설정 (GT-1116) 38 Byte (규격서의 37 byte가 잘못된 정보임)
+ * 환경설정 (GT-5116) 38 Byte
  * Server -> MDT
  */
 public class ServiceConfigPacket extends ResponsePacket {

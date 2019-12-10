@@ -6,7 +6,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
- * 대기콜 배차정보 전송 (GT-1914) 353 Byte
+ * 대기콜 배차정보 전송 (GT-5914) 354 Byte
  * Server -> MDT
  */
 public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
@@ -163,8 +163,8 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 			callerPhone = EncryptUtil.decodeStr("" + readString(30));
 			place = readString(41);
 			placeExplanation = readString(101);
-			destName = readString(41);
 
+			destName = readString(41);
 			String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
 			String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
 			destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);

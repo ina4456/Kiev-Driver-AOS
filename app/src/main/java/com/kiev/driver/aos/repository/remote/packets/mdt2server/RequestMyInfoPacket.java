@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * SMS 전송 요청 (GT-1E11) 38 Byte
+ * 내정보 요청 (GT-5E11) 36 Byte
  * MDT -> Server
  */
 public class RequestMyInfoPacket extends RequestPacket {
@@ -14,10 +14,8 @@ public class RequestMyInfoPacket extends RequestPacket {
 	private int carId; // Car ID (2)
 	private String phoneNumber; // Phone Number (30)
 
-
 	public RequestMyInfoPacket() {
 		super(Packets.REQ_MY_INFO);
-
 	}
 
 	public int getCorporationCode() {

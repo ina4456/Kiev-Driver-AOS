@@ -2,6 +2,11 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
+/**
+ * 내정보 요청 응답 (GT-5138) 1504 Byte
+ * Server -> MDT
+ */
+
 public class ResponseNoticeListPacket extends ResponsePacket {
 
     private int carId; // Car ID(2)

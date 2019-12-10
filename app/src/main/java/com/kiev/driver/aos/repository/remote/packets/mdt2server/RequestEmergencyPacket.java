@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * Emergency 요청 (GT-5711) 26 Byte
+ * Emergency 요청 (GT-5711) 78 Byte
  * MDT -> Server
  */
 public class RequestEmergencyPacket extends RequestPacket {

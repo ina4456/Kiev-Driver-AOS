@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * SMS 전송 요청 (GT-5813) 102 Byte
+ * SMS 전송 요청 (GT-5813) 180 Byte
  * MDT -> Server
  */
 public class RequestSendSMSPacket extends RequestPacket {
@@ -15,11 +15,10 @@ public class RequestSendSMSPacket extends RequestPacket {
     private int carId; // Car ID (2)
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
-	private String content; // 내용 (80)
+	private String content; // 내용 (160)
 
     public RequestSendSMSPacket() {
 	    super(Packets.REQ_SEND_SMS);
-
     }
 
     public int getServiceNumber() {

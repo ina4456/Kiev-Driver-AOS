@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 운행보고 (GT-1411) 62 Byte
+ * 운행보고 (GT-5411) 62 Byte
  * MDT -> Server
  */
 public class ServiceReportPacket extends RequestPacket {

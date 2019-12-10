@@ -3,8 +3,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 접속종료 (GT-FF11) 3 Byte
+ * 접속종료 (GT-EF11) 3 Byte
  * REQ_ACK(F111)의 응답 기능으로 사용 한다.
  * Server -> MDT
  */

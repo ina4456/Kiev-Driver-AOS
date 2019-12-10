@@ -5,9 +5,9 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by hoonlee on 2017. 5. 31..
+ * 대기결정 (GT-5523) 107 Byte
+ * MDT -> Server
  */
-
 public class RequestWaitAreaDecisionPacket extends RequestPacket {
 	private int serviceNumber; // 서비스번호 (1)
 	private int corporationCode; // 법인코드 (2)

@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 운행보고응답 (GT-1412) 7 Byte
+ * 운행보고응답 (GT-5412) 7 Byte
  * Server -> MDT
  */
 public class ResponseServiceReportPacket extends ResponsePacket {
@@ -42,6 +41,14 @@ public class ResponseServiceReportPacket extends ResponsePacket {
             reportKind = Packets.ReportKind.GetOff;
         } else if (kind == Packets.ReportKind.Failed.value) {
             reportKind = Packets.ReportKind.Failed;
+        } else if (kind == Packets.ReportKind.FailedPassengerCancel.value) {
+	        reportKind = Packets.ReportKind.FailedPassengerCancel;
+        } else if (kind == Packets.ReportKind.FailedNoShow.value) {
+	        reportKind = Packets.ReportKind.FailedNoShow;
+        } else if (kind == Packets.ReportKind.FailedUseAnotherTaxi.value) {
+	        reportKind = Packets.ReportKind.FailedUseAnotherTaxi;
+        } else if (kind == Packets.ReportKind.FailedEtc.value) {
+	        reportKind = Packets.ReportKind.FailedEtc;
         }
     }
 

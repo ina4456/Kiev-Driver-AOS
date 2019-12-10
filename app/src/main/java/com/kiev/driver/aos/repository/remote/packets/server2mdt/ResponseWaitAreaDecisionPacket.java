@@ -6,8 +6,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기결정응답 (GT-1514) 19 Byte
+ * 대기결정응답 (GT-5524) 73 Byte
  * Server -> MDT
  */
 public class ResponseWaitAreaDecisionPacket extends ResponsePacket {

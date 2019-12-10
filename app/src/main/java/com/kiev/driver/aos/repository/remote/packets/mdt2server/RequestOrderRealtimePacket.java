@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 실시간 위치 및 배차요청 (GT-1911) 62 Byte
+ * 실시간 위치 및 배차요청 (GT-5911) 62 Byte
  * MDT -> Server
  */
 public class RequestOrderRealtimePacket extends RequestPacket {
@@ -14,15 +13,15 @@ public class RequestOrderRealtimePacket extends RequestPacket {
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-    private String phoneNumber; // 운전자 전화번호 (13)
+    private String phoneNumber; // 운전자 전화번호 (30)
     private int callNumber; // 콜번호 (2)
     private String callReceiptDate; // 콜접수일자 (11) (ex : 2009-01-13)
     private Packets.OrderDecisionType decisionType; // 배차결정구분 (1)
     private String sendTime; // 전송 시간 (6) (년월일시분초 - ex : 090805112134)
     private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
     private int direction; // 주행방향 (2)
-    private float longitude; // 경도 (4)
-    private float latitude; // 위도 (4)
+    private float longitude; // 경도 (30)
+    private float latitude; // 위도 (30)
     private int speed; // 속도 (1)
     private float distance; // 고객과의 거리 (4)
     private int orderCount; // 배차횟수 (1) (배차데이터(GT-1312)에서 받은 횟수)

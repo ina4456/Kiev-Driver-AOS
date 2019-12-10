@@ -3,8 +3,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 메시지 전송용청 응답 (GT-1812) 207 Byte
+ * 내정보 요청 응답 (GT-5E12) 94 Byte
  * Server -> MDT
  */
 public class ResponseMyInfoPacket extends ResponsePacket {

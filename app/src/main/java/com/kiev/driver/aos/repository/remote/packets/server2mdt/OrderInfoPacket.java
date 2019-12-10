@@ -6,15 +6,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 배차데이터 (GT-1312) 186 Byte (규격서에 나와 있는 +64 byte는 사용 안 한다.)
- * <p>
- * Edit by sbkwon 2017. 9. 19
- * 복지콜 추가. 따라서 규격서에 나온대로 +64 byte 사용하게 변경
- * <p>
- * Modified 2018. 12. 20
- * 배차데이터 목적지 추가 (GT-1311) 256 bytes 같이 사용한다.
- * <p>
+ * 배차데이터 (GT-5311) 357 Byte
  * Server -> MDT
  */
 public class OrderInfoPacket extends ResponsePacket {
@@ -214,6 +206,8 @@ public class OrderInfoPacket extends ResponsePacket {
 				//그 외 없는 배차가 내려올시에 일반 배차로 지정함 (김용태 팀장 요청)
 			} else if (Packets.OrderKind.Integration.value == order) {
 				orderKind = Packets.OrderKind.Integration;
+			} else if (Packets.OrderKind.WaitCall.value == order) {
+				orderKind = Packets.OrderKind.WaitCall;
 			} else {
 				orderKind = Packets.OrderKind.Normal;
 			}
@@ -230,8 +224,6 @@ public class OrderInfoPacket extends ResponsePacket {
 			placeExplanation = readString(101);
 			allocBoundary = readInt(2);
 			orderCount = readInt(1);
-			LogHelper.e("messageType : " + messageType);
-			LogHelper.e("length : " + buffers.length);
 
 			destination = readString(41);
 
@@ -245,8 +237,6 @@ public class OrderInfoPacket extends ResponsePacket {
 			LogHelper.e(">> parse error");
 			e.printStackTrace();
 		}
-
-
 	}
 
 	@Override

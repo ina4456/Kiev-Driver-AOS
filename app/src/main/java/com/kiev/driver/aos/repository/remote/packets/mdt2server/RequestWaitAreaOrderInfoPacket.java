@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기배차고객정보 요청 (GT-1517) 7 Byte
+ * 대기배차고객정보 요청 (GT-5517) 7 Byte
  * MDT -> Server
  */
 public class RequestWaitAreaOrderInfoPacket extends RequestPacket {

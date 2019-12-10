@@ -2,7 +2,10 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
-
+/**
+ * 대기지역 리스트 응답 (GT-5522) 507 Byte
+ * Server -> MDT
+ */
 public class ResponseWaitAreaListPacket extends ResponsePacket {
 
     private int carId; // Car ID (2)

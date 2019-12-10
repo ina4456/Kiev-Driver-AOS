@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 7..
- * 서비스 요청 (GT-1111) 36 Byte
+ * 서비스 요청 (GT-5111) 70 Byte
  * MDT -> Server
  */
 public class RequestServicePacket extends RequestPacket {
@@ -20,9 +19,7 @@ public class RequestServicePacket extends RequestPacket {
     private String modemNumber; // 모뎀 번호 (30)
 
     public RequestServicePacket() {
-//        super(Packets.REQUEST_SERVICE);
 	    super(Packets.REQ_SERVICE);
-
     }
 
     public int getServiceNumber() {

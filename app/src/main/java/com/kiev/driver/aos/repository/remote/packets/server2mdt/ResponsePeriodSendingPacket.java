@@ -3,8 +3,7 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 주기응답 (GT-1212) 8 Byte
+ * 주기응답 (GT-5212) 8 Byte
  * Server -> MDT
  */
 public class ResponsePeriodSendingPacket extends ResponsePacket {

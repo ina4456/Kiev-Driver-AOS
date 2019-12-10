@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기취소응답 (GT-1516) 5 Byte
+ * 대기취소응답 (GT-5516) 5 Byte
  * Server -> MDT
  */
 public class ResponseWaitAreaCancelPacket extends ResponsePacket {

@@ -3,7 +3,6 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
  * 응급해제 (GT-1712) 6 Byte
  * Server -> MDT
  */

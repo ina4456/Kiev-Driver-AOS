@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 7..
- * 서비스 요청 결과 (GT-1112) 23 Byte
+ * 서비스 요청 결과 (GT-5112) 23 Byte
  * Server -> MDT
  */
 public class ServiceRequestResultPacket extends ResponsePacket {

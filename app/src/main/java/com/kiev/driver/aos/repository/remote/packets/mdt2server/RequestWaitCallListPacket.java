@@ -5,12 +5,10 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * 대기콜 리스트 (GT-1D11) 77 Byte
+ * 대기콜 리스트 (GT-5D11) 69 Byte
  * MDT -> Server
  */
 public class RequestWaitCallListPacket extends RequestPacket {
-
-	public static final int MAX_REQUEST_CNT = 10;
 
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)

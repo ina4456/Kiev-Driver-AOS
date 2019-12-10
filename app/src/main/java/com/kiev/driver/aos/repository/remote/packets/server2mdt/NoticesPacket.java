@@ -3,15 +3,11 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 공지사항 (GT-1114) 293 Byte
+ * 공지사항 (GT-5114) 293 Byte
  * Server -> MDT
  */
 
-// TODO: 2019-09-03 공지 날짜 추가 예정
-
 public class NoticesPacket extends ResponsePacket {
-
     private int carId; // car ID (2)
     private int noticeCode; // 공지코드 (2)
     private String noticeTitle; // 공지제목 (31)

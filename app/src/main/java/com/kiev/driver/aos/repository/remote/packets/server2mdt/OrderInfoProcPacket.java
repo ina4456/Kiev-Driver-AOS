@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 배차데이터 처리 (GT-1314) 7 Byte
+ * 배차데이터 처리 (GT-5314) 7 Byte
  * Server -> MDT
  */
 public class OrderInfoProcPacket extends ResponsePacket {

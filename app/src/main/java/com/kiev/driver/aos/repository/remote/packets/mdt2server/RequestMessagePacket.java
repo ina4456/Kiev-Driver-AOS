@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 메시지요청 (GT-1811) 7 Byte
+ * 메시지요청 (GT-5811) 7 Byte
  * MDT -> Server
  */
 public class RequestMessagePacket extends RequestPacket {

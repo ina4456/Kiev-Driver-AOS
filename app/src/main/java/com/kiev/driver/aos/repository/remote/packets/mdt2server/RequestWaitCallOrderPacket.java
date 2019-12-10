@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * 대기콜 배차요청 (GT-1913) 126 Byte
+ * 대기콜 배차요청 (GT-5913) 125 Byte
  * MDT -> Server
  */
 public class RequestWaitCallOrderPacket extends RequestPacket {

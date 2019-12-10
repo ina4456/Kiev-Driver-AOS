@@ -2,6 +2,11 @@ package com.kiev.driver.aos.repository.remote.packets.server2mdt;
 
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
+/**
+ * 대기콜 리스트 (GT-5D12) 1173 Byte
+ * Server -> MDT
+ */
+
 public class ResponseWaitCallListPacket extends ResponsePacket {
 
     private int carId; // Car ID(2)
@@ -97,12 +102,12 @@ public class ResponseWaitCallListPacket extends ResponsePacket {
         carId = readInt(2);
 		waitCallCount = readInt(2);
 
-		callNumbers = readString(42);
+		callNumbers = readString(72);
 		callReceiptDates = readString(130);
-		orderCounts = readString(32);
+		orderCounts = readString(42);
 		departures = readString(420);
 		destinations = readString(420);
-		distances = readString(62);
+		distances = readString(82);
 		int moreList = readInt(1);
 		hasMoreList = moreList == 0x01;
 

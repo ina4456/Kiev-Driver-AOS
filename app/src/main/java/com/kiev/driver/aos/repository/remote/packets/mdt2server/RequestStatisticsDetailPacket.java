@@ -5,7 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * 콜 정산 통계 요청 (GT-1613) 67 Byte
+ * 운행이력 요청 (GT-5915) 40 Byte
  * MDT -> Server
  */
 public class RequestStatisticsDetailPacket extends RequestPacket {

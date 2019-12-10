@@ -53,7 +53,8 @@ public class Packets {
 	public static final int RES_PERIOD = 0x5212; // 주기응답
 	public static final int RES_REPORT = 0x5412; // 운행보고응답
 
-	public static final int RES_MESSAGE = 0x5812; // 메시지 응답
+	public static final int RES_MESSAGE = 0x1812; // 메시지 응답
+	public static final int RES_MESSAGE_NEW = 0x5812; // 메시지 응답
 	public static final int RES_SEND_SMS = 0x5814; // SMS 전송 요청 응답
 
 	public static final int RES_ORDER_INFO_BROADCAST = 0x5311; // 배차데이터 (목적지 추가)
@@ -351,7 +352,7 @@ public class Packets {
 			case REQ_WAIT_AREA_ORDER_INFO: // 대기배차고객정보 요청
 				return 7;
 			case REQ_EMERGENCY: // Emergency 요청
-				return 26;
+				return 78;
 			case REQ_MESSAGE: // 메시지요청
 				return 7;
 			case REQ_ORDER_REALTIME: // 실시간 위치 및 배차요청
@@ -384,6 +385,8 @@ public class Packets {
 				return 6;
 			case RES_MESSAGE: // 메시지 응답
 				return 207;
+			case RES_MESSAGE_NEW: // 메시지 응답
+				return 229;
 			case RES_ORDER_INFO: // 고객정보 재전송 (목적지 추가)
 				return 357;
 			case RES_REST: // 휴식/운행응답
@@ -405,7 +408,7 @@ public class Packets {
 			case REQ_WAIT_CALL_LIST: // 대기콜 리스트 요청
 				return 69;
 			case RES_WAIT_CALL_LIST: // 대기콜 리스트 요청 응답
-				return 1113;
+				return 1173;
 
 			case REQ_WAIT_CALL_ORDER: // 대기콜 배차 요청
 				return 125;
@@ -430,7 +433,7 @@ public class Packets {
 			case REQ_WAIT_AREA_LIST: // 대기 지역 현황 요청
 				return 70;
 			case RES_WAIT_AREA_LIST: // 대기 지역 현황 요청 응답
-				return 509;
+				return 507;
 
 			case REQ_WAIT_AREA_DECISION: // 대기 지역 대기 요청
 				return 107;

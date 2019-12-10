@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by sbkwon on 2019. 9. 4..
- * 콜정산정보 (GT-1614) 97 Byte
+ * 콜정산정보 (GT-5614) 114 Byte
  * Server -> MDT
  */
 public class ResponseStatisticsPacket extends ResponsePacket {

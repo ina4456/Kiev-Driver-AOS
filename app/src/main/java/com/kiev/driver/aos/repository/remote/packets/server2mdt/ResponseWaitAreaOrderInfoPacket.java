@@ -6,8 +6,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 import com.kiev.driver.aos.util.LogHelper;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기배차고객정보 (GT-1518) 182 Byte
+ * 대기배차고객정보 (GT-5518) 352 Byte
  * Server -> MDT
  */
 public class ResponseWaitAreaOrderInfoPacket extends ResponsePacket {

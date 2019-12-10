@@ -5,8 +5,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.util.EncryptUtil;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 대기취소 (GT-1515) 23 Byte
+ * 대기취소 (GT-5515) 41 Byte
  * MDT -> Server
  */
 public class RequestWaitAreaCancelPacket extends RequestPacket {
@@ -14,7 +13,7 @@ public class RequestWaitAreaCancelPacket extends RequestPacket {
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (2)
-    private String phoneNumber; // Phone Number (13)
+    private String phoneNumber; // Phone Number (30)
     private String areaCode; // 대기지역코드 (4)
 
     public RequestWaitAreaCancelPacket() {

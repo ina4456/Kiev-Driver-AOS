@@ -32,7 +32,6 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.AckPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.LivePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.PeriodSendingPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestCallInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestEmergencyPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessagePacket;
@@ -45,16 +44,18 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestSendSMSPa
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestServicePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestStatisticsPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaListPacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitCallOrderPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.ServiceReportPacket;
-import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestWaitAreaCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.CallerInfoResendPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.NoticesPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoProcPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessageNewPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMessagePacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeListPacket;
@@ -64,14 +65,14 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacke
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseServiceReportPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
 import com.kiev.driver.aos.util.GpsHelper;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
@@ -1158,9 +1159,17 @@ public class ScenarioService extends LifecycleService {
 					LogHelper.e("response service report : " + packet.toString());
 
 					if (reportKind == Packets.ReportKind.GetOff
-							|| reportKind == Packets.ReportKind.Failed) {
+							|| reportKind == Packets.ReportKind.Failed
+							|| reportKind == Packets.ReportKind.FailedPassengerCancel
+							|| reportKind == Packets.ReportKind.FailedNoShow
+							|| reportKind == Packets.ReportKind.FailedUseAnotherTaxi
+							|| reportKind == Packets.ReportKind.FailedEtc) {
 						// 빈차등이 회사별로 다르기 때문에 예약과 빈차를 같이 보내야 정상 처리 된다.
-						if (packet.getReportKind() == Packets.ReportKind.Failed) {
+						if (packet.getReportKind() == Packets.ReportKind.Failed
+								|| reportKind == Packets.ReportKind.FailedPassengerCancel
+								|| reportKind == Packets.ReportKind.FailedNoShow
+								|| reportKind == Packets.ReportKind.FailedUseAnotherTaxi
+								|| reportKind == Packets.ReportKind.FailedEtc) {
 							WavResourcePlayer.getInstance(context).play(R.raw.voice_151);
 						}
 
@@ -1185,11 +1194,17 @@ public class ScenarioService extends LifecycleService {
 				}
 				break;
 
-				case Packets.RES_MESSAGE: { // 메시지 응답
-					WavResourcePlayer.getInstance(context).play(R.raw.voice_142);
+				case Packets.RES_MESSAGE:  // 메시지 응답
+				case Packets.RES_MESSAGE_NEW: { // 메시지 응답
+					Notice message;
+					if (messageType == Packets.RES_MESSAGE) {
+						ResponseMessagePacket responseMessagePacket = (ResponseMessagePacket) response;
+						message = new Notice("", responseMessagePacket.getMessage(), "", false);
+					} else {
+						ResponseMessageNewPacket responseMessageNewPacket = (ResponseMessageNewPacket) response;
+						message = new Notice("", responseMessageNewPacket.getMessage(), responseMessageNewPacket.getMessageSentDate(), false);
+					}
 
-					ResponseMessagePacket packet = (ResponseMessagePacket) response;
-					Notice message = new Notice("", packet.getMessage(), String.valueOf(System.currentTimeMillis()), false);
 					mRepository.insertNotice(message);
 
 					if (hasCertification) {
@@ -1197,7 +1212,7 @@ public class ScenarioService extends LifecycleService {
 								.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_MESSAGE)
 								.setTitle(getString(R.string.common_message))
 								.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
-								.setContent(packet.getMessage())
+								.setContent(message.getContent())
 								.build();
 						PopupActivity.startActivity(ScenarioService.this, popup);
 						WavResourcePlayer.getInstance(ScenarioService.this).play(R.raw.voice_142);

@@ -4,8 +4,7 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 
 /**
- * Created by zic325 on 2016. 9. 8..
- * 휴식/운행응답 (GT-1B12) 5 Byte
+ * 휴식/운행응답 (GT-5B12) 5 Byte
  * Server -> MDT
  */
 public class ResponseRestPacket extends ResponsePacket {

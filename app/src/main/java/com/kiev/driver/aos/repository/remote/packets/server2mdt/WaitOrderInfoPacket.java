@@ -123,7 +123,7 @@ public class WaitOrderInfoPacket extends ResponsePacket {
 			longitude = Float.parseFloat(departLongitudeStr.isEmpty() ? "0" : departLongitudeStr);
 			latitude = Float.parseFloat(departLatitudeStr.isEmpty() ? "0" : departLatitudeStr);
 
-			callerPhone = readString(13);
+			callerPhone = EncryptUtil.decodeStr(readString(30));
 			place = readString(41);
 			placeExplanation = readString(101);
 			orderCount = readInt(1);

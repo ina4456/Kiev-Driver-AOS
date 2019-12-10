@@ -55,7 +55,6 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		mViewModel = new ViewModelProvider(this, new CallHistoryViewModel.Factory(getApplication()))
 				.get(CallHistoryViewModel.class);
 		mBinding.setLifecycleOwner(this);
-		mBinding.setViewModel(mViewModel);
 
 
 		int titleRid;
@@ -210,16 +209,14 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 								history.setStartTime(boardedTimes[i]);
 								history.setEndTime(alightedTimes[i]);
 								history.setPassengerPhoneNumber(hasData(phoneNumbers) ? phoneNumbers[i] : "0");
+								LogHelper.e("phoneNum : " + history.getPassengerPhoneNumber());
 								historyList.add(history);
-								LogHelper.e("history : " + history);
 							}
 
-							LogHelper.e("history : " + historyList.size());
+							//LogHelper.e("history : " + historyList.size());
 							if (startIndex == START_INDEX) {
-								LogHelper.e("refresh");
 								mCallHistoryAdapter.refreshData(historyList);
 							} else {
-								LogHelper.e("adddata");
 								mCallHistoryAdapter.addData(historyList);
 							}
 

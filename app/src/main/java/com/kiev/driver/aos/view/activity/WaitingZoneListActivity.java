@@ -141,6 +141,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 							hasMoreData = response.isHasMoreData();
 							LogHelper.e("hasMoreData : " + hasMoreData);
 
+							boolean hasOrder = false;
 							for (int i = 0; i < waitAreaIds.length; i++) {
 								WaitingZone waitZone = new WaitingZone();
 								waitZone.setWaitingZoneId(waitAreaIds[i]);
@@ -150,6 +151,12 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
 
 								waitingZoneList.add(waitZone);
+
+								hasOrder = waitZone.getMyWaitingOrder() != 0;
+							}
+
+							if (hasOrder) {
+								mViewModel.setWaitingZone(null, false);
 							}
 
 							if (startIndex == START_INDEX) {
@@ -228,6 +235,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 				liveData.observe(this, new Observer<ResponseWaitCancelPacket>() {
 					@Override
 					public void onChanged(ResponseWaitCancelPacket response) {
+						mViewModel.setWaitingZone(null, false);
 						liveData.removeObserver(this);
 						LogHelper.e("대기 취소 응답 :  " + response);
 						if (response.getWaitCancelType() == Packets.WaitCancelType.Success) {

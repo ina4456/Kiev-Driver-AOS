@@ -409,7 +409,7 @@ public class Packets {
 			case CALLER_INFO_RESEND: // 고객정보재전송
 				return 250;
 			case CALLER_INFO_RESEND_DES: // 고객정보 재전송 (목적지 추가)
-				return 236;
+				return 357;
 			case RESPONSE_REST: // 휴식/운행응답
 				return 5;
 			case REQUEST_WAIT_AREA_STATE: //대기지역 현황 정보 요청

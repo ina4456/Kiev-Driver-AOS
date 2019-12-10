@@ -55,9 +55,10 @@ public class OrderInfoPacket extends ResponsePacket {
 	}
 
 	public OrderInfoPacket(CallerInfoResendPacket p) {
-		super(new byte[p.getMessageType() == Packets.CALLER_INFO_RESEND_DES
-				? (p.isCallForDisabledPerson() ? BYTE_LENGTH_FOR_DISABLED_PERSON_WITH_DEST : BYTE_LENGTH_FOR_NORMAL_WITH_DEST)
-				: (p.isCallForDisabledPerson() ? BYTE_LENGTH_FOR_DISABLED_PERSON : BYTE_LENGTH_FOR_NORMAL)]);
+//		super(new byte[p.getMessageType() == Packets.CALLER_INFO_RESEND_DES
+//				? (p.isCallForDisabledPerson() ? BYTE_LENGTH_FOR_DISABLED_PERSON_WITH_DEST : BYTE_LENGTH_FOR_NORMAL_WITH_DEST)
+//				: (p.isCallForDisabledPerson() ? BYTE_LENGTH_FOR_DISABLED_PERSON : BYTE_LENGTH_FOR_NORMAL)]);
+		super(new byte[p.getMessageType()]);
 		LogHelper.e("packet msg type : " + p.getMessageType());
 
 		corporationCode = p.getCorporationCode();
@@ -276,7 +277,7 @@ public class OrderInfoPacket extends ResponsePacket {
 		longitude = Float.parseFloat(departLongitudeStr.isEmpty() ? "0" : departLongitudeStr);
 		latitude = Float.parseFloat(departLatitudeStr.isEmpty() ? "0" : departLatitudeStr);
 
-		callerPhone = readString(13);
+		callerPhone = EncryptUtil.decodeStr(readString(30));
 		place = readString(41);
 		placeExplanation = readString(101);
 		allocBoundary = readInt(2);
@@ -284,24 +285,15 @@ public class OrderInfoPacket extends ResponsePacket {
 		LogHelper.e("messageType : " + messageType);
 		LogHelper.e("length : " + buffers.length );
 
-		if (messageType == Packets.ORDER_INFO_DES) {
-			destName = readString(41);
+		destName = readString(41);
 
-			String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
-			String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
-			destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);
-			destLatitude = Float.parseFloat(destLatitudeStr.isEmpty() ? "0" : destLatitudeStr);
+		String destLongitudeStr = EncryptUtil.decodeStr(readString(30));
+		String destLatitudeStr = EncryptUtil.decodeStr(readString(30));
+		destLongitude = Float.parseFloat(destLongitudeStr.isEmpty() ? "0" : destLongitudeStr);
+		destLatitude = Float.parseFloat(destLatitudeStr.isEmpty() ? "0" : destLatitudeStr);
 
-			callClass = readInt(1);
-		} else {
-			if (buffers.length != BYTE_LENGTH_FOR_NORMAL) {
-				callerName = readString(11);
-				errorCode = readString(11);
-				destination = readString(41);
-				int wheelChair = readInt(1);
-				isWheelChair = wheelChair == 0x02;
-			}
-		}
+		callClass = readInt(1);
+
 	}
 
 	@Override

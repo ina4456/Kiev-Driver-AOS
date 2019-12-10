@@ -88,6 +88,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
+<!--            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>-->
+
+
+
+
+
         <!--서비스-->
         <service
             android:name="com.kiev.driver.aos.service.ScenarioService"

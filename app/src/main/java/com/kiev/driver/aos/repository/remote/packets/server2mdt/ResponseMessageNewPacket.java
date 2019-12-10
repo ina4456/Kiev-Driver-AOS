@@ -34,6 +34,10 @@ public class ResponseMessageNewPacket extends ResponsePacket {
 		return messageSentDate;
 	}
 
+	public String getMessageId() {
+		return messageId;
+	}
+
 	@Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
@@ -49,6 +53,9 @@ public class ResponseMessageNewPacket extends ResponsePacket {
         return "메시지 응답 new (0x" + Integer.toHexString(messageType) + ") " +
                 "corporationCode=" + corporationCode +
                 ", carId=" + carId +
-                ", message='" + message + '\'';
+                ", message='" + message +
+		        ", sentDate'" + messageSentDate +
+		        ", messageId'" + messageId +
+		        + '\'';
     }
 }

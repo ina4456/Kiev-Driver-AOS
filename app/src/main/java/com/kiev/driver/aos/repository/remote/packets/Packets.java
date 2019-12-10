@@ -16,6 +16,7 @@ public class Packets {
 	public static final int REQ_REPORT = 0x5411; // 운행보고
 
 	public static final int REQ_MESSAGE = 0x5811; // 메시지요청
+	public static final int REQ_MESSAGE_READ = 0x5815; // 메시지 읽음 확인
 	public static final int REQ_SEND_SMS = 0x5813; // SMS 전송 요청
 
 	public static final int REQ_ORDER_REALTIME = 0x5911; // 실시간 위치 및 배차요청
@@ -387,6 +388,8 @@ public class Packets {
 				return 207;
 			case RES_MESSAGE_NEW: // 메시지 응답
 				return 229;
+			case REQ_MESSAGE_READ:
+				return 11;
 			case RES_ORDER_INFO: // 고객정보 재전송 (목적지 추가)
 				return 357;
 			case RES_REST: // 휴식/운행응답

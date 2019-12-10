@@ -34,12 +34,12 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 	private ActivityNoticeListBinding mBinding;
 	private ExpandableListView mExpandableListView;
 	private NoticeAdapter mAdapter;
-	private ArrayList<Notice> mNoticeList;
 	private NoticeViewModel mNoticeViewModel;
 
 
 	public static void startActivity(Context context, boolean isNotice) {
 		final Intent intent = new Intent(context, NoticeActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(EXTRA_IS_NOTIFICATION, isNotice);
 		context.startActivity(intent);
 	}
@@ -141,7 +141,7 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 				@Override
 				public void onChanged(List<Notice> notices) {
 					if (notices != null && notices.size() > 0) {
-						liveData.removeObserver(this);
+						//liveData.removeObserver(this);
 						LogHelper.e("notice list : " + notices.size());
 						//setRecyclerView(new ArrayList(notices));
 						mAdapter.setGroupList(notices);

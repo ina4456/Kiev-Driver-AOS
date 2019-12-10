@@ -35,6 +35,7 @@ import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestCallInfoP
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestConfigPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestEmergencyPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessagePacket;
+import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMessageReadPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestNoticeListPacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.RequestNoticePacket;
@@ -493,6 +494,15 @@ public class ScenarioService extends LifecycleService {
 		packetMsg.setServiceNumber(mConfiguration.getServiceNumber());
 		packetMsg.setCorporationCode(mConfiguration.getCorporationCode());
 		packetMsg.setCarId(mConfiguration.getCarId());
+		request(packetMsg);
+	}
+
+	private void requestMessageRead(String msgId) {
+		RequestMessageReadPacket packetMsg = new RequestMessageReadPacket();
+		packetMsg.setServiceNumber(mConfiguration.getServiceNumber());
+		packetMsg.setCorporationCode(mConfiguration.getCorporationCode());
+		packetMsg.setCarId(mConfiguration.getCarId());
+		packetMsg.setMessageId(msgId);
 		request(packetMsg);
 	}
 
@@ -1203,6 +1213,8 @@ public class ScenarioService extends LifecycleService {
 					} else {
 						ResponseMessageNewPacket responseMessageNewPacket = (ResponseMessageNewPacket) response;
 						message = new Notice("", responseMessageNewPacket.getMessage(), responseMessageNewPacket.getMessageSentDate(), false);
+
+						requestMessageRead(responseMessageNewPacket.getMessageId());
 					}
 
 					mRepository.insertNotice(message);

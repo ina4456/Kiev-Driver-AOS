@@ -69,8 +69,9 @@ public class NoticeAdapter extends BaseExpandableListAdapter {
             viewHolder = (ViewHolder) v.getTag();
         }
 
-        viewHolder.tvNoticeTitle.setText(getGroup(groupPosition).getTitle());
-        viewHolder.tvNoticeDate.setText(String.valueOf(getGroup(groupPosition).getDate()));
+	    Notice item = getGroup(groupPosition);
+        viewHolder.tvNoticeTitle.setText(item.isNotice() ? item.getTitle() : item.getContent());
+        viewHolder.tvNoticeDate.setText(item.getDate());
 
         if (isExpanded) {
 	        viewHolder.ivNoticeToggle.setImageDrawable(mContext.getResources().getDrawable(R.drawable.hs_dropdown_arrow_up));

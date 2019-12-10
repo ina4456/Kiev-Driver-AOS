@@ -8,9 +8,9 @@ import android.view.Window;
 
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.model.Popup;
+import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.navigationdrawer.NoticeActivity;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
-import com.kiev.driver.aos.util.LogHelper;
 
 import androidx.annotation.Nullable;
 
@@ -38,6 +38,8 @@ public class PopupActivity extends BaseActivity implements PopupDialogFragment.P
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		Popup popup = (Popup) getIntent().getSerializableExtra(Constants.INTENT_KEY_POPUP_DIALOG);
 		if (popup != null) {

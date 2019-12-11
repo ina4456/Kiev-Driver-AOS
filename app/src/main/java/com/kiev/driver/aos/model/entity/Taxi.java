@@ -1,5 +1,7 @@
 package com.kiev.driver.aos.model.entity;
 
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -42,6 +44,15 @@ public class Taxi {
 
 	public Taxi() {
 		id = 1;
+	}
+
+	public Taxi(ResponseMyInfoPacket packet) {
+		id = 1;
+		this.companyName = packet.getCorporationName();
+		this.driverName = packet.getDriverName();
+		this.taxiColor = packet.getCarColor();
+		this.taxiPlateNumber = packet.getCarPlateNumber();
+		this.taxiModel = packet.getCarType();
 	}
 
 	public void setId(int id) {

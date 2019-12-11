@@ -7,22 +7,19 @@ import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MyInfoViewModel extends AndroidViewModel {
 
-	private final LiveData<Taxi> mTaxiInfo;
 	private final LiveData<Call> mCallInfo;
 	private final LiveData<Configuration> mConfiguration;
-	private MutableLiveData<ResponseMyInfoPacket> mMyInfo;
+	private final LiveData<Taxi> mTaxiInfo;
 	private Repository mRepository;
 
 
@@ -30,19 +27,16 @@ public class MyInfoViewModel extends AndroidViewModel {
 		super(application);
 		LogHelper.e("MainViewModel()");
 		mRepository = repository;
-		mTaxiInfo = repository.getTaxiInfoLive();
 		mCallInfo = repository.getCallInfoLive();
 		mConfiguration = repository.getConfigLive();
-		mMyInfo = mRepository.requestMyInfo();
+		mTaxiInfo = repository.getTaxiInfoLive();
+		//mMyInfo = mRepository.requestMyInfo();
 
 	}
 
 	/**
 	 * Expose the LiveData Comments query so the UI can observe it.
 	 */
-	public LiveData<Taxi> getTaxiInfo() {
-		return mTaxiInfo;
-	}
 	public LiveData<Call> getCallInfo() {
 		return mCallInfo;
 	}
@@ -50,8 +44,8 @@ public class MyInfoViewModel extends AndroidViewModel {
 		return mConfiguration;
 	}
 
-	public MutableLiveData<ResponseMyInfoPacket> getMyInfo() {
-		return mMyInfo;
+	public LiveData<Taxi> getTaxiInfo() {
+		return mTaxiInfo;
 	}
 
 	public void changeVehicleNumber(String vehicleNumber) {

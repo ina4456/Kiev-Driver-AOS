@@ -180,6 +180,8 @@
     <string name="mi_company">소속회사</string>
     <string name="mi_business_area">영업지역</string>
     <string name="mi_vehicle_number">차량번호</string>
+    <string name="mi_taxi_model">차량모델</string>
+    <string name="mi_taxi_color">차량색상</string>
     <string name="mi_walkie_talkie_number">무전기번호</string>
     <string name="mi_msg_change_vehicle_number">차량번호가 변경되면 다시 로그인해야 합니다.</string>
     <string name="mi_msg_change_vehicle_number_msg_cancel_back">차량번호를 변경하지 않고 이전화면으로 돌아갑니다.</string>

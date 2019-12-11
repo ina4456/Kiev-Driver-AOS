@@ -17,13 +17,13 @@ import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseNoticeLi
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.service.ScenarioService;
 import com.kiev.driver.aos.util.LogHelper;
 
@@ -164,12 +164,6 @@ public class Repository {
 		});
 	}
 
-	public void updateTaxiInfo(Taxi taxi) {
-		LogHelper.e("updateTaxiInfo()");
-		mAppExecutors.diskIO().execute(() -> {
-			mDatabase.taxiDao().upsert(taxi);
-		});
-	}
 
 
 
@@ -235,6 +229,8 @@ public class Repository {
 	public void saveWaitArea(WaitingZone waitingZone) {
 		mSharedPreferenceManager.setWaitArea(waitingZone);
 	}
+
+
 
 
 	public OrderInfoPacket loadCallInfoWithOrderKind(Packets.OrderKind kind) {

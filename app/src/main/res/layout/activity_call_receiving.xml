@@ -68,11 +68,12 @@
             android:gravity="center_vertical|end"
             android:layout_marginEnd="2dp"
             app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toBottomOf="@+id/iv_call_state"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_distance"
             app:layout_constraintBottom_toTopOf="@+id/tv_departure_poi"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
 <!--        android:text="@{viewModel.callInfo.getCallDistanceToDeparture()}"-->
@@ -87,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_here"
             app:layout_constraintBottom_toBottomOf="@+id/tv_here"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <!--도착지-->

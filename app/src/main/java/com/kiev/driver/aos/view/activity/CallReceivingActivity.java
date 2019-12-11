@@ -153,6 +153,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		callInfo.observe(this, new Observer<Call>() {
 			@Override
 			public void onChanged(Call call) {
+				hasGotResponse = true;
 				LogHelper.e("onChanged()");
 				if (call != null) {
 					LogHelper.e("onChanged-Call : " + call.toString());
@@ -187,8 +188,9 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 						case Constants.CALL_STATUS_DRIVING:
 						case Constants.CALL_STATUS_VACANCY:
 							//배차 방송 수신 중에 미터기 조작이 된다면, 수신된 배차 방송을 거절 처리하고 닫는다.
+							//SP는 필요없으므로 주석 처리
 							LogHelper.i("onChanged-Call : status : " + status);
-							if (!isFromWaitingCallList) {
+							/*if (!isFromWaitingCallList) {
 								WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_126);
 								needToRequestToRefuseWhenCloseActivity = false;
 								requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
@@ -200,19 +202,19 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 								finish();
 								callInfo.removeObserver(this);
-							}
+							}*/
 
 							break;
 
 
 						default:
-							LogHelper.i("onChanged-Call : default");
+							LogHelper.i("onChanged-Call : default 콜 수신");
 
 							//initViews();
 							break;
 					}
 
-					if (!isFromWaitingCallList) {
+					if (!isFromWaitingCallList && status == 0) {
 						setDataToViews(call);
 
 						//거리 표시
@@ -363,47 +365,16 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			mMainViewModel.clearTempCallInfo();
 			mMainViewModel.setWaitingZone(null, false);
 		}
-
 	}
 
-	private void showAllocatedPopup() {
-		Popup popup = new Popup
-				.Builder(Popup.TYPE_ONE_BTN_NORMAL, DIALOG_TAG_ALLOCATED)
-				.setContent(getString(R.string.alloc_routing_to_passenger))
-				.setBtnLabel(getString(R.string.common_confirm), null)
-				.setDismissSecond(3)
-				.build();
-		showPopupDialog(popup);
-	}
-
-//	@Override
-//	public void onDismissPopupDialog(String tag, Intent intent) {
-//		LogHelper.e("onDismissPopupDialog() : " + tag);
-//		switch (tag) {
-//			case DIALOG_TAG_FAILURE:
-//				finish();
-//				break;
-//
-//			case DIALOG_TAG_ALLOCATED:
-//				// TODO: 2019. 3. 8. 길안내 시작
-//				WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_128);
-//				mMainViewModel.executeNavigation(this);
-//				finish();
-//				super.setCurrentActivity(null);
-//				break;
-//
-//			default:
-//				break;
-//		}
-//	}
 
 	@Override
 	public void onDismissPopupDialog(String tag, Intent intent) {
 		LogHelper.e("onDismissPopupDialog() / tag : " + tag);
 		//배차 요청 실패
-		if (tag.equals(Constants.DIALOG_TAG_ALLOCATION_FAILURE)) {
-			resetCallInfo();
-			finishActivity();
+		if (tag.equals(DIALOG_TAG_FAILURE)) {
+			this.finishActivity();
+			this.resetCallInfo();
 		}
 	}
 
@@ -420,6 +391,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 			//배차 요청
 			case R.id.btn_request:
+				hasGotResponse = false;
 				super.startLoadingProgress();
 				setViewsAsWaitingResponse(null);
 				WavResourcePlayer.getInstance(this).play(R.raw.voice_124);
@@ -429,11 +401,13 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						if (hasGotResponse) {
+						LogHelper.e("hasGotResponse : " + hasGotResponse);
+						if (!hasGotResponse) {
+							WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_122);
 							showFailurePopup();
 						}
 					}
-				}, 15000);
+				}, 10000);
 
 				break;
 		}

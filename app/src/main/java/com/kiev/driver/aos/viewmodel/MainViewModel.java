@@ -18,11 +18,11 @@ import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.OrderInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseSMSPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
+import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallListPacket;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitCallOrderInfoPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaCancelPacket;
-import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseWaitAreaDecisionPacket;
 import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.NavigationExecutor;
@@ -41,7 +41,6 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainViewModel extends AndroidViewModel {
 
 	private final LiveData<Configuration> mConfiguration;
-	private final LiveData<Taxi> mTaxiInfo;
 	private final LiveData<Call> mCallInfo;
 	private final LiveData<Notice> mNotice;
 
@@ -56,7 +55,6 @@ public class MainViewModel extends AndroidViewModel {
 		LogHelper.e("MainViewModel()");
 		mRepository = repository;
 		mConfiguration = repository.getConfigLive();
-		mTaxiInfo = repository.getTaxiInfoLive();
 		mCallInfo = repository.getCallInfoLive();
 		mNotice = repository.getLatestNotice();
 		mMessageList = loadMessageList();
@@ -70,9 +68,6 @@ public class MainViewModel extends AndroidViewModel {
 		return mConfiguration;
 	}
 
-	public LiveData<Taxi> getTaxiInfo() {
-		return mTaxiInfo;
-	}
 
 	public LiveData<Call> getCallInfo() {
 		return mCallInfo;
@@ -163,6 +158,10 @@ public class MainViewModel extends AndroidViewModel {
 		} else {
 			mRepository.clearWaitingZone();
 		}
+	}
+
+	public void saveTaxiInfo(ResponseMyInfoPacket packet) {
+		mRepository.upsertTaxiInfo(new Taxi(packet));
 	}
 
 

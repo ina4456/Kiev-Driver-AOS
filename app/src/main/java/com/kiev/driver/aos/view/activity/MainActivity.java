@@ -17,6 +17,7 @@ import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
+import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -157,6 +158,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 						if (driverName != null) {
 							String displayDriverName = String.format(getString(R.string.d_menu_driver_name), driverName);
 							mBinding.navViewBody.tvDriverName.setText(displayDriverName);
+							mainViewModel.saveTaxiInfo(myInfoPacket);
+
 							myInfo.removeObserver(this);
 						}
 					}

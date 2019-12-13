@@ -172,6 +172,8 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 							LogHelper.e("waitingCallList : " + waitingCallList.size());
 
 							showListOrEmptyMsgView();
+						} else {
+							showListOrEmptyMsgView();
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						e.printStackTrace();

@@ -73,8 +73,7 @@
     <string name="main_state_resting_msg">휴식중</string>
     <string name="main_state_resting_msg2">콜을 받지 않습니다.</string>
     <string name="main_state_waiting_msg">\[%s\]\n대기중</string>
-    <string name="main_btn_boarding">손님탑승</string>
-    <string name="main_btn_boarding2">손님승차</string>
+    <string name="main_btn_boarding">손님승차</string>
     <string name="main_btn_alighting">손님하차</string>
     <string name="main_btn_resting">휴식하기</string>
     <string name="main_btn_receive_call">콜 받기</string>

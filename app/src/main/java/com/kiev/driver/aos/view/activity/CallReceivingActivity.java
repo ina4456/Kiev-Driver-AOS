@@ -77,7 +77,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 		initViews(callInfoFromWaitingCallList);
 		subscribeViewModel(mMainViewModel, callInfoFromWaitingCallList);
-
 	}
 
 	@Override
@@ -222,7 +221,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 						call.setDistance(distance);
 						//LogHelper.e("distance : " + distance);
 						mBinding.tvDistance.setText(call.getCallDistanceToDeparture());
-
 
 						//콜 등급 표시
 						//테스트 call.setCallClass(new Ranom().nextInt(5));

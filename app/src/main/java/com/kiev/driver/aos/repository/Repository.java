@@ -274,11 +274,11 @@ public class Repository {
 	}
 
 	public WaitingZone getWaitingZone() {
-		return mSharedPreferenceManager.getWaitingZone();
+		return mSharedPreferenceManager.getWaitingArea();
 	}
 
 	public void clearWaitingZone() {
-		mSharedPreferenceManager.clearWaitingZone();
+		mSharedPreferenceManager.clearWaitingArea();
 	}
 
 

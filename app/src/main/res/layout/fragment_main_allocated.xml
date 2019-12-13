@@ -194,7 +194,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
         <Button
             android:id="@+id/btn_boarding"
-            android:text="@string/main_btn_boarding2"
+            android:text="@string/main_btn_boarding"
             style="@style/MainBottomRightButtonStyle"
             app:layout_constraintStart_toEndOf="@+id/btn_cancel_boarding"
             app:layout_constraintEnd_toEndOf="parent"

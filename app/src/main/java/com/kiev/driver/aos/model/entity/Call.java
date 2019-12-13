@@ -69,13 +69,6 @@ public class Call implements Parcelable {
 	@ColumnInfo(name = "call_passenger_phone_number")
 	private String passengerPhoneNumber;
 
-	//복지콜
-	@ColumnInfo(name = "call_passenger_name")
-	private String passengerName;
-	@ColumnInfo(name = "call_handicap_code")
-	private String handicapCode;
-	@ColumnInfo(name = "call_use_wheelchair")
-	private boolean useWheelchair;
 
 	private boolean isReported; // 운행보고 여부 (Local에서만 사용하는 값이다.)
 	private float distance;
@@ -143,9 +136,6 @@ public class Call implements Parcelable {
 		parcel.writeDouble(destinationLat);
 		parcel.writeDouble(destinationLong);
 		parcel.writeString(passengerPhoneNumber);
-		parcel.writeString(handicapCode);
-		parcel.writeString(passengerPhoneNumber);
-		parcel.writeByte((byte)(useWheelchair ? 1 : 0));
 
 	}
 
@@ -171,10 +161,6 @@ public class Call implements Parcelable {
 		destinationLat = in.readDouble();
 		destinationLong = in.readDouble();
 		passengerPhoneNumber = in.readString();
-
-		passengerName = in.readString();
-		handicapCode = in.readString();
-		useWheelchair = in.readByte() != 0;
 	}
 
 	public int getId() {
@@ -315,14 +301,6 @@ public class Call implements Parcelable {
 		this.passengerPhoneNumber = passengerPhoneNumber;
 	}
 
-	public String getPassengerName() {
-		return passengerName;
-	}
-
-	public void setPassengerName(String passengerName) {
-		this.passengerName = passengerName;
-	}
-
 	public String getCallDistanceToDeparture() {
 		return callDistanceToDeparture;
 	}
@@ -336,7 +314,6 @@ public class Call implements Parcelable {
 	}
 
 	public void setDistance(float distance) {
-		//LogHelper.e("distance : " + distance);
 		this.distance = distance;
 		String distanceStr;
 		float distanceTemp;
@@ -386,21 +363,6 @@ public class Call implements Parcelable {
 		this.callReceivedDate = callReceivedDate;
 	}
 
-	public String getHandicapCode() {
-		return handicapCode;
-	}
-
-	public void setHandicapCode(String handicapCode) {
-		this.handicapCode = handicapCode;
-	}
-
-	public boolean isUseWheelchair() {
-		return useWheelchair;
-	}
-
-	public void setUseWheelchair(boolean useWheelchair) {
-		this.useWheelchair = useWheelchair;
-	}
 
 	@Override
 	public String toString() {
@@ -426,9 +388,6 @@ public class Call implements Parcelable {
 				", destinationLat=" + destinationLat +
 				", destinationLong=" + destinationLong +
 				", passengerPhoneNumber='" + passengerPhoneNumber + '\'' +
-				", passengerName='" + passengerName + '\'' +
-				", handicapCode='" + handicapCode + '\'' +
-				", useWheelchair=" + useWheelchair +
 				", isReported=" + isReported +
 				'}';
 	}

@@ -346,7 +346,6 @@ public class MainViewModel extends AndroidViewModel {
 	 * actually necessary in this case, as the product ID can be passed in a public method.
 	 */
 	public static class Factory extends ViewModelProvider.NewInstanceFactory {
-
 		@NonNull
 		private final Application mApplication;
 		private final Repository mRepository;

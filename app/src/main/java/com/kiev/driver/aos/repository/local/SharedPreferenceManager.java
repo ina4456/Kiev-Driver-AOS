@@ -143,18 +143,16 @@ public class SharedPreferenceManager {
 		LogHelper.write("==> [대기상태 저장] : " + waitingzone);
 		setDataAsJson(SP_KEY_WAIT_AREA, new Gson().toJson(waitingzone));
 	}
-
-
 	/**
 	 * @return 대기상태
 	 */
-	public WaitingZone getWaitingZone() {
+	public WaitingZone getWaitingArea() {
 		return getDataAsJson(SP_KEY_WAIT_AREA, WaitingZone.class);
 	}
 	/**
 	 * 대기상태 삭제
 	 */
-	public void clearWaitingZone() {
+	public void clearWaitingArea() {
 		LogHelper.write("==> [대기상태 삭제]");
 		clearData(SP_KEY_WAIT_AREA);
 	}

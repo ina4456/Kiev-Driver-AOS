@@ -184,8 +184,6 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 						String[] destinations = response.getDestination().split("\\|\\|");
 						String[] boardedTimes = response.getBoardingTime().split("\\|\\|");
 						String[] alightedTimes = response.getAlightingTime().split("\\|\\|");
-
-						// FIXME: 2019-11-27 데이터없이 파이프 라인만 있을 경우 처리 필요
 						String[] phoneNumbers = response.getPhoneNumber().split("\\|\\|");
 
 
@@ -208,8 +206,12 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 								history.setDestination(destinations[i]);
 								history.setStartTime(boardedTimes[i]);
 								history.setEndTime(alightedTimes[i]);
-								history.setPassengerPhoneNumber(hasData(phoneNumbers) ? phoneNumbers[i] : "0");
-								LogHelper.e("phoneNum : " + history.getPassengerPhoneNumber());
+								try {
+									history.setPassengerPhoneNumber(phoneNumbers[i]);
+								} catch (ArrayIndexOutOfBoundsException e) {
+									history.setPassengerPhoneNumber("");
+								}
+
 								historyList.add(history);
 							}
 
@@ -230,68 +232,6 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 			}
 		});
 	}
-
-	private boolean hasData(String[] data) {
-		if (data != null && data.length > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
-	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-		@Override
-		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-			super.onScrolled(recyclerView, dx, dy);
-
-			if (hasMoreData) {
-				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
-				if (layoutManager != null) {
-					int totalItemCount = layoutManager.getItemCount();
-					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
-
-					if (lastVisible >= totalItemCount - 1 && !isLoading) {
-						LogHelper.e("lastVisibled : " + totalItemCount);
-						requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
-					}
-				}
-			}
-		}
-	};
-
-
-//	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-//		@Override
-//		public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//			super.onScrolled(recyclerView, dx, dy);
-//
-//			LogHelper.e("onScrolled()");
-//
-//			if (hasMoreData) {
-//				LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
-//				if (layoutManager != null) {
-////					int totalItemCount = layoutManager.getItemCount();
-//					int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
-//
-//					LogHelper.e("try to load more");
-////					if (lastVisible >= totalItemCount - 1) { //&& totalItemCount <= visibleThreshold) {
-////						LogHelper.e("lastVisibled : " + totalItemCount);
-////						requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
-////					}
-//
-//					int visibleItemCount = layoutManager.getChildCount();
-//					int totalItemCount = layoutManager.getItemCount();
-//					int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-//					if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-//						LogHelper.e("lastVisibled : " + totalItemCount);
-//						//requestHistoryList(currentListType, currentPeriodType, totalItemCount + 1);
-//					}
-//				}
-//			}
-//		}
-//
-//	};
 
 
 	@Override

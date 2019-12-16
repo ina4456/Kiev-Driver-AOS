@@ -272,7 +272,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + vehicleNumber);
 			final String vehicleNumForMobile = "3" + vehicleNumber;
 			super.startLoadingProgress();
-			mLoginViewModel.login(phoneNumber, vehicleNumber).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
+			mLoginViewModel.login(phoneNumber, vehicleNumForMobile).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
 				@Override
 				public void onChanged(ServiceRequestResultPacket result) {
 					LogHelper.e("RES-onChanged : ");
@@ -283,7 +283,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 						if (result.getCertificationResult() == Packets.CertificationResult.Success) {
 							String phoneNum = mBinding.etPhoneNumber.getText().toString();
 
-							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, vehicleNumber);
+							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, vehicleNumForMobile);
 							WavResourcePlayer.getInstance(getApplicationContext()).play(R.raw.voice_102);
 
 							MainActivity.startActivity(LoginActivity.this);

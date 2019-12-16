@@ -141,7 +141,6 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 							hasMoreData = response.isHasMoreData();
 							LogHelper.e("hasMoreData : " + hasMoreData);
 
-							boolean hasOrder = false;
 							for (int i = 0; i < waitAreaIds.length; i++) {
 								WaitingZone waitZone = new WaitingZone();
 								waitZone.setWaitingZoneId(waitAreaIds[i]);
@@ -155,10 +154,14 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 
 							if (startIndex == START_INDEX) {
 								mWaitingZoneAdapter.refreshData(waitingZoneList);
+								boolean hasOrder = false;
 								for (WaitingZone waitingZone : waitingZoneList) {
 									hasOrder = waitingZone.getMyWaitingOrder() != 0;
-									break;
+									if (hasOrder) {
+										break;
+									}
 								}
+								LogHelper.e("hasorder : " + hasOrder);
 								if (!hasOrder) {
 									mViewModel.setWaitingZone(null, false);
 								}
@@ -225,6 +228,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 						LogHelper.e("대기 결정 응답 :  " + response);
 						if (response.getWaitProcType() == Packets.WaitProcType.Success) {
 							mViewModel.setWaitingZone(item, true);
+							LogHelper.e("대기 지역 저장");
 							requestWaitZoneList(START_INDEX);
 						} else {
 							showFailurePopup(isRequest);

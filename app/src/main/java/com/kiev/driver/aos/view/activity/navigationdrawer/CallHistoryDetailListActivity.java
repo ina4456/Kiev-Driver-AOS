@@ -10,6 +10,7 @@ import com.kiev.driver.aos.databinding.ActivityCallHistoryDetailListBinding;
 import com.kiev.driver.aos.model.CallHistory;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseStatisticsDetailPacket;
+import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.activity.BaseActivity;
 import com.kiev.driver.aos.view.adapter.CallHistoryAdapter;
@@ -27,7 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CallHistoryDetailListActivity extends BaseActivity implements View.OnClickListener {
+public class CallHistoryDetailListActivity extends BaseActivity implements View.OnClickListener, CallHistoryAdapter.CallHistoryCallback {
 
 	private static final int START_INDEX = 1;
 	private boolean hasMoreData = false;
@@ -103,7 +104,7 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 
 
 	private void initRecyclerView() {
-		mCallHistoryAdapter = new CallHistoryAdapter(this, new ArrayList<>());
+		mCallHistoryAdapter = new CallHistoryAdapter(this, new ArrayList<>(), this);
 		mBinding.rvCallHistory.setNestedScrollingEnabled(true);
 		mBinding.rvCallHistory.setAdapter(mCallHistoryAdapter);
 		mBinding.rvCallHistory.setFocusable(false);
@@ -233,6 +234,13 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 		});
 	}
 
+	@Override
+	public void onCallToPassengerPressed(String phoneNumber) {
+		LogHelper.e("onCallToPassengerPressed");
+		LogHelper.e("isUserSpeaker : " + mViewModel.isUseSpeakerPhone());
+		CallManager.getInstance(this)
+				.call(this, phoneNumber, mViewModel.isUseSpeakerPhone());
+	}
 
 	@Override
 	public void onClick(View view) {

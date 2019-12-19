@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseStatisticsDetailPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private Packets.StatisticListType queryType; //요청 구분(1) : 통합, 일반콜, 앱콜, 업무콜
 	private int totalCount; //총 개수(2)
 	private String callType; //콜 구분(20) : 일반콜, 앱콜, 업무콜
@@ -126,7 +126,7 @@ public class ResponseStatisticsDetailPacket extends ResponsePacket {
 	@Override
     public void parse(byte[] buffers) {
 		super.parse(buffers);
-		carId = readInt(2);
+		carId = readInt(4);
 		int qType = readInt(1);
 		queryType = getCallType(qType);
 		totalCount = readInt(2);

@@ -13,7 +13,7 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 
 
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private boolean isSuccess;  //성공 여부(1)
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
@@ -149,7 +149,7 @@ public class ResponseWaitCallOrderInfoPacket extends ResponsePacket {
 
 		try {
 			corporationCode = readInt(2);
-			carId = readInt(2);
+			carId = readInt(4);
 			int success = readInt(1);
 			isSuccess = success == 0x01;
 			callReceiptDate = readString(11);

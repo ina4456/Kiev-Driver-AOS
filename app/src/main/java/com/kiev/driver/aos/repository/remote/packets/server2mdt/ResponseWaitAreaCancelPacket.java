@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseWaitAreaCancelPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private Packets.WaitCancelType waitCancelType; // 대기취소처리 구분 (1)
 
     public ResponseWaitAreaCancelPacket(byte[] bytes) {
@@ -27,7 +27,7 @@ public class ResponseWaitAreaCancelPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         int type = readInt(1);
         if (type == Packets.WaitCancelType.Success.value) {
             waitCancelType = Packets.WaitCancelType.Success;

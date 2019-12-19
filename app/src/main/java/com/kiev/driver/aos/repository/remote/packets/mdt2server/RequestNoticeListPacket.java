@@ -10,7 +10,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 public class RequestNoticeListPacket extends RequestPacket {
 
     private int targetServer; // 서버 구분 (1)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private int listType; //리스트 구분 (1)
 
     public RequestNoticeListPacket() {
@@ -45,7 +45,7 @@ public class RequestNoticeListPacket extends RequestPacket {
     public byte[] toBytes() {
         super.toBytes();
         writeInt(targetServer, 1);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeInt(listType, 1);
         return buffers;
     }

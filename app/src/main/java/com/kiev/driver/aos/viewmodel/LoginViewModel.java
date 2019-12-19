@@ -12,6 +12,7 @@ import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
 import com.kiev.driver.aos.util.CallManager;
+import com.kiev.driver.aos.util.CarNumberConverter;
 import com.kiev.driver.aos.util.LogHelper;
 
 import java.util.ArrayList;
@@ -64,9 +65,7 @@ public class LoginViewModel extends AndroidViewModel {
 		if (phoneNumber != null && !phoneNumber.isEmpty()
 			&& vehicleNumber != null && !vehicleNumber.isEmpty()) {
 
-			// TODO: 2019-10-14 car number 적용전까지는 ID로 로그인하게 유지하므로, 길이 체크 기준 변경함.
-//			if (phoneNumber.length() >= 10 && vehicleNumber.length() >= 7) {
-			if (vehicleNumber.length() >= 4) {
+			if (vehicleNumber.length() == 9) {
 				return true;
 			} else {
 				return false;
@@ -115,6 +114,7 @@ public class LoginViewModel extends AndroidViewModel {
 			LogHelper.e("save Vehicle Number origin Vehicle Num : " + vehicleNum + " / inputVehicleNumInt : " + inputVehicleNumInt);
 			if (vehicleNum == 0 || vehicleNum != inputVehicleNumInt) {
 				configuration.setCarId(inputVehicleNumInt);
+				configuration.setCarNumber(CarNumberConverter.getCarNumFromCarId(inputVehicleNumInt));
 			}
 
 			LogHelper.e("configuration : " + configuration.toString());

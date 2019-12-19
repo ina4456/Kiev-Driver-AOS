@@ -8,7 +8,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponsePeriodSendingPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private boolean hasOrder; // 배차상태 (1)
     private int callNumber; // 콜번호 (2)
     private boolean hasMessage; // 메시지 유무 (1)
@@ -36,7 +36,7 @@ public class ResponsePeriodSendingPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         int order = readInt(1);
         hasOrder = order == 0x01;
         callNumber = readInt(2);

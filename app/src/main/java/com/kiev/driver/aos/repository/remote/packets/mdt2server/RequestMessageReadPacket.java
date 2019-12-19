@@ -11,7 +11,7 @@ public class RequestMessageReadPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private String messageId; // Message ID (4)
 
     public RequestMessageReadPacket() {
@@ -55,7 +55,7 @@ public class RequestMessageReadPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeString(messageId, 4);
         return buffers;
     }

@@ -10,7 +10,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
  */
 public class LivePacket extends RequestPacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 
     public LivePacket() {
         super(Packets.REQ_LIVE);
@@ -27,7 +27,7 @@ public class LivePacket extends RequestPacket {
     @Override
     public byte[] toBytes() {
         super.toBytes();
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         return buffers;
     }
 

@@ -15,7 +15,7 @@ public class AckPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private int ackMessage; // 메시지구분 (2)
     private int parameter; // 처리인자 (2)
 
@@ -68,7 +68,7 @@ public class AckPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeInt(ackMessage, 2);
         writeInt(parameter, 2);
         return buffers;

@@ -291,9 +291,10 @@ public class FloatingViewService extends LifecycleService implements View.OnTouc
 			case R.id.btn_call_passenger:
 				LogHelper.e("call btn clicked");
 				String phoneNumber = mCall.getPassengerPhoneNumber();
-				// FIXME: 2019-11-27 사용자 환경 설정값으로 스피커폰 사용 여부 설정 필요
+				LogHelper.e("isUserSpeaker : " + mConfig.isUseSpeakerPhone());
+
 				CallManager.getInstance(this)
-						.call(this, phoneNumber, true);
+						.call(this, phoneNumber, mConfig.isUseSpeakerPhone());
 
 				break;
 		}

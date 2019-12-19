@@ -8,7 +8,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ServiceConfigPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private int version; // 환결설정버전 (2)
     private int periodSendingTime; // 주기전송시간(단위:초) (1)
     private int periodSendingRange; // 주기전송판단거리(단위:미터) (2)
@@ -91,7 +91,7 @@ public class ServiceConfigPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         version = readInt(2);
         periodSendingTime = readInt(1);
         periodSendingRange = readInt(2);

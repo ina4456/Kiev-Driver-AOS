@@ -147,7 +147,7 @@ public class MyInfoChangeVehicleNumberActivity extends BaseActivity implements V
 			Configuration config =  mViewModel.getConfiguration().getValue();
 			if (!vehicleNumber.isEmpty()) {
 				if (config != null) {
-					originVehicleNumber = String.valueOf(config.getCarIdForUI());
+					originVehicleNumber = config.getCarNumber();
 				}
 
 				if (!originVehicleNumber.isEmpty() && vehicleNumber.equals(originVehicleNumber)) {

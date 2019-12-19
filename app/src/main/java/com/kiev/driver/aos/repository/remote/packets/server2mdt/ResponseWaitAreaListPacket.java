@@ -8,7 +8,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseWaitAreaListPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private int totalCount; //대기지역 총 개수(2)
 	private String waitAreaNames;
 	private String waitAreaIds;
@@ -91,7 +91,7 @@ public class ResponseWaitAreaListPacket extends ResponsePacket {
     public void parse(byte[] buffers) {
 		super.parse(buffers);
 
-        carId = readInt(2);
+        carId = readInt(4);
 		totalCount = readInt(2);
 
 

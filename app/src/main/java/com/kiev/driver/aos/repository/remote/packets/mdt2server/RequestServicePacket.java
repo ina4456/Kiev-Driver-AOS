@@ -12,7 +12,7 @@ public class RequestServicePacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private String phoneNumber; // Phone Number (30)
     private Packets.CorporationType corporationType; // 개인법인체크 (1)
     private int programVersion; // 프로그램 버전 (2)
@@ -83,7 +83,7 @@ public class RequestServicePacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
 	    writeString(EncryptUtil.encodeStr(phoneNumber), 30);
         writeInt(corporationType.value, 1);
         writeInt(programVersion, 2);

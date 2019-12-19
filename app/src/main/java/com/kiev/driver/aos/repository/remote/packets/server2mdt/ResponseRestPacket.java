@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseRestPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private Packets.RestType restType; // 휴식 상태 (1) (규격서의 Description이 잘못 되었음)
 
     public ResponseRestPacket(byte[] bytes) {
@@ -27,7 +27,7 @@ public class ResponseRestPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         int type = readInt(1);
         if (Packets.RestType.Rest.value == type) {
             restType = Packets.RestType.Rest;

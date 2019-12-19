@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 public class RequestWaitAreaDecisionPacket extends RequestPacket {
 	private int serviceNumber; // 서비스번호 (1)
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private String phoneNumber; //기사 연락처 (30)
 	private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
 	private float longitude; // 경도 (30)
@@ -91,7 +91,7 @@ public class RequestWaitAreaDecisionPacket extends RequestPacket {
 		super.toBytes();
 		writeInt(serviceNumber, 1);
 		writeInt(corporationCode, 2);
-		writeInt(carId, 2);
+		writeInt(carId, 4);
 		writeString(EncryptUtil.encodeStr("" + phoneNumber), 30);
 		writeDateTime(gpsTime, 6);
 		writeString(EncryptUtil.encodeStr("" + longitude), 30);

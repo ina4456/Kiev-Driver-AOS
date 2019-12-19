@@ -7,6 +7,7 @@ import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.Repository;
+import com.kiev.driver.aos.util.CarNumberConverter;
 import com.kiev.driver.aos.util.LogHelper;
 
 import androidx.annotation.NonNull;
@@ -51,8 +52,9 @@ public class MyInfoViewModel extends AndroidViewModel {
 	public void changeVehicleNumber(String vehicleNumber) {
 		Configuration configuration = mRepository.getConfig();
 		if (configuration != null) {
-			vehicleNumber = "3" + vehicleNumber.trim();
-			configuration.setCarId(Integer.parseInt(vehicleNumber));
+			int vehicleNumberInt = Integer.valueOf(CarNumberConverter.getCarIdFromCarNum(vehicleNumber));
+			configuration.setCarId(vehicleNumberInt);
+			configuration.setCarNumber(vehicleNumber);
 			mRepository.updateConfig(configuration);
 		}
 	}

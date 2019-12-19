@@ -337,111 +337,111 @@ public class Packets {
 	public static int getSize(int type) {
 		switch (type) {
 			case REQ_ACK: // REQ_ACK
-				return 11;
+				return 13;
 			case REQ_SERVICE: // 서비스요청
-				return 70;
+				return 72;
 			case REQ_NOTICE: // 공지사항요청
-				return 7;
-			case REQ_CONFIG: // 환경설정요청
 				return 9;
+			case REQ_CONFIG: // 환경설정요청
+				return 11;
 			case REQ_PERIOD: // 주기전송
-				return 84;
+				return 86;
 			case REQ_REPORT: // 운행보고
-				return 131;
+				return 132;
 			case REQ_WAIT_AREA_CANCEL: // 대기취소
-				return 41;
+				return 43;
 			case REQ_WAIT_AREA_ORDER_INFO: // 대기배차고객정보 요청
-				return 7;
+				return 9;
 			case REQ_EMERGENCY: // Emergency 요청
-				return 78;
+				return 80;
 			case REQ_MESSAGE: // 메시지요청
-				return 7;
+				return 9;
 			case REQ_ORDER_REALTIME: // 실시간 위치 및 배차요청
-				return 131;
+				return 133;
 			case REQ_REST: // 휴식/운행재개
-				return 7;
+				return 9;
 			case REQ_LIVE: // Live 패킷
-				return 4;
+				return 6;
 			case RES_ACK: // 접속종료 (ACK의 응답 목적으로 사용 한다.)
 				return 3;
 			case RES_SERVICE: // 서비스요청결과
-				return 23;
+				return 25;
 			case RES_NOTICE: // 공지사항
-				return 293;
+				return 295;
 			case RES_CONFIG: // 환경설정
-				return 38;
+				return 40;
 			case RES_PERIOD: // 주기응답
-				return 8;
+				return 10;
 			case RES_ORDER_INFO_BROADCAST: // 배차데이터 (목적지 추가)
-				return 357;
+				return 359;
 			case RES_ORDER_INFO_PROC: // 배차데이터 처리
-				return 7;
+				return 9;
 			case RES_REPORT: // 운행보고응답
-				return 7;
+				return 9;
 			case RES_WAIT_AREA_CANCEL: // 대기취소응답
-				return 5;
+				return 7;
 			case RES_WAIT_AREA_ORDER_INFO: // 대기배차고객정보
-				return 352;
+				return 354;
 			case RES_EMERGENCY_CANCEL: // Emergency 응답
-				return 6;
+				return 8;
 			case RES_MESSAGE: // 메시지 응답
-				return 207;
+				return 209;
 			case RES_MESSAGE_NEW: // 메시지 응답
-				return 229;
+				return 231;
 			case REQ_MESSAGE_READ:
-				return 11;
+				return 13;
 			case RES_ORDER_INFO: // 고객정보 재전송 (목적지 추가)
-				return 357;
+				return 359;
 			case RES_REST: // 휴식/운행응답
-				return 5;
+				return 7;
 			case REQ_ORDER_INFO: // 배차정보 요청 (목적지 추가)
-				return 19;
+				return 21;
 
 			/*신규 추가 패킷*/
 			case REQ_SEND_SMS: // SMS전송 요청
-				return 180;
+				return 182;
 			case RES_SEND_SMS: // SMS전송 요청 응답
-				return 20;
+				return 22;
 
 			case REQ_MY_INFO: // 내정보 요청
-				return 36;
+				return 38;
 			case RES_MY_INFO: // 내정보 요청 응답
-				return 94;
+				return 96;
 
 			case REQ_WAIT_CALL_LIST: // 대기콜 리스트 요청
-				return 69;
+				return 71;
 			case RES_WAIT_CALL_LIST: // 대기콜 리스트 요청 응답
-				return 1173;
+				return 1175;
 
 			case REQ_WAIT_CALL_ORDER: // 대기콜 배차 요청
-				return 125;
+				return 127;
 			case RES_WAIT_CALL_ORDER: // 대기콜 배차 요청 응답
-				return 354;
+				return 356;
 
 			case REQ_NOTICE_LIST:
-				return 6;
+				return 8;
 			case RES_NOTICE_LIST:
-				return 1504;
+				return 1506;
 
 			case REQ_STATISTICS: // 콜 통계 요청
-				return 67;
+				return 69;
 			case RES_STATISTICS: // 콜 통계 요청 응답
-				return 114;
+				return 116;
 
 			case REQ_STATISTICS_DETAIL: // 콜 통계 상세 요청
-				return 40;
+				return 42;
 			case RES_STATISTICS_DETAIL: // 콜 통계 상세 요청 응답
-				return 818;
+				return 820;
 
 			case REQ_WAIT_AREA_LIST: // 대기 지역 현황 요청
-				return 70;
+				return 72;
 			case RES_WAIT_AREA_LIST: // 대기 지역 현황 요청 응답
-				return 507;
+				return 509;
 
 			case REQ_WAIT_AREA_DECISION: // 대기 지역 대기 요청
-				return 107;
+				return 109;
 			case RES_WAIT_AREA_DECISION: // 대기 지역 대기 요청 응답
-				return 73;
+				return 75;
 
 			default:
 				return 0;

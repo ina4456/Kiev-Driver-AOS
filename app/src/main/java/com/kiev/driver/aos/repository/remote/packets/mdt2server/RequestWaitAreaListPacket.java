@@ -12,7 +12,7 @@ public class RequestWaitAreaListPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private Packets.WaitAreaRequestType requestType; //대기리스트 요청 구분(1)
     private float longitude; // 경도 (30)
     private float latitude; // 위도 (30)
@@ -92,7 +92,7 @@ public class RequestWaitAreaListPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
 		writeInt(requestType.value, 1);
 		writeString(EncryptUtil.encodeStr(""+ longitude), 30);
 		writeString(EncryptUtil.encodeStr(""+ latitude), 30);

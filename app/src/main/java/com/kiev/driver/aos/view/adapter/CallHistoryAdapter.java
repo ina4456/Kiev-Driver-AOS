@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.databinding.ItemCallHistoryDetailListBinding;
 import com.kiev.driver.aos.model.CallHistory;
-import com.kiev.driver.aos.repository.Repository;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
-import com.kiev.driver.aos.util.CallManager;
 import com.kiev.driver.aos.util.LogHelper;
 
 import java.util.ArrayList;
@@ -24,15 +22,20 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 
 	private ArrayList<CallHistory> mItems;
 	private Context mContext;
-	private Repository mRepository;
+	private CallHistoryCallback callback;
 
-	public CallHistoryAdapter(Context context, ArrayList<CallHistory> items) {
+	public CallHistoryAdapter(Context context, ArrayList<CallHistory> items, CallHistoryCallback callback) {
 		mContext = context;
 		mItems = items;
+		this.callback = callback;
 
 		/*Application application = ((Activity)context).getApplication();
 		MainApplication mainApplication = (MainApplication)application;
 		mRepository = mainApplication.getRepository();*/
+	}
+
+	public interface CallHistoryCallback {
+		void onCallToPassengerPressed(String phoneNumber);
 	}
 
 	@Override
@@ -136,10 +139,7 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 
 			if (phoneNumber != null && !phoneNumber.isEmpty()) {
 				LogHelper.e("phoneNumber : " + phoneNumber);
-
-				// FIXME: 2019-11-27 사용자 환경 설정값으로 스피커폰 사용 여부 설정 필요
-				CallManager.getInstance(mContext)
-						.call(mContext, phoneNumber, true);
+				callback.onCallToPassengerPressed(phoneNumber);
 			} else {
 				LogHelper.e("전화번호가 유효하지 않음");
 			}

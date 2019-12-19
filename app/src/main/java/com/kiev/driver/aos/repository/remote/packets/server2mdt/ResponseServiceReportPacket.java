@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseServiceReportPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private int callNumber; // 콜번호 (2)
     private Packets.ReportKind reportKind; // 운행구분 (1)
 
@@ -32,7 +32,7 @@ public class ResponseServiceReportPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         callNumber = readInt(2);
         int kind = readInt(1);
         if (kind == Packets.ReportKind.GetOn.value) {

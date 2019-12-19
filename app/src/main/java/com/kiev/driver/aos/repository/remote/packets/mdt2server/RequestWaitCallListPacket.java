@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 public class RequestWaitCallListPacket extends RequestPacket {
 
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private Packets.WaitCallListType waitCallListType; // 대기콜리스트타입 (1)
 	private int startIndex; // 시작인덱스 (1)
 	private int requestCount; // 요청개수 (1)
@@ -83,7 +83,7 @@ public class RequestWaitCallListPacket extends RequestPacket {
         super.toBytes();
 
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
 		writeInt(waitCallListType.value, 1);
 		writeInt(startIndex, 1);
 		writeInt(requestCount, 1);

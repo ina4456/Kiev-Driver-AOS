@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 public class ResponseMessageNewPacket extends ResponsePacket {
 
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private String message; // 메시지 본문 (201)
 	private String messageSentDate; // 메시지 전송일자 (20)
 	private String messageId; // 메시지 코드
@@ -42,7 +42,7 @@ public class ResponseMessageNewPacket extends ResponsePacket {
     public void parse(byte[] buffers) {
         super.parse(buffers);
         corporationCode = readInt(2);
-        carId = readInt(2);
+        carId = readInt(4);
         message = readString(201);
 		messageSentDate = readString(20);
 		messageId = readString(4);

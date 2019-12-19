@@ -10,7 +10,7 @@ import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 public class RequestRestPacket extends RequestPacket {
 
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private Packets.RestType restType; // 구분 (1)
 
     public RequestRestPacket() {
@@ -45,7 +45,7 @@ public class RequestRestPacket extends RequestPacket {
     public byte[] toBytes() {
         super.toBytes();
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeInt(restType.value, 1);
         return buffers;
     }

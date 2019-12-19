@@ -55,6 +55,10 @@ public class CallHistoryViewModel extends AndroidViewModel {
 		return mRepository.requestStatisticsDetail(type, period, startIndex);
 	}
 
+	public boolean isUseSpeakerPhone() {
+		return mRepository.getConfig().isUseSpeakerPhone();
+	}
+
 
 	/**
 	 * A creator is used to inject the product ID into the ViewModel

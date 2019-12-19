@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 public class RequestMyInfoPacket extends RequestPacket {
 
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private String phoneNumber; // Phone Number (30)
 
 	public RequestMyInfoPacket() {
@@ -46,7 +46,7 @@ public class RequestMyInfoPacket extends RequestPacket {
 	public byte[] toBytes() {
 		super.toBytes();
 		writeInt(corporationCode, 2);
-		writeInt(carId, 2);
+		writeInt(carId, 4);
 		writeString(EncryptUtil.encodeStr(phoneNumber), 30);
 		return buffers;
 	}

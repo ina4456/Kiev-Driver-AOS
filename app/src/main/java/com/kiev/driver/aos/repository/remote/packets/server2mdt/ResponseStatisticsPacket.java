@@ -10,7 +10,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 public class ResponseStatisticsPacket extends ResponsePacket {
 
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private String phoneNumber; // Phone Number (30)
 	
 	//오늘(총콜, 일반콜, 업무콜, 앱콜, 첨두콜, 외곽콜) 각 (2)
@@ -167,7 +167,7 @@ public class ResponseStatisticsPacket extends ResponsePacket {
     public void parse(byte[] buffers) {
         super.parse(buffers);
         corporationCode = readInt(2);
-        carId = readInt(2);
+        carId = readInt(4);
 		phoneNumber = EncryptUtil.decodeStr("" + readString(30));
 
 		todayTotalCnt = readInt(2);

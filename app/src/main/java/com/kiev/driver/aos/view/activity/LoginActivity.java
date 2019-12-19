@@ -22,6 +22,7 @@ import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ServiceRequestResultPacket;
+import com.kiev.driver.aos.util.CarNumberConverter;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
@@ -197,7 +198,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 					LogHelper.e("isNeedAutoLogin() : " + configuration.isNeedAutoLogin());
 					if (configuration.isNeedAutoLogin()) {
-						login();
+						//login();
 						config.removeObserver(this);
 					}
 				}
@@ -221,10 +222,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 	private void setPhoneAndVehicleNumber(Configuration configuration) {
 		mBinding.etPhoneNumber.setText(configuration.getDriverPhoneNumber());
-		String carId = String.valueOf(configuration.getCarIdForUI());
-		LogHelper.e("carId : " + carId);
-		if (configuration.getCarId() > 0) {
-			mBinding.etVehicleNumber.setText(carId);
+		//String carId = String.valueOf(configuration.getCarIdForUI());
+		String carNumber = configuration.getCarNumber();
+		LogHelper.e("carNumber : " + carNumber);
+		if (carNumber != null && !carNumber.isEmpty()) {
+			mBinding.etVehicleNumber.setText(carNumber);
 		}
 
 		int length = mBinding.etPhoneNumber.getText().length();
@@ -267,12 +269,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 		String phoneNumber = mBinding.etPhoneNumber.getText().toString().trim();
 		phoneNumber = phoneNumber.replaceAll("-", "");
 		String vehicleNumber = mBinding.etVehicleNumber.getText().toString().trim();
+		final String convertedVehicleNumber = CarNumberConverter.getCarIdFromCarNum(vehicleNumber);
 
 		if (!phoneNumber.isEmpty() && !vehicleNumber.isEmpty()) {
 			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + vehicleNumber);
-			final String vehicleNumForMobile = "3" + vehicleNumber;
+			//final String vehicleNumForMobile = "3" + vehicleNumber;
 			super.startLoadingProgress();
-			mLoginViewModel.login(phoneNumber, vehicleNumForMobile).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
+			mLoginViewModel.login(phoneNumber, convertedVehicleNumber).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {
 				@Override
 				public void onChanged(ServiceRequestResultPacket result) {
 					LogHelper.e("RES-onChanged : ");
@@ -283,7 +286,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 						if (result.getCertificationResult() == Packets.CertificationResult.Success) {
 							String phoneNum = mBinding.etPhoneNumber.getText().toString();
 
-							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, vehicleNumForMobile);
+							mLoginViewModel.savePhoneNumAndVehicleNumIfNeeded(phoneNum, convertedVehicleNumber);
 							WavResourcePlayer.getInstance(getApplicationContext()).play(R.raw.voice_102);
 
 							MainActivity.startActivity(LoginActivity.this);
@@ -311,31 +314,35 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 		String message = getString(R.string.fail_cert);
 		Context context = getApplicationContext();
 
-		switch (result) {
-			case InvalidCar:
-				message = context.getString(R.string.login_failed_not_register_vehicle_number) + " (0x" + Integer.toHexString(result.value) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_105);
-				break;
-			case InvalidContact:
-				message = context.getString(R.string.login_failed_not_register_phone_number) + " (0x" + Integer.toHexString(result.value) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_104);
-				break;
-			case DriverPenalty:
-				message = context.getString(R.string.fail_panelty) + " (0x" + Integer.toHexString(result.value) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
-				break;
-			case InvalidHoliday:
-				message = context.getString(R.string.fail_vacation) + " (0x" + Integer.toHexString(result.value) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
-				break;
-			case NoResponse:
-				message = context.getString(R.string.login_failed_server_connection_failed) + " (0x" + Integer.toHexString(result.value) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
-				break;
-			default:
-				message += "(0x" + Integer.toHexString(certCode) + ")";
-				WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
-				break;
+		if (result == null) {
+			message += "(0x" + Integer.toHexString(certCode) + ")";
+		} else {
+			switch (result) {
+				case InvalidCar:
+					message = context.getString(R.string.login_failed_not_register_vehicle_number) + " (0x" + Integer.toHexString(result.value) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_105);
+					break;
+				case InvalidContact:
+					message = context.getString(R.string.login_failed_not_register_phone_number) + " (0x" + Integer.toHexString(result.value) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_104);
+					break;
+				case DriverPenalty:
+					message = context.getString(R.string.fail_panelty) + " (0x" + Integer.toHexString(result.value) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
+					break;
+				case InvalidHoliday:
+					message = context.getString(R.string.fail_vacation) + " (0x" + Integer.toHexString(result.value) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
+					break;
+				case NoResponse:
+					message = context.getString(R.string.login_failed_server_connection_failed) + " (0x" + Integer.toHexString(result.value) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
+					break;
+				default:
+					message += "(0x" + Integer.toHexString(certCode) + ")";
+					WavResourcePlayer.getInstance(context).play(R.raw.voice_103);
+					break;
+			}
 		}
 
 		Popup popup = new Popup

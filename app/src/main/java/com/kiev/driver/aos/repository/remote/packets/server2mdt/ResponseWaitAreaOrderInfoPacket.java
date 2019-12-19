@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.LogHelper;
  */
 public class ResponseWaitAreaOrderInfoPacket extends ResponsePacket {
 
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private Packets.OrderKind orderKind; // 배차구분 (1)
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
@@ -95,7 +95,7 @@ public class ResponseWaitAreaOrderInfoPacket extends ResponsePacket {
 		super.parse(buffers);
 
 		try {
-			carId = readInt(2);
+			carId = readInt(4);
 			int order = readInt(1);
 			if (Packets.OrderKind.Normal.value == order) {
 				orderKind = Packets.OrderKind.Normal;

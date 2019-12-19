@@ -11,7 +11,7 @@ public class RequestConfigPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private int configurationCode; // 현재환경설정 코드 (2)
 
     public RequestConfigPacket() {
@@ -55,7 +55,7 @@ public class RequestConfigPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeInt(configurationCode, 2);
         return buffers;
     }

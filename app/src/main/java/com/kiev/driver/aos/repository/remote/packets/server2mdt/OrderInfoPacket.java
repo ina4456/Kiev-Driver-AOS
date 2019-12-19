@@ -12,13 +12,13 @@ import com.kiev.driver.aos.util.LogHelper;
 public class OrderInfoPacket extends ResponsePacket {
 
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private Packets.OrderKind orderKind; // 배차구분 (1)
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
 	private float longitude; // 고객 경도 (30)
 	private float latitude; // 고객 위도 (30)
-	private String callerPhone; // 고객 연락처 (13)
+	private String callerPhone; // 고객 연락처 (30)
 	private String place; // 탑승지 (41)
 	private String placeExplanation; // 탑승지 설명 (101)
 	private int allocBoundary; // 배차범위 (2)
@@ -182,7 +182,7 @@ public class OrderInfoPacket extends ResponsePacket {
 
 		try {
 			corporationCode = readInt(2);
-			carId = readInt(2);
+			carId = readInt(4);
 			int order = readInt(1);
 			if (Packets.OrderKind.Normal.value == order) {
 				orderKind = Packets.OrderKind.Normal;

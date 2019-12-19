@@ -12,7 +12,7 @@ public class RequestStatisticsPacket extends RequestPacket {
 
 	private int serviceNumber; // 서비스번호 (1)
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private String phoneNumber; // Phone Number (30)
 	private String memo; // Memo (30)
 
@@ -66,7 +66,7 @@ public class RequestStatisticsPacket extends RequestPacket {
 		super.toBytes();
 		writeInt(serviceNumber, 1);
 		writeInt(corporationCode, 2);
-		writeInt(carId, 2);
+		writeInt(carId, 4);
 		writeString(EncryptUtil.encodeStr(phoneNumber), 30);
 		writeString(memo, 30);
 		return buffers;

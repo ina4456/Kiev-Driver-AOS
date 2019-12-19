@@ -161,26 +161,29 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 					switch (status) {
 						case Constants.CALL_STATUS_ALLOCATED:
 							LogHelper.e("onChanged-Call : CALL_STATUS_ALLOCATED");
+							callInfo.removeObserver(this);
+							hasGotResponse = true;
 							needToRequestToRefuseWhenCloseActivity = false;
 							finish();
-							callInfo.removeObserver(this);
 							break;
 
 						case Constants.CALL_STATUS_ALLOCATION_FAILED:
 							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATION_FAILED");
+							callInfo.removeObserver(this);
+							hasGotResponse = true;
 							showFailurePopup();
 							needToRequestToRefuseWhenCloseActivity = false;
 							resetCallInfo();
 							finishActivity();
-							callInfo.removeObserver(this);
 							break;
 
 						case Constants.CALL_STATUS_ALLOCATED_WHILE_GETON:
 							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATED_WHILE_GETON");
+							callInfo.removeObserver(this);
+							hasGotResponse = true;
 							needToRequestToRefuseWhenCloseActivity = false;
 							resetCallInfo();
 							finishActivity();
-							callInfo.removeObserver(this);
 							break;
 
 						case Constants.CALL_STATUS_BOARDED:

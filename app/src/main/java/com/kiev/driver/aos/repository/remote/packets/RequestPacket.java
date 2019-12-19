@@ -87,5 +87,4 @@ public class RequestPacket {
         writeInt(Integer.valueOf(dateTime.substring(8, 10)).intValue(), 1);
         writeInt(Integer.valueOf(dateTime.substring(10, 12)).intValue(), 1);
     }
-
 }

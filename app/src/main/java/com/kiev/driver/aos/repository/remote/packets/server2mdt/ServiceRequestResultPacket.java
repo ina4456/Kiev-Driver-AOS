@@ -108,7 +108,7 @@ public class ServiceRequestResultPacket extends ResponsePacket {
 	public void parse(byte[] buffers) {
 		super.parse(buffers);
 		serviceNumber = readInt(1);
-		carId = readInt(2);
+		carId = readInt(4);
 		certCode = readInt(1);
 		if (certCode == Packets.CertificationResult.Success.value) {
 			certificationResult = Packets.CertificationResult.Success;

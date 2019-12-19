@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class OrderInfoProcPacket extends ResponsePacket {
 
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private Packets.OrderProcType orderProcType; // 처리구분 (1)
     private int callNumber; // 콜번호 (2)
 
@@ -32,7 +32,7 @@ public class OrderInfoProcPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         int type = readInt(1);
         if (Packets.OrderProcType.Display.value == type) {
             orderProcType = Packets.OrderProcType.Display;

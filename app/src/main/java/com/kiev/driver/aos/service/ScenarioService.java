@@ -441,7 +441,7 @@ public class ScenarioService extends LifecycleService {
 	 * 요청 후 3초 이내에 응답이 없을 경우 Error를 보여준다.
 	 */
 	public void requestServicePacket(String phoneNumber, String vehicleNumber, boolean withTimer) {
-		LogHelper.e("REQ-LOGIN : requestServicePacket() : " + mConfiguration);
+		//LogHelper.e("REQ-LOGIN : requestServicePacket() : " + mConfiguration);
 		mServiceResultPacket = new MutableLiveData<>();
 
 
@@ -450,6 +450,7 @@ public class ScenarioService extends LifecycleService {
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
 		// FIXME: 2019-08-22 carNumber
 		packet.setCarId(Integer.valueOf(vehicleNumber));
+		//packet.setCarId(mConfiguration.getCarId());
 		packet.setPhoneNumber(phoneNumber);
 		packet.setCorporationType(mConfiguration.isCorporation() ? Packets.CorporationType.Corporation : Packets.CorporationType.Indivisual);
 		packet.setProgramVersion(mConfiguration.getAppVersion());

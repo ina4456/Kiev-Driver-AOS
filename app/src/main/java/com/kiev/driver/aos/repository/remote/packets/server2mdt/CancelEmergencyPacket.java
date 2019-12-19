@@ -9,7 +9,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 public class CancelEmergencyPacket extends ResponsePacket {
 
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 
     public CancelEmergencyPacket(byte[] bytes) {
         super(bytes);
@@ -27,7 +27,7 @@ public class CancelEmergencyPacket extends ResponsePacket {
     public void parse(byte[] buffers) {
         super.parse(buffers);
         corporationCode = readInt(2);
-        carId = readInt(2);
+        carId = readInt(4);
     }
 
     @Override

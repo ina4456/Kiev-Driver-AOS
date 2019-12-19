@@ -12,7 +12,7 @@ public class RequestEmergencyPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private Packets.EmergencyType emergencyType; // Emergency 구분
     private String gpsTime; // GPS시간 (6) (년월일시분초 - ex : 090805112134)
     private int direction; // 주행방향 (2)
@@ -110,7 +110,7 @@ public class RequestEmergencyPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
         writeInt(emergencyType.value, 1);
         writeDateTime(gpsTime, 6);
         writeInt(direction, 2);

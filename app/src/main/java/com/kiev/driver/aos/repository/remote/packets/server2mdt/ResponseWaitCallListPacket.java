@@ -99,7 +99,7 @@ public class ResponseWaitCallListPacket extends ResponsePacket {
     public void parse(byte[] buffers) {
         super.parse(buffers);
 
-        carId = readInt(2);
+        carId = readInt(4);
 		waitCallCount = readInt(2);
 
 		callNumbers = readString(72);

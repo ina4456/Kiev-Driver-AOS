@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.LogHelper;
  */
 public class ResponseWaitAreaDecisionPacket extends ResponsePacket {
 
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private Packets.WaitProcType waitProcType; // 대기처리 구분 (1)
 	private String waitPlaceCode; // 대기지역 코드 (4)
 	private float longitude; // 대기지역 경도 (30)
@@ -83,7 +83,7 @@ public class ResponseWaitAreaDecisionPacket extends ResponsePacket {
 	public void parse(byte[] buffers) {
 		super.parse(buffers);
 		try {
-			carId = readInt(2);
+			carId = readInt(4);
 			int type = readInt(1);
 			if (type == Packets.WaitProcType.Success.value) {
 				waitProcType = Packets.WaitProcType.Success;

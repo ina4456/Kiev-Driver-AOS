@@ -36,7 +36,7 @@ public class NoticesPacket extends ResponsePacket {
     @Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
         noticeCode = readInt(2);
         noticeTitle = readString(31);
         notice = readString(256);

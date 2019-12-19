@@ -8,7 +8,7 @@ import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
  */
 public class ResponseMyInfoPacket extends ResponsePacket {
 
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private String corporationName; // 법인회사 이름(20)
 	private String carPlateNumber; // 차량번호 (20)
 	private String driverName; // 운전자 이름 (20)
@@ -71,7 +71,7 @@ public class ResponseMyInfoPacket extends ResponsePacket {
 	@Override
 	public void parse(byte[] buffers) {
 		super.parse(buffers);
-		carId = readInt(2);
+		carId = readInt(4);
 		corporationName = readString(20);
 		carPlateNumber = readString(20);
 		driverName = readString(20);

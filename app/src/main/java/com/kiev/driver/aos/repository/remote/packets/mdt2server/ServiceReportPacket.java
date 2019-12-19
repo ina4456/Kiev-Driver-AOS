@@ -12,7 +12,7 @@ public class ServiceReportPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
     private String phoneNumber; // Phone Number (13)
     private String callReceiptDate; // 콜접수일자 (11) (ex : 2009-01-13)
     private int callNumber; // 콜번호 (2)
@@ -174,7 +174,7 @@ public class ServiceReportPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
 	    writeString(EncryptUtil.encodeStr(""+phoneNumber), 30);
 	    writeString(callReceiptDate, 11);
         writeInt(callNumber, 2);

@@ -2,7 +2,7 @@ package com.kiev.driver.aos.model;
 
 
 public class WaitingZone {
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private String waitingZoneId;
 	private String waitingZoneName;
 	private int numberOfCarsInAreas;    //전체 대기 인원

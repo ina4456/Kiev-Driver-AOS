@@ -209,7 +209,7 @@ public class ResponseNoticeListPacket extends ResponsePacket {
 	@Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
-        carId = readInt(2);
+        carId = readInt(4);
 
         noticeCode1 = readInt(2);
 		noticeDate1 = readString(11);

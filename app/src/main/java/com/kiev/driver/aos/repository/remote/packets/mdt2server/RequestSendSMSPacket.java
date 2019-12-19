@@ -12,7 +12,7 @@ public class RequestSendSMSPacket extends RequestPacket {
 
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
-    private int carId; // Car ID (2)
+    private int carId; // Car ID (4)
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
 	private String content; // 내용 (160)
@@ -74,7 +74,7 @@ public class RequestSendSMSPacket extends RequestPacket {
         super.toBytes();
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
-        writeInt(carId, 2);
+        writeInt(carId, 4);
 		writeString(callReceiptDate, 11);
 		writeInt(callNumber, 2);
         writeString(EncryptUtil.encodeStrUTF8(content), 160);

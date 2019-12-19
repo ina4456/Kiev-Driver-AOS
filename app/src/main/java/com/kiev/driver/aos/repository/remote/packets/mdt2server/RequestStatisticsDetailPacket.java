@@ -11,7 +11,7 @@ import com.kiev.driver.aos.util.EncryptUtil;
 public class RequestStatisticsDetailPacket extends RequestPacket {
 
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
 	private Packets.StatisticListType queryType; //요청 구분(1) : 통합, 일반콜, 앱콜, 업무콜
 	private int startIndex; //시작 인덱스(1)
 	private int requestCount; //요청개수(1)
@@ -83,7 +83,7 @@ public class RequestStatisticsDetailPacket extends RequestPacket {
 	public byte[] toBytes() {
 		super.toBytes();
 		writeInt(corporationCode, 2);
-		writeInt(carId, 2);
+		writeInt(carId, 4);
 		writeInt(queryType.value, 1);
 		writeInt(startIndex, 1);
 		writeInt(requestCount, 1);

@@ -12,7 +12,8 @@ import com.kiev.driver.aos.util.LogHelper;
 public class RequestCallInfoPacket extends RequestPacket {
 
 	private int corporationCode; // 법인코드 (2)
-	private int carId; // Car ID (2)
+	private int carId; // Car ID (4)
+
 	private String callReceiptDate; // 콜접수일자(ex : 2009-01-23) (11)
 	private int callNumber; // 콜번호 (2)
 
@@ -56,7 +57,8 @@ public class RequestCallInfoPacket extends RequestPacket {
 	public byte[] toBytes() {
 		super.toBytes();
 		writeInt(corporationCode, 2);
-		writeInt(carId, 2);
+		//writeInt(carId, 4);
+		writeInt(carId, 4);
 		writeString(callReceiptDate, 11);
 		writeInt(callNumber, 2);
 		LogHelper.e("buffer : " + ByteUtil.toHexString(buffers));

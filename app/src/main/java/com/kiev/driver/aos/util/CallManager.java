@@ -58,7 +58,7 @@ public class CallManager {
 			super.onCallStateChanged(state, incomingNumber);
 			AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-			LogHelper.e("onCallStateCahnged() : " + state + " / " + incomingNumber);
+			LogHelper.e("onCallStateChanged() : " + state + " / " + incomingNumber);
 			switch (state) {
 
 				case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -85,7 +85,7 @@ public class CallManager {
 					LogHelper.e("onCallStateCahnged() CALL_STATE_IDLE : " + state + " / " + incomingNumber);
 
 					audioManager.setMode(AudioManager.MODE_IN_CALL);
-					audioManager.setSpeakerphoneOn(false);
+					audioManager.setSpeakerphoneOn(useSpeakerPhone);
 					break;
 			}
 		}

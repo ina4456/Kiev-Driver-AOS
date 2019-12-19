@@ -347,7 +347,7 @@ public class Packets {
 			case REQ_PERIOD: // 주기전송
 				return 86;
 			case REQ_REPORT: // 운행보고
-				return 132;
+				return 133;
 			case REQ_WAIT_AREA_CANCEL: // 대기취소
 				return 43;
 			case REQ_WAIT_AREA_ORDER_INFO: // 대기배차고객정보 요청

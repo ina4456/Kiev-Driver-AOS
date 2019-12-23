@@ -84,12 +84,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.kiev.driver.aos.view.activity.PopupActivity"
-            android:screenOrientation="portrait"
+            android:label=""
             android:theme="@style/Theme.AppCompat.Translucent" />
-
-<!--            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>-->
-
-
+<!--            android:screenOrientation="portrait"-->
 
 
 

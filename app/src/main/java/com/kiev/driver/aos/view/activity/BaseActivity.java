@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,10 +18,10 @@ import com.gun0912.tedpermission.TedPermission;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.entity.Configuration;
+import com.kiev.driver.aos.service.FloatingViewService;
 import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
 import com.kiev.driver.aos.viewmodel.ConfigViewModel;
-import com.kiev.driver.aos.service.FloatingViewService;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +38,13 @@ public class BaseActivity  extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		try {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		} catch (IllegalStateException e) {
+			//e.printStackTrace();
+		}
 		super.onCreate(savedInstanceState);
+
 		mMainApplication = (MainApplication)this.getApplicationContext();
 
 		ConfigViewModel.Factory callFactory = new ConfigViewModel.Factory(mMainApplication);

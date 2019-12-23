@@ -46,16 +46,19 @@ public class CarNumberConverter {
 
 
 	public static String getCarIdFromCarNum(String carNum) {
-		String area = convertArea(carNum.substring(0, 2));
-		String type = carNum.substring(2, 4);
-		String usage = convertUsage(carNum.substring(4, 5));
-		String number = "3" + carNum.substring(5, 9);
-		String carId = area + type + usage + number;
-		LogHelper.e("차량 area : " + area);
-		LogHelper.e("차량 type : " + type);
-		LogHelper.e("차량 usage : " + usage);
-		LogHelper.e("차량 number : " + number);
-		LogHelper.e("차량 carId : " + carId);
+		String carId = "";
+		if (!carNum.isEmpty()) {
+			String area = convertArea(carNum.substring(0, 2));
+			String type = carNum.substring(2, 4);
+			String usage = convertUsage(carNum.substring(4, 5));
+			String number = "3" + carNum.substring(5, 9);
+			carId = area + type + usage + number;
+			LogHelper.e("차량 area : " + area);
+			LogHelper.e("차량 type : " + type);
+			LogHelper.e("차량 usage : " + usage);
+			LogHelper.e("차량 number : " + number);
+			LogHelper.e("차량 carId : " + carId);
+		}
 
 		return carId;
 	}

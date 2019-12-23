@@ -251,8 +251,8 @@
     <string name="msg_9min"><![CDATA[<font color=\'#dcb969\'>9</font>분 이내로 도착합니다.]]></string>
     <string name="msg_7min"><![CDATA[<font color=\'#dcb969\'>7</font>분 이내로 도착합니다.]]></string>
     <string name="msg_5min"><![CDATA[<font color=\'#dcb969\'>5</font>분 이내로 도착합니다.]]></string>
-    <string name="msg_soon"><![CDATA[잠시 후 도착합니다. \n차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
-    <string name="msg_arrival"><![CDATA[도착했습니다. \n차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
+    <string name="msg_soon"><![CDATA[잠시 후 도착합니다. 차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
+    <string name="msg_arrival"><![CDATA[도착했습니다. 차량번호는 <font color=\'#dcb969\'>%s</font> 입니다.]]></string>
     <string-array name="msg_static_list">
         <item>@string/msg_9min</item>
         <item>@string/msg_7min</item>

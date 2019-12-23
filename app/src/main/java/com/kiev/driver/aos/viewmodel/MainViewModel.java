@@ -199,7 +199,7 @@ public class MainViewModel extends AndroidViewModel {
 
 	private ArrayList<SelectionItem> loadMessageList() {
 		Context context = getApplication();
-		String carNumber = mRepository.getConfig().getCarNumber();
+		String carNumber = mRepository.getConfig().getCarNumber().substring(2);
 		ArrayList<SelectionItem> messagesItems = new ArrayList<>();
 		List<String> messageList = Arrays.asList(context.getResources().getStringArray(R.array.msg_static_list));
 

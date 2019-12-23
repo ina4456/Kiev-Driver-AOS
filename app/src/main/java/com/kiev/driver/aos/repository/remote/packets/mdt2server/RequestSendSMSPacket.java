@@ -77,7 +77,7 @@ public class RequestSendSMSPacket extends RequestPacket {
         writeInt(carId, 4);
 		writeString(callReceiptDate, 11);
 		writeInt(callNumber, 2);
-        writeString(EncryptUtil.encodeStrUTF8(content), 160);
+        writeString(EncryptUtil.encodeStrUTF8(content), 200);
         return buffers;
     }
 

@@ -399,7 +399,7 @@ public class Packets {
 
 			/*신규 추가 패킷*/
 			case REQ_SEND_SMS: // SMS전송 요청
-				return 182;
+				return 222;
 			case RES_SEND_SMS: // SMS전송 요청 응답
 				return 22;
 

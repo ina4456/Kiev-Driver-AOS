@@ -68,7 +68,6 @@ public class MainViewModel extends AndroidViewModel {
 		return mConfiguration;
 	}
 
-
 	public LiveData<Call> getCallInfo() {
 		return mCallInfo;
 	}

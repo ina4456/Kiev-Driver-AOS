@@ -35,26 +35,27 @@ public class CarNumberConverter {
 	private static final String CAR_NUM_AREA_STR_GYEONGNAM = "경남";
 	private static final String CAR_NUM_AREA_STR_JEJU = "제주";
 
-	private static final int CAR_NUM_MIDFIX_BA = 0x1;
-	private static final int CAR_NUM_MIDFIX_SA = 0x2;
-	private static final int CAR_NUM_MIDFIX_A = 0x3;
-	private static final int CAR_NUM_MIDFIX_JA = 0x4;
-	private static final String CAR_NUM_MIDFIX_STR_BA = "바";
-	private static final String CAR_NUM_MIDFIX_STR_SA = "사";
-	private static final String CAR_NUM_MIDFIX_STR_A = "아";
-	private static final String CAR_NUM_MIDFIX_STR_JA = "자";
+	private static final int CAR_NUM_USAGE_BA = 0x1;
+	private static final int CAR_NUM_USAGE_SA = 0x2;
+	private static final int CAR_NUM_USAGE_A = 0x3;
+	private static final int CAR_NUM_USAGE_JA = 0x4;
+	private static final String CAR_NUM_USAGE_STR_BA = "바";
+	private static final String CAR_NUM_USAGE_STR_SA = "사";
+	private static final String CAR_NUM_USAGE_STR_A = "아";
+	private static final String CAR_NUM_USAGE_STR_JA = "자";
 
 
 	public static String getCarIdFromCarNum(String carNum) {
-		LogHelper.e("차량 area : " + carNum.substring(0, 2));
-		LogHelper.e("차량 type : " + carNum.substring(2, 4));
-		LogHelper.e("차량 usage : " + carNum.substring(4, 5));
-		LogHelper.e("차량 number : " + carNum.substring(5, 9));
 		String area = convertArea(carNum.substring(0, 2));
 		String type = carNum.substring(2, 4);
 		String usage = convertUsage(carNum.substring(4, 5));
 		String number = "3" + carNum.substring(5, 9);
 		String carId = area + type + usage + number;
+		LogHelper.e("차량 area : " + area);
+		LogHelper.e("차량 type : " + type);
+		LogHelper.e("차량 usage : " + usage);
+		LogHelper.e("차량 number : " + number);
+		LogHelper.e("차량 carId : " + carId);
 
 		return carId;
 	}
@@ -197,16 +198,16 @@ public class CarNumberConverter {
 		String result;
 		switch (usage) {
 			case "사":
-				result = String.valueOf(CAR_NUM_MIDFIX_SA);
+				result = String.valueOf(CAR_NUM_USAGE_SA);
 				break;
 			case "아":
-				result = String.valueOf(CAR_NUM_MIDFIX_A);
+				result = String.valueOf(CAR_NUM_USAGE_A);
 				break;
 			case "자":
-				result = String.valueOf(CAR_NUM_MIDFIX_JA);
+				result = String.valueOf(CAR_NUM_USAGE_JA);
 				break;
 			default:
-				result = String.valueOf(CAR_NUM_MIDFIX_BA);
+				result = String.valueOf(CAR_NUM_USAGE_BA);
 				break;
 		}
 		return result;
@@ -215,17 +216,17 @@ public class CarNumberConverter {
 	private static String convertUsage(int usage) {
 		String result;
 		switch (usage) {
-			case CAR_NUM_MIDFIX_SA:
-				result = CAR_NUM_MIDFIX_STR_SA;
+			case CAR_NUM_USAGE_SA:
+				result = CAR_NUM_USAGE_STR_SA;
 				break;
-			case CAR_NUM_MIDFIX_A:
-				result = CAR_NUM_MIDFIX_STR_A;
+			case CAR_NUM_USAGE_A:
+				result = CAR_NUM_USAGE_STR_A;
 				break;
-			case CAR_NUM_MIDFIX_JA:
-				result = CAR_NUM_MIDFIX_STR_JA;
+			case CAR_NUM_USAGE_JA:
+				result = CAR_NUM_USAGE_STR_JA;
 				break;
 			default:
-				result = CAR_NUM_MIDFIX_STR_BA;
+				result = CAR_NUM_USAGE_STR_BA;
 				break;
 		}
 		return result;

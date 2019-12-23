@@ -198,7 +198,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 					LogHelper.e("isNeedAutoLogin() : " + configuration.isNeedAutoLogin());
 					if (configuration.isNeedAutoLogin()) {
-						//login();
+						login();
 						config.removeObserver(this);
 					}
 				}

@@ -53,9 +53,9 @@ public class ResponseMessageNewPacket extends ResponsePacket {
         return "메시지 응답 new (0x" + Integer.toHexString(messageType) + ") " +
                 "corporationCode=" + corporationCode +
                 ", carId=" + carId +
-                ", message='" + message +
-		        ", sentDate'" + messageSentDate +
-		        ", messageId'" + messageId +
+                ", message=" + message +
+		        ", sentDate=" + messageSentDate +
+		        ", messageId=" + messageId +
 		        + '\'';
     }
 }

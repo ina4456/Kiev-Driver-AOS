@@ -444,13 +444,10 @@ public class ScenarioService extends LifecycleService {
 		//LogHelper.e("REQ-LOGIN : requestServicePacket() : " + mConfiguration);
 		mServiceResultPacket = new MutableLiveData<>();
 
-
 		RequestServicePacket packet = new RequestServicePacket();
 		packet.setServiceNumber(mConfiguration.getServiceNumber());
 		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		// FIXME: 2019-08-22 carNumber
 		packet.setCarId(Integer.valueOf(vehicleNumber));
-		//packet.setCarId(mConfiguration.getCarId());
 		packet.setPhoneNumber(phoneNumber);
 		packet.setCorporationType(mConfiguration.isCorporation() ? Packets.CorporationType.Corporation : Packets.CorporationType.Indivisual);
 		packet.setProgramVersion(mConfiguration.getAppVersion());
@@ -1000,7 +997,6 @@ public class ScenarioService extends LifecycleService {
 			switch (messageType) {
 				case Packets.RES_SERVICE: { // 서비스 요청 응답
 					pollingHandler.removeMessages(MSG_SERVICE_ACK);
-					LogHelper.e("서비스 요청 응답");
 
 					ServiceRequestResultPacket resPacket = (ServiceRequestResultPacket) response;
 					mServiceResultPacket.postValue(resPacket);
@@ -1039,7 +1035,6 @@ public class ScenarioService extends LifecycleService {
 						// 서비스 번호
 						if (resPacket.getServiceNumber() != mConfiguration.getServiceNumber()) {
 							mConfiguration.setServiceNumber(resPacket.getServiceNumber());
-							mRepository.updateConfig(mConfiguration);
 						}
 
 						if (mRepository.getWaitingZone() != null) {
@@ -1050,8 +1045,11 @@ public class ScenarioService extends LifecycleService {
 						final int noticeCode = resPacket.getNoticeCode();
 						if (noticeCode > 0) {
 							if (noticeCode != mConfiguration.getLastNoticeVersion()) {
+								mConfiguration.setLastNoticeVersion(noticeCode);
 								requestNotice();
 							}
+						} else {
+							mConfiguration.setLastNoticeVersion(noticeCode);
 						}
 
 
@@ -1065,6 +1063,8 @@ public class ScenarioService extends LifecycleService {
 						} else if (waitingZone == null) {
 							mRepository.clearWaitingZone();
 						}
+
+						mRepository.updateConfig(mConfiguration);
 					}
 					break;
 				}

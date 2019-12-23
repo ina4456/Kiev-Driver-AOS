@@ -166,30 +166,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 				}
 			});
 
-			mainViewModel.getConfiguration().observe(this, new Observer<Configuration>() {
+			LiveData<Configuration> configurationLiveData = mainViewModel.getConfiguration();
+			configurationLiveData.observe(this, new Observer<Configuration>() {
 				@Override
 				public void onChanged(Configuration configuration) {
 					LogHelper.e("onChanged()-configuration");
+					configurationLiveData.removeObserver(this);
 					mBinding.navViewBody.tvVehicleNumber.setText(configuration.getCarNumber());
-				}
-			});
 
-
-			LiveData<Notice> noticeLiveData = mMainViewModel.getLatestNotice();
-			noticeLiveData.observe(this, new Observer<Notice>() {
-				@Override
-				public void onChanged(Notice notice) {
-					noticeLiveData.removeObserver(this);
-					if (notice != null && notice.getId() != 0 && notice.isNotice()) {
-						LogHelper.e("onChanged-Notice : " + notice.toString());
-						Popup popup = new Popup
-								.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_NOTICE)
-								.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
-								.setTitle(getString(R.string.d_menu_notice))
-								.setContent(notice.getTitle() + "\n\n" + notice.getContent())
-								.build();
-						showPopupDialog(popup);
-						WavResourcePlayer.getInstance(getApplication()).play(R.raw.voice_115);
+					if (configuration.getLastNoticeVersion() > 0) {
+						LiveData<Notice> noticeLiveData = mMainViewModel.getLatestNotice();
+						noticeLiveData.observe(MainActivity.this, new Observer<Notice>() {
+							@Override
+							public void onChanged(Notice notice) {
+								noticeLiveData.removeObserver(this);
+								if (notice != null && notice.getId() != 0 && notice.isNotice()) {
+									LogHelper.e("onChanged-Notice : " + notice.toString());
+									Popup popup = new Popup
+											.Builder(Popup.TYPE_TWO_BTN_WITH_TITLE, Constants.DIALOG_TAG_NOTICE)
+											.setBtnLabel(getString(R.string.common_read_more), getString(R.string.common_close))
+											.setTitle(getString(R.string.d_menu_notice))
+											.setContent(notice.getTitle() + "\n\n" + notice.getContent())
+											.build();
+									showPopupDialog(popup);
+									WavResourcePlayer.getInstance(getApplication()).play(R.raw.voice_115);
+								}
+							}
+						});
 					}
 				}
 			});

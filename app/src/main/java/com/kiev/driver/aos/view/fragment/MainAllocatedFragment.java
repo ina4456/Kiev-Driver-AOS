@@ -181,10 +181,11 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 				mBinding.btnAlighting.setVisibility(View.GONE);
 				mBinding.btnRouting.setBackgroundResource(R.drawable.selector_bg_route_passenger_btn);
 
-				if (callInfo.getCallTypeEnum() == Packets.OrderKind.WaitCall) {
-					WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_120);
-				} else {
+				if (callInfo.getCallTypeEnum() == Packets.OrderKind.Wait
+						|| callInfo.getCallTypeEnum() == Packets.OrderKind.WaitOrder) {
 					WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_132);
+				} else {
+					WavResourcePlayer.getInstance(getContext()).play(R.raw.voice_120);
 				}
 
 				//탑승후

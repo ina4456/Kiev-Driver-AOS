@@ -40,6 +40,7 @@
                 <androidx.appcompat.widget.AppCompatCheckedTextView
                     android:id="@+id/tv_msg_auto_send"
                     style="@style/SettingCheckedTextStyle"
+                    android:visibility="gone"
                     android:text="@string/setting_send_auto_msg_allocation"
                     android:checked="@{viewModel.configuration.isUseAutoSendSmsWhenGotCall()}"
                     app:layout_constraintTop_toTopOf="parent"
@@ -49,6 +50,7 @@
                 <View
                     android:id="@+id/v_msg_auto_send_line"
                     style="@style/SettingLineStyle"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_msg_auto_send"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

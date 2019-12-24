@@ -1151,6 +1151,13 @@ public class ScenarioService extends LifecycleService {
 						if (restType == Packets.RestType.Rest) {
 							mCallInfo.setCallStatus(Constants.CALL_STATUS_RESTING);
 							WavResourcePlayer.getInstance(context).play(R.raw.voice_112);
+
+							WaitingZone waitingZone = mRepository.getWaitingZone();
+							if (waitingZone != null) {
+								mRepository.requestWaitCancel(waitingZone.getWaitingZoneId());
+								mRepository.clearWaitingZone();
+							}
+
 						} else {
 							mCallInfo.setCallStatus(Constants.CALL_STATUS_WORKING);
 							WavResourcePlayer.getInstance(context).play(R.raw.voice_114);

@@ -83,6 +83,17 @@ public class WaitingCallListAdapter extends RecyclerView.Adapter<WaitingCallList
 			mBinding.tvDistance.setText(item.getCallDistanceToDeparture());
 			mBinding.tvDeparture.setText(item.getDeparturePoi());
 			mBinding.tvDestination.setText(item.getDestinationPoi());
+
+			String destinationPoi = item.getDestinationPoi();
+			String destinationAddr = item.getDestinationAddr();
+			if (destinationPoi == null || destinationPoi.isEmpty()) {
+				if (destinationAddr != null && !destinationAddr.isEmpty()) {
+					destinationPoi = destinationAddr;
+				} else {
+					destinationPoi = mContext.getString(R.string.alloc_no_destination);
+				}
+			}
+			mBinding.tvDestination.setText(destinationPoi);
 		}
 
 		@Override

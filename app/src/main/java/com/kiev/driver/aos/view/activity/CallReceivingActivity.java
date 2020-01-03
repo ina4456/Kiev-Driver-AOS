@@ -105,7 +105,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		//홈 or 백 버튼을 눌러 콜 수신을 거부하여 onPause 가 호출될 경우.
 		if (needToRequestToRefuseWhenCloseActivity) {
 			LogHelper.e("onPause - needToRequestToRefuseWhenCloseActivity");
-			WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
+			//WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
 			this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
 			this.resetCallInfo();
 			finish();

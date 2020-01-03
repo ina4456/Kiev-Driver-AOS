@@ -67,6 +67,32 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 		showListOrEmptyMsgView();
 	}
 
+	private void subscribeViewModel(MainViewModel mainViewModel) {
+		if (mainViewModel != null) {
+			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+				@Override
+				public void onChanged(Call call) {
+					LogHelper.e("onChanged-Call");
+					if (call != null) {
+						int callStatus = call.getCallStatus();
+						LogHelper.e("onChanged-Call : " + callStatus);
+						switch (callStatus) {
+							case Constants.CALL_STATUS_DRIVING:
+							case Constants.CALL_STATUS_BOARDED:
+							case Constants.CALL_STATUS_ALLOCATED:
+								finish();
+								break;
+
+							case Constants.CALL_STATUS_VACANCY:
+								requestWaitZoneList(START_INDEX);
+								break;
+						}
+					}
+				}
+			});
+		}
+	}
+
 	private void initToolbar() {
 		setSupportActionBar(mBinding.wzToolbar.toolbar);
 		mBinding.wzToolbar.ibtnActionButton.setImageResource(R.drawable.selector_bg_common_refresh_btn);
@@ -143,11 +169,12 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 
 							for (int i = 0; i < waitAreaIds.length; i++) {
 								WaitingZone waitZone = new WaitingZone();
-								waitZone.setWaitingZoneId(waitAreaIds[i]);
-								waitZone.setWaitingZoneName(waitAreaNames[i]);
-								waitZone.setNumberOfCarsInAreas(Integer.parseInt(numberOfCarsInAreas[i]));
-								waitZone.setAvailableWait(isAvailableWaits[i].equals("Y"));
-								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitNumbers[i].equals("") ? "0" : myWaitNumbers[i]));
+								waitZone.setWaitingZoneId(getStringFromArray(waitAreaIds, i));
+								waitZone.setWaitingZoneName(getStringFromArray(waitAreaNames, i));
+								waitZone.setNumberOfCarsInAreas(Integer.parseInt(getStringFromArray(numberOfCarsInAreas, i)));
+								waitZone.setAvailableWait(getStringFromArray(isAvailableWaits, i).equals("Y"));
+								String myWaitingOrder = getStringFromArray(myWaitNumbers, i);
+								waitZone.setMyWaitingOrder(Integer.parseInt(myWaitingOrder.equals("") ? "0" : myWaitingOrder));
 
 								waitingZoneList.add(waitZone);
 							}
@@ -179,34 +206,15 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 		});
 	}
 
-
-
-	private void subscribeViewModel(MainViewModel mainViewModel) {
-		if (mainViewModel != null) {
-			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
-				@Override
-				public void onChanged(Call call) {
-					LogHelper.e("onChanged-Call");
-					if (call != null) {
-						int callStatus = call.getCallStatus();
-						LogHelper.e("onChanged-Call : " + callStatus);
-						switch (callStatus) {
-							case Constants.CALL_STATUS_DRIVING:
-							case Constants.CALL_STATUS_BOARDED:
-							case Constants.CALL_STATUS_ALLOCATED:
-								finish();
-								break;
-
-							case Constants.CALL_STATUS_VACANCY:
-								requestWaitZoneList(START_INDEX);
-								break;
-						}
-					}
-				}
-			});
+	private String getStringFromArray(String[] array, int index) {
+		String result = "";
+		try {
+			result = array[index];
+			return result;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return result;
 		}
 	}
-
 
 	@Override
 	public void onClick(View view) {

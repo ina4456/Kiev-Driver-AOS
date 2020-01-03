@@ -154,12 +154,12 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 
 							for (int i = 0; i < callNumbers.length; i++) {
 								Call call = new Call();
-								call.setCallNumber(Integer.parseInt(callNumbers[i]));
-								call.setCallReceivedDate(callReceiptDates[i]);
-								call.setCallOrderCount(Integer.parseInt(callOrderCounts[i]));
-								call.setDeparturePoi(departures[i]);
-								call.setDestinationPoi(destinations[i]);
-								call.setDistance(Integer.valueOf(distances[i]));
+								call.setCallNumber(Integer.parseInt(getStringFromArray(callNumbers, i)));
+								call.setCallReceivedDate(getStringFromArray(callReceiptDates, i));
+								call.setCallOrderCount(Integer.parseInt(getStringFromArray(callOrderCounts, i)));
+								call.setDeparturePoi(getStringFromArray(departures, i));
+								call.setDestinationPoi(getStringFromArray(destinations, i));
+								call.setDistance(Integer.valueOf(getStringFromArray(distances, i)));
 								waitingCallList.add(call);
 							}
 
@@ -181,6 +181,16 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 				}
 			}
 		});
+	}
+
+	private String getStringFromArray(String[] array, int index) {
+		String result = "";
+		try {
+			result = array[index];
+			return result;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return result;
+		}
 	}
 
 

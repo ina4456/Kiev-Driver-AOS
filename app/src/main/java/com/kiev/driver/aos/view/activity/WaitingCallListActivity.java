@@ -65,13 +65,17 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	}
 
 	private void subscribeMainViewModel(MainViewModel mainViewModel) {
-		mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+		mainViewModel.getCallInfoLive().observe(this, new Observer<Call>() {
 			@Override
 			public void onChanged(Call call) {
 				LogHelper.e("onChanged()-call");
 				//콜 리스트에서 배차 요청을 하고 난 후, 배차 성공을 했다면, 해당 리스트를 닫는다.
-				if (call.getCallStatus() == Constants.CALL_STATUS_ALLOCATED) {
-					finish();
+				switch (call.getCallStatus()) {
+					case Constants.CALL_STATUS_ALLOCATED:
+					case Constants.CALL_STATUS_BOARDED:
+					case Constants.CALL_STATUS_DRIVING:
+						finish();
+						break;
 				}
 			}
 		});
@@ -163,13 +167,11 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 								waitingCallList.add(call);
 							}
 
-
 							if (startIndex == START_INDEX) {
 								mWaitingCallListAdapter.refreshData(waitingCallList);
 							} else {
 								mWaitingCallListAdapter.addData(waitingCallList);
 							}
-							LogHelper.e("waitingCallList : " + waitingCallList.size());
 
 							showListOrEmptyMsgView();
 						} else {
@@ -204,9 +206,9 @@ public class WaitingCallListActivity extends BaseActivity implements View.OnClic
 	@Override
 	public void onListItemSelected(Call call) {
 		LogHelper.e("selected Item : " + call.toString());
-
-		CallReceivingActivity.startActivity(this, true, call);
-
+		call.setCallStatus(Constants.CALL_STATUS_RECEIVING);
+		mMainViewModel.updateCallInfo(call);
+		CallReceivingActivity.startActivity(this, true);
 	}
 
 	RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {

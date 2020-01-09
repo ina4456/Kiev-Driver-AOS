@@ -91,7 +91,7 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 	private void subscribeViewModel(MainViewModel mainViewModel) {
 		// TODO: 2019. 3. 6. 콜 상태 변경에 따른 화면 분기 처리
 
-		mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+		mainViewModel.getCallInfoLive().observe(this, new Observer<Call>() {
 			@Override
 			public void onChanged(Call call) {
 

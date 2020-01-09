@@ -69,7 +69,7 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 
 	private void subscribeViewModel(MainViewModel mainViewModel) {
 		if (mainViewModel != null) {
-			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+			mainViewModel.getCallInfoLive().observe(this, new Observer<Call>() {
 				@Override
 				public void onChanged(Call call) {
 					LogHelper.e("onChanged-Call");

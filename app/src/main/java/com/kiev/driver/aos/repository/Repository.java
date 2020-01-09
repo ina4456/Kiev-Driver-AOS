@@ -210,28 +210,42 @@ public class Repository {
 	public void updateCallInfo(Call call) {
 		LogHelper.e("try to update call info : " + call.toString());
 		Call savedCall = getCallInfo();
+
 		mAppExecutors.diskIO().execute(() -> {
 			if (savedCall != null) {
+				LogHelper.e("savedCall : " + savedCall.toString());
 				call.setId(savedCall.getId());
+				mDatabase.callDao().update(call);
+			} else {
+				mDatabase.callDao().insert(call);
 			}
-			mDatabase.callDao().update(call);
 		});
 	}
 
-	public ResponseWaitAreaOrderInfoPacket loadWaitCallInfo() {
-		return mSharedPreferenceManager.getWaitOrderInfo();
+
+	public void refreshUiWithIfCallInfoExist() {
+		Call call;
+		OrderInfoPacket normal = loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
+		if (normal != null && normal.getCallNumber() > 0) {
+			LogHelper.e("기존 콜 : " + normal.toString());
+			call = new Call(normal);
+			call.setCallStatus(Constants.CALL_STATUS_BOARDED);
+			updateCallInfo(call);
+		} else {
+			LogHelper.e("normal call is null : " + getCallInfo().toString());
+			//일반콜 정보는 없는데, 현재 승차 상태가 탑승인 경우 목적지 정보가 없는 길빵 손님으로 간주한다.
+			//수락했을 경우에 대한 처리 필요...
+			call = new Call();
+			if (mScenarioService.getBoardType() == Packets.BoardType.Boarding) {
+				LogHelper.e("boarded");
+				call.setCallStatus(Constants.CALL_STATUS_BOARDED);
+			} else {
+				LogHelper.e("not boarded");
+				call.setCallStatus(Constants.CALL_STATUS_VACANCY);
+			}
+			updateCallInfo(call);
+		}
 	}
-
-	public void saveWaitCallInfo(ResponseWaitAreaOrderInfoPacket responseWaitAreaOrderInfoPacket) {
-		mSharedPreferenceManager.setWaitOrderInfo(responseWaitAreaOrderInfoPacket);
-	}
-
-	public void saveWaitArea(WaitingZone waitingZone) {
-		mSharedPreferenceManager.setWaitArea(waitingZone);
-	}
-
-
-
 
 	public OrderInfoPacket loadCallInfoWithOrderKind(Packets.OrderKind kind) {
 		switch (kind) {
@@ -272,6 +286,19 @@ public class Repository {
 				break;
 		}
 	}
+
+	public ResponseWaitAreaOrderInfoPacket loadWaitCallInfo() {
+		return mSharedPreferenceManager.getWaitOrderInfo();
+	}
+
+	public void saveWaitCallInfo(ResponseWaitAreaOrderInfoPacket responseWaitAreaOrderInfoPacket) {
+		mSharedPreferenceManager.setWaitOrderInfo(responseWaitAreaOrderInfoPacket);
+	}
+
+	public void saveWaitArea(WaitingZone waitingZone) {
+		mSharedPreferenceManager.setWaitArea(waitingZone);
+	}
+
 
 	public WaitingZone getWaitingZone() {
 		return mSharedPreferenceManager.getWaitingArea();
@@ -338,7 +365,6 @@ public class Repository {
 		if (mScenarioService == null){
 			return null;
 		}
-
 
 		mScenarioService.requestMyInfo();
 		final MutableLiveData<ResponseMyInfoPacket> data = mScenarioService.getResponseMyInfo();

@@ -70,7 +70,7 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 	}
 
 	private void subscribeMainViewModel(MainViewModel mainViewModel) {
-		mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+		mainViewModel.getCallInfoLive().observe(this, new Observer<Call>() {
 			@Override
 			public void onChanged(Call call) {
 				if (call != null) {

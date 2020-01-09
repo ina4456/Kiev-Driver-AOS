@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.kiev.driver.aos.R;
 import com.kiev.driver.aos.model.entity.Notice;
+import com.kiev.driver.aos.util.LogHelper;
 
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class NoticeAdapter extends BaseExpandableListAdapter {
         }
 
 	    Notice item = getGroup(groupPosition);
+	    LogHelper.e("item: " + item.toString());
         viewHolder.tvNoticeTitle.setText(item.isNotice() ? item.getTitle() : item.getContent());
         viewHolder.tvNoticeDate.setText(item.getDate());
 

@@ -39,6 +39,7 @@ public class Constants {
 	public static final int CALL_STATUS_VACANCY = 1000;
 	public static final int CALL_STATUS_VACANCY_IN_WAITING_ZONE = 1100;
 	public static final int CALL_STATUS_DRIVING = 2000;     //주행
+	public static final int CALL_STATUS_RECEIVING = 2500;   //콜 수신
 	public static final int CALL_STATUS_ALLOCATED = 3000;   //배차
 	public static final int CALL_STATUS_ALLOCATION_FAILED = 3100;   //배차실패
 	public static final int CALL_STATUS_ALLOCATED_WHILE_GETON = 3200;   //승차중배차

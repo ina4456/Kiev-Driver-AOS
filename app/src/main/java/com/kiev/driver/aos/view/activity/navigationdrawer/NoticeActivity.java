@@ -184,10 +184,12 @@ public class NoticeActivity extends BaseActivity implements View.OnClickListener
 
 	private Notice getNoticeObjectFromPacket(int code, String date, String title, String content) {
 		Notice notice = new Notice();
+		notice.setNotice(true);
 		notice.setId(code);
 		notice.setDate(date);
 		notice.setTitle(title);
 		notice.setContent(content);
+
 
 		return notice;
 	}

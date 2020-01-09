@@ -44,6 +44,22 @@ public class MainViewModel extends AndroidViewModel {
 	private final LiveData<Call> mCallInfo;
 	private final LiveData<Notice> mNotice;
 
+	public LiveData<Configuration> getConfiguration() {
+		return mConfiguration;
+	}
+
+	public LiveData<Call> getCallInfoLive() {
+		return mCallInfo;
+	}
+
+	public LiveData<Notice> getLatestNotice() {
+		return mNotice;
+	}
+
+	public Call getCallInformaintion() {
+		return mRepository.getCallInfo();
+	}
+
 	private ArrayList<SelectionItem> mMessageList;
 	private ArrayList<SelectionItem> mCancelReasonList;
 
@@ -59,26 +75,6 @@ public class MainViewModel extends AndroidViewModel {
 		mNotice = repository.getLatestNotice();
 		mMessageList = loadMessageList();
 		mCancelReasonList = loadCancelReasonList();
-	}
-
-	/**
-	 * Expose the LiveData Comments query so the UI can observe it.
-	 */
-	public LiveData<Configuration> getConfiguration() {
-		return mConfiguration;
-	}
-
-	public LiveData<Call> getCallInfo() {
-		return mCallInfo;
-	}
-
-	public LiveData<Notice> getLatestNotice() {
-		return mNotice;
-	}
-
-
-	public Call getCallInformaintion() {
-		return mRepository.getCallInfo();
 	}
 
 	public void logoutOrFinishApp(boolean isJustFinishApp) {
@@ -98,18 +94,12 @@ public class MainViewModel extends AndroidViewModel {
 		LogHelper.e("changeCallStatus() : " + callStatus);
 		mRepository.changeCallStatus(callStatus);
 
-
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				((MainApplication) getApplication()).progressOff();
 			}
 		}, 3000);
-//		Call call = this.mCallInfo.getValue();
-//		if (call != null) {
-//			call.setCallStatus(callStatus);
-//			mRepository.updateCallInfo(call);
-//		}
 	}
 
 
@@ -144,18 +134,6 @@ public class MainViewModel extends AndroidViewModel {
 			}
 		} else {
 			LogHelper.e("call 정보 오류");
-		}
-	}
-
-	public WaitingZone getWaitingZone() {
-		return mRepository.getWaitingZone();
-	}
-
-	public void setWaitingZone(WaitingZone waitingZone, boolean isSave) {
-		if (isSave) {
-			mRepository.saveWaitArea(waitingZone);
-		} else {
-			mRepository.clearWaitingZone();
 		}
 	}
 
@@ -250,6 +228,19 @@ public class MainViewModel extends AndroidViewModel {
 		mRepository.requestCancelCall(cancelReason);
 	}
 
+	public void updateCallInfo(Call call) {
+		call.setCallIsTemp(true);
+		mRepository.updateCallInfo(call);
+	}
+
+	public void refreshUiWithIfCallInfoExist() {
+		mRepository.refreshUiWithIfCallInfoExist();
+	}
+
+	public Call getCallInfo() {
+		return mRepository.getCallInfo();
+	}
+
 	public void resetCallInfoForUi() {
 		OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 		OrderInfoPacket getOn = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
@@ -261,7 +252,6 @@ public class MainViewModel extends AndroidViewModel {
 		}
 
 		if (normal != null && getOn != null) {
-			LogHelper.e("일반 배차와 승차중 배차 데이터가 모두 존재");
 			//승차중 배차의 경우 콜 수신 화면을 새로운 데이터와 함께 보여주고,
 			//다시 원래 일반 배차 데이터를 표시함.
 			Call call = new Call(normal);
@@ -273,6 +263,7 @@ public class MainViewModel extends AndroidViewModel {
 	public void resetCallInfoForUi(int status) {
 		mRepository.resetCallInfo(status);
 	}
+
 
 	public MutableLiveData<ResponseSMSPacket> requestToSendSMS(String msg) {
 		return mRepository.requestToSendSMS(msg);
@@ -305,6 +296,18 @@ public class MainViewModel extends AndroidViewModel {
 
 	public void clearTempCallInfo() {
 		mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Temp);
+	}
+
+	public WaitingZone getWaitingZone() {
+		return mRepository.getWaitingZone();
+	}
+
+	public void setWaitingZone(WaitingZone waitingZone, boolean isSave) {
+		if (isSave) {
+			mRepository.saveWaitArea(waitingZone);
+		} else {
+			mRepository.clearWaitingZone();
+		}
 	}
 
 	public boolean isUseAutoRoutingToTarget(boolean isDeparture) {

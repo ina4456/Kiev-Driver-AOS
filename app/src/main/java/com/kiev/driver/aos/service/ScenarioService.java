@@ -195,7 +195,6 @@ public class ScenarioService extends LifecycleService {
 		return mWaitCancel;
 	}
 
-
 	public Packets.BoardType getBoardType() {
 		return boardType;
 	}
@@ -270,12 +269,15 @@ public class ScenarioService extends LifecycleService {
 		mRepository.getCallInfoLive().observe(this, new Observer<Call>() {
 			@Override
 			public void onChanged(Call call) {
-				LogHelper.e("onChanged-Call");
 				if (call != null) {
+					LogHelper.e("onChanged-Call : " + call.getCallStatus());
 					mCallInfo = call;
-					boardType = call.getCallStatus() == Constants.CALL_STATUS_BOARDED
-							? Packets.BoardType.Boarding
-							: Packets.BoardType.Empty;
+//					if (call.getCallStatus() == Constants.CALL_STATUS_BOARDED
+//					|| call.getCallStatus() == Constants.CALL_STATUS_DRIVING) {
+//						boardType = Packets.BoardType.Boarding;
+//					} else {
+//						boardType = Packets.BoardType.Empty;
+//					}
 				}
 			}
 		});
@@ -755,26 +757,27 @@ public class ScenarioService extends LifecycleService {
 
 	public void requestOrderRealtime(Packets.OrderDecisionType type, Call call) {
 		LogHelper.e("requestOrderRealtime : " + type);
-		RequestOrderRealtimePacket packet = new RequestOrderRealtimePacket();
-		packet.setServiceNumber(mConfiguration.getServiceNumber());
-		packet.setCorporationCode(mConfiguration.getCorporationCode());
-		packet.setCarId(mConfiguration.getCarId());
-		packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
-		packet.setCallNumber(call.getCallNumber());
-		packet.setCallReceiptDate(call.getCallReceivedDate());
-		packet.setDecisionType(type);
-		packet.setSendTime(getCurrentTime());
-		packet.setGpsTime(gpsHelper.getTime());
-		packet.setDirection(gpsHelper.getBearing());
-		packet.setLongitude(gpsHelper.getLongitude());
-		packet.setLatitude(gpsHelper.getLatitude());
-		packet.setSpeed(gpsHelper.getSpeed());
-		packet.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
-		packet.setOrderCount(call.getCallOrderCount());
-		request(packet);
+		if (call != null && call.getCallNumber() > 0) {
+			RequestOrderRealtimePacket packet = new RequestOrderRealtimePacket();
+			packet.setServiceNumber(mConfiguration.getServiceNumber());
+			packet.setCorporationCode(mConfiguration.getCorporationCode());
+			packet.setCarId(mConfiguration.getCarId());
+			packet.setPhoneNumber(mConfiguration.getDriverPhoneNumber());
+			packet.setCallNumber(call.getCallNumber());
+			packet.setCallReceiptDate(call.getCallReceivedDate());
+			packet.setDecisionType(type);
+			packet.setSendTime(getCurrentTime());
+			packet.setGpsTime(gpsHelper.getTime());
+			packet.setDirection(gpsHelper.getBearing());
+			packet.setLongitude(gpsHelper.getLongitude());
+			packet.setLatitude(gpsHelper.getLatitude());
+			packet.setSpeed(gpsHelper.getSpeed());
+			packet.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+			packet.setOrderCount(call.getCallOrderCount());
+			request(packet);
+		}
 	}
 
-	// 2017. 12. 19 - 권석범
 	// 배차상태 & 저장된 고객정보가 없을 경우 배차정보요청 패킷(GT-1A11) 전송
 	public void requestCallInfo(int callNumber) {
 		RequestCallInfoPacket packet = new RequestCallInfoPacket();
@@ -1117,9 +1120,12 @@ public class ScenarioService extends LifecycleService {
 					// 배차상태 & 저장된 고객정보가 없을 경우 배차정보요청 패킷(GT-1A11) 전송
 					LogHelper.e("packet.hasOrder : " + packet.hasOrder());
 					if (packet.hasOrder()) {
-						OrderInfoPacket orderInfoPacket = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
-						if (orderInfoPacket == null) {
-							LogHelper.e("orderInfoPacket is null");
+						OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
+						OrderInfoPacket getOn = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
+						//LogHelper.e("orderInfoPacket : " + normal);
+
+						if (normal == null && getOn == null) {
+							LogHelper.e("orderInfoPacket is n                                                                                                                ull");
 							requestCallInfo(packet.getCallNumber());
 //						} else {
 //							// FIXME: 2019-09-17 배차 정보가 있으나, 화면을 보여주지 못하는 경우에 대한 처리 필요..
@@ -1199,6 +1205,10 @@ public class ScenarioService extends LifecycleService {
 						((MainApplication)getApplication()).setCurrentActivity(null);
 						refreshSavedPassengerInfo(packet.getCallNumber());
 						checkReservation();
+					} else if (reportKind == Packets.ReportKind.GetOn) {
+						LogHelper.e("승차 응답 수신");
+						mCallInfo.setCallStatus(Constants.CALL_STATUS_BOARDED);
+						mRepository.updateCallInfo(mCallInfo);
 					}
 
 					if (reportKind == Packets.ReportKind.GetOn) {
@@ -1294,7 +1304,7 @@ public class ScenarioService extends LifecycleService {
 							WavResourcePlayer.getInstance(context).play(R.raw.voice_160_116);
 
 							LogHelper.e("need to show CallReceivingActivity 111");
-							updateCallInfoToUi(packet, -1);
+							updateCallInfo(packet, Constants.CALL_STATUS_RECEIVING);
 							showCallReceivingActivity(true);
 						}
 					} else {
@@ -1314,7 +1324,7 @@ public class ScenarioService extends LifecycleService {
 
 							// 일반 배차와 승차중 배차일 경우 콜 수신 화면 표시
 							LogHelper.e("need to show CallReceivingActivity 222");
-							updateCallInfoToUi(packet, -1);
+							updateCallInfo(packet, Constants.CALL_STATUS_RECEIVING);
 
 							showCallReceivingActivity(true);
 						}
@@ -1339,7 +1349,7 @@ public class ScenarioService extends LifecycleService {
 
 						OrderInfoPacket orderInfo = new OrderInfoPacket(resp);
 						mRepository.saveCallInfoWithOrderKind(orderInfo, Packets.OrderKind.Normal);
-						updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
+						updateCallInfo(orderInfo, Constants.CALL_STATUS_ALLOCATED);
 
 						LogHelper.write("#### 콜 수락(대기) -> callNo : " + resp.getCallNumber());
 					}
@@ -1367,24 +1377,24 @@ public class ScenarioService extends LifecycleService {
 								mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
 
 							} else if (getOn != null && getOn.getCallNumber() == p.getCallNumber()) {
-								updateCallInfoToUi(getOn, Constants.CALL_STATUS_ALLOCATED);
+								updateCallInfo(getOn, Constants.CALL_STATUS_ALLOCATED);
 
 							} else {
 								OrderInfoPacket orderInfo = new OrderInfoPacket(p);
 								mRepository.saveCallInfoWithOrderKind(orderInfo, Packets.OrderKind.GetOnOrder);
-								updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
+								updateCallInfo(orderInfo, Constants.CALL_STATUS_ALLOCATED);
 							}
 						} else {
 							LogHelper.e("CALLER INFO RESEND~~~~3 : " + p.getOrderKind());
 
 							OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 							if (normal != null && normal.getCallNumber() == p.getCallNumber()) {
-								updateCallInfoToUi(normal, Constants.CALL_STATUS_ALLOCATED);
+								updateCallInfo(normal, Constants.CALL_STATUS_ALLOCATED);
 							} else {
 								// 주기 전송에서 hasOrder가 true로 내려오지만, 해당 콜 종류를 알 수 없어 normal을 기준으로 판단하므로, normal 콜에 대기배차 고객정보를 저장함.
 								OrderInfoPacket orderInfo = new OrderInfoPacket(p);
 								mRepository.saveCallInfoWithOrderKind(orderInfo, Packets.OrderKind.Normal);
-								updateCallInfoToUi(orderInfo, Constants.CALL_STATUS_ALLOCATED);
+								updateCallInfo(orderInfo, Constants.CALL_STATUS_ALLOCATED);
 							}
 						}
 					} else {
@@ -1558,13 +1568,13 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.i("boadrType : " + boardType);
 			if (boardType != Packets.BoardType.Boarding) {
 				// 주행 중이 아닐 때는 고객 정보 창에서 음성이 나온다.
-				updateCallInfoToUi(tempPacket, status);
+				updateCallInfo(tempPacket, status);
 				if (mMainApplication.isBackground()) {
 					showCallReceivingActivity(false);
 				}
 			} else {
 				WavResourcePlayer.getInstance(context).play(R.raw.voice_120);
-				updateCallInfoToUi(tempPacket, status);
+				updateCallInfo(tempPacket, status);
 			}
 			requestAck(messageType, mConfiguration.getServiceNumber(), callNumber);
 			mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Temp);
@@ -1584,10 +1594,9 @@ public class ScenarioService extends LifecycleService {
 		}
 	}
 
-	private void updateCallInfoToUi(OrderInfoPacket packet, int callStatus) {
+	private void updateCallInfo(OrderInfoPacket packet, int callStatus) {
 		Call call = new Call(packet);
-		if (callStatus != -1)
-			call.setCallStatus(callStatus);
+		call.setCallStatus(callStatus);
 		call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
 		mRepository.updateCallInfo(call);
 	}

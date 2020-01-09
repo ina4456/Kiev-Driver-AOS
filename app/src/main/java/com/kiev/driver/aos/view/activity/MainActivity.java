@@ -17,7 +17,6 @@ import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
-import com.kiev.driver.aos.model.entity.Taxi;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.server2mdt.ResponseMyInfoPacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -118,7 +117,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 		if (mainViewModel != null) {
 
 
-			mainViewModel.getCallInfo().observe(this, new Observer<Call>() {
+			mainViewModel.getCallInfoLive().observe(this, new Observer<Call>() {
 				@Override
 				public void onChanged(Call call) {
 					LogHelper.e("onChanged-Call");
@@ -395,7 +394,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 		String content = getString(isLogout ? R.string.logout_confirm_msg : R.string.main_btn_finish_msg);
 
 		Call call = mMainViewModel.getCallInformaintion();
-		//Call call = mMainViewModel.getCallInfo().getValue();
+		//Call call = mMainViewModel.getCallInfoLive().getValue();
 		if (call != null) {
 			int callStatus = call.getCallStatus();
 			if (callStatus == Constants.CALL_STATUS_ALLOCATED) {

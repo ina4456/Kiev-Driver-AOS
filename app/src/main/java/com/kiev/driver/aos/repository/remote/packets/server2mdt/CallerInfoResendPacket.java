@@ -121,6 +121,8 @@ public class CallerInfoResendPacket extends ResponsePacket {
 				orderKind = Packets.OrderKind.GetOnOrder;
 			} else if (Packets.OrderKind.Mobile.value == order) {
 				orderKind = Packets.OrderKind.Mobile;
+			} else if (Packets.OrderKind.WaitCall.value == order) {
+				orderKind = Packets.OrderKind.WaitCall;
 			}
 			callReceiptDate = readString(11);
 			callNumber = readInt(2);

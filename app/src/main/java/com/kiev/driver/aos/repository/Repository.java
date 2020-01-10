@@ -241,7 +241,14 @@ public class Repository {
 				call.setCallStatus(Constants.CALL_STATUS_BOARDED);
 			} else {
 				LogHelper.e("not boarded");
-				call.setCallStatus(Constants.CALL_STATUS_VACANCY);
+				OrderInfoPacket getOn = loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
+				if (getOn != null && getOn.getCallNumber() > 0) {
+					call = new Call(getOn);
+					call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
+					saveCallInfoWithOrderKind(getOn, Packets.OrderKind.Normal);
+				} else {
+					call.setCallStatus(Constants.CALL_STATUS_VACANCY);
+				}
 			}
 			updateCallInfo(call);
 		}

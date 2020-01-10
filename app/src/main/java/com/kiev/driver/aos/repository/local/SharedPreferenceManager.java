@@ -16,7 +16,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 
 public class SharedPreferenceManager {
-	private static final String LOCAL_DATA = "HOUSTON_SP.LOCAL_DATA";
+	private static final String LOCAL_DATA = "KIEV_SP.LOCAL_DATA";
 	private static final String SP_KEY_WAIT_AREA = "wait_area";
 	private static final String SP_KEY_CALL_INFO_WAIT = "call_info_wait";
 	private static final String SP_KEY_CALL_INFO_TEMP = "call_info_temp";

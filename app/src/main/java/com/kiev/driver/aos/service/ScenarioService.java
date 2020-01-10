@@ -932,15 +932,19 @@ public class ScenarioService extends LifecycleService {
 			LogHelper.d(">> refreshSavedPassengerInfo - 4");
 			mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Normal);
 			OrderInfoPacket _getOn = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
+
 			mRepository.saveCallInfoWithOrderKind(_getOn, Packets.OrderKind.Normal);
 			mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
 
 			//배차 데이터 정리 완료 후, 승차중 배차 데이터가 존재하고, 일반 배차 데이터가 없을 경우
 			//승차중 배차 데이터를 배차 상태로 UI에 표시한다.
-			Call call = new Call(_getOn);
-			call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-			call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
-			mRepository.updateCallInfo(call);
+			if (_getOn != null) {
+				LogHelper.e("getOn is not null");
+				Call call = new Call(_getOn);
+				call.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
+				call.setDistance(gpsHelper.getDistance((float)call.getDepartureLat(), (float)call.getDepartureLong()));
+				mRepository.updateCallInfo(call);
+			}
 		}
 	}
 

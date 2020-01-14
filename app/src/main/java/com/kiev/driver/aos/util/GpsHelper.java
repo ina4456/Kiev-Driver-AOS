@@ -65,6 +65,8 @@ public class GpsHelper {
             return (float) lastLocation.getLongitude();
         }
         return 0.0f;
+//	    return (float) 127.112129;  //테스트 기흥
+
     }
 
     /**
@@ -77,6 +79,7 @@ public class GpsHelper {
             return (float) lastLocation.getLatitude();
         }
         return 0.0f;
+//	    return (float) 37.266266;   //테스트 기흥
     }
 
     /**

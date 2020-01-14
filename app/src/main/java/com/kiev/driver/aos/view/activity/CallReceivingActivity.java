@@ -1,7 +1,12 @@
 package com.kiev.driver.aos.view.activity;
 
+import android.app.ActivityManager;
+import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -11,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
@@ -24,6 +30,8 @@ import com.kiev.driver.aos.util.LogHelper;
 import com.kiev.driver.aos.util.WavResourcePlayer;
 import com.kiev.driver.aos.view.fragment.PopupDialogFragment;
 import com.kiev.driver.aos.viewmodel.MainViewModel;
+
+import java.util.List;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -48,9 +56,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 	private ActivityCallReceivingBinding mBinding;
 	private static final int COUNT_DOWN_INTERVAL = 1000;
 	private CountDownTimer countDownTimer;
-	private boolean initialized = false;
 	private boolean hasGotResponse = false;
-	private boolean failedOrCanceledCall = false;
 	private boolean needToRequestToRefuseWhenCloseActivity = true;
 	boolean isFromWaitingCallList;
 
@@ -64,6 +70,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		turnOnScreen();
 		super.onCreate(savedInstanceState);
 		LogHelper.e("onCreate()");
 
@@ -78,6 +85,22 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		subscribeViewModel();
 	}
 
+	private void turnOnScreen() {
+		LogHelper.e("turnOnScreen()");
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+			setShowWhenLocked(true);
+			setTurnScreenOn(true);
+			KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+			if(keyguardManager != null)
+				keyguardManager.requestDismissKeyguard(this, null);
+		} else {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+					WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+					WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+		}
+	}
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -88,6 +111,9 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 	protected void onResume() {
 		super.onResume();
 		LogHelper.e("onResume()");
+
+		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+		registerReceiver(mReceiver, filter);
 	}
 
 	@Override
@@ -100,30 +126,47 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		}
 
 		mMainApplication.setCurrentActivity(null);
+	}
 
-		//홈 or 백 버튼을 눌러 콜 수신을 거부하여 onPause 가 호출될 경우.
-		if (needToRequestToRefuseWhenCloseActivity) {
-			failedOrCanceledCall = true;
-			LogHelper.e("onPause - needToRequestToRefuseWhenCloseActivity");
-			//WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
-			this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
-			this.refreshUiWithIfCallInfoExist();
-			finish();
-		}
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mReceiver);
+		super.onDestroy();
+		LogHelper.e("onDestroy()");
 	}
 
 	@Override
 	public void onBackPressed() {
-		boolean wasBackground = mMainApplication.wasBackground();
-		//백그라운드 상태에서 진입 했을 경우, 백버튼 누를시 task 전체를 백그라운드로 이동.
-		//그 외의 경우 콜 수신 화면만 닫음.
-		if (wasBackground) {
-			moveTaskToBack(true);
-		} else {
-			super.onBackPressed();
+		LogHelper.e("onBackPressed()");
+		this.refuseCall();
+	}
+
+
+	@Override
+	protected void onUserLeaveHint() {
+		super.onUserLeaveHint();
+		LogHelper.e("onUserLeaveHint()");
+
+		//홈 버튼을 눌러 콜 수신을 거부하는 경우.
+		LogHelper.e("needToRequestToRefuseWhenCloseActivity : " + needToRequestToRefuseWhenCloseActivity);
+		if (needToRequestToRefuseWhenCloseActivity) {
+			this.refuseCall();
 		}
 	}
 
+	public BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			LogHelper.e("onReceive()");
+
+			if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+				LogHelper.e("The screen has turned off");
+
+				if (needToRequestToRefuseWhenCloseActivity) {
+					refuseCall();
+				}
+			}
+		}
+	};
 
 	private void subscribeViewModel() {
 		LiveData<Call> callInfo = mMainViewModel.getCallInfoLive();
@@ -156,7 +199,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATION_FAILED");
 							callInfo.removeObserver(this);
 							hasGotResponse = true;
-							failedOrCanceledCall = true;
 							showFailurePopup();
 							needToRequestToRefuseWhenCloseActivity = false;
 							refreshUiWithIfCallInfoExist();
@@ -166,30 +208,9 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 							LogHelper.i("onChanged-Call : CALL_STATUS_ALLOCATED_WHILE_GETON");
 							callInfo.removeObserver(this);
 							hasGotResponse = true;
-							needToRequestToRefuseWhenCloseActivity = false;
 							refreshUiWithIfCallInfoExist();
 							finishActivity();
 							break;
-
-						case Constants.CALL_STATUS_BOARDED:
-						case Constants.CALL_STATUS_DRIVING:
-						case Constants.CALL_STATUS_VACANCY:
-							//배차 방송 수신 중에 미터기가 조작이 된다면, 수신된 배차 방송을 거절 처리하고 닫는다.
-							LogHelper.i("onChanged-Call : status : " +status);
-
-							LogHelper.e("failedOrCanceledCall : " + failedOrCanceledCall);
-							if (initialized && !failedOrCanceledCall) {
-								callInfo.removeObserver(this);
-								requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
-								//WavResourcePlayer.getInstance(CallReceivingActivity.this).play(R.raw.voice_126);
-								refreshUiWithIfCallInfoExist();
-								needToRequestToRefuseWhenCloseActivity = false;
-								finish();
-							}
-
-							initialized = true;
-							break;
-
 
 						default:
 							LogHelper.i("onChanged-Call : default");
@@ -243,7 +264,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			mBinding.tvDistance.setText(tempCall.getCallDistanceToDeparture());
 
 			//콜 등급 표시
-			//테스트 call.setCallClass(new Random().nextInt(5));
 			if (tempCall.getCallClass() == 0) {
 				mBinding.rbCallGrade.setVisibility(View.GONE);
 			} else {
@@ -273,12 +293,38 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		}
 	}
 
-	private void setRatingStarColor(Drawable drawable, @ColorInt int color) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			DrawableCompat.setTint(drawable, color);
-		} else {
-			drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+	private void refuseCall() {
+		LogHelper.i("refuseCall()");
+		needToRequestToRefuseWhenCloseActivity = false;
+		this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
+		this.refreshUiWithIfCallInfoExist();
+		this.finishActivity();
+	}
+
+	private void requestAcceptOrRefuse(Packets.OrderDecisionType decisionType) {
+		mMainViewModel.requestAcceptOrRefuse(decisionType);
+		if (decisionType == Packets.OrderDecisionType.Reject) {
+			mMainViewModel.clearTempCallInfo();
+			mMainViewModel.setWaitingZone(null, false);
 		}
+	}
+
+	private void refreshUiWithIfCallInfoExist() {
+		LogHelper.d("refreshUiWithIfCallInfoExist()");
+		mMainViewModel.refreshUiWithIfCallInfoExist();
+	}
+
+	public boolean isApplicationSentToBackground(final Context context) {
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+		if (!tasks.isEmpty()) {
+			ComponentName topActivity = tasks.get(0).topActivity;
+			if (!topActivity.getPackageName().equals(context.getPackageName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void finishActivity() {
@@ -288,7 +334,19 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			moveTaskToBack(true);
 			finish();
 		} else {
-			super.onBackPressed();
+			if (!isFinishing()) {
+				finish();
+			} else {
+				super.onBackPressed();
+			}
+		}
+	}
+
+	private void setRatingStarColor(Drawable drawable, @ColorInt int color) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			DrawableCompat.setTint(drawable, color);
+		} else {
+			drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 		}
 	}
 
@@ -302,11 +360,7 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 			@Override
 			public void onFinish() {
 				LogHelper.e("onFinish()");
-				failedOrCanceledCall = true;
-				needToRequestToRefuseWhenCloseActivity = false;
-				requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
-				refreshUiWithIfCallInfoExist();
-				finishActivity();
+				refuseCall();
 			}
 		};
 		countDownTimer.start();
@@ -343,7 +397,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		mBinding.tvDeparturePoi.setText(call.getDeparturePoi());
 		mBinding.tvDepartureAddr.setText(call.getDepartureAddr());
 
-
 		String destinationPoi = call.getDestinationPoi();
 		String destinationAddr = call.getDestinationAddr();
 		if (destinationPoi == null || destinationPoi.isEmpty()) {
@@ -356,20 +409,6 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		mBinding.tvDestinationPoi.setText(destinationPoi);
 		mBinding.tvDestinationAddr.setText(call.getDestinationAddr());
 	}
-
-	private void refreshUiWithIfCallInfoExist() {
-		LogHelper.d("refreshUiWithIfCallInfoExist()");
-		mMainViewModel.refreshUiWithIfCallInfoExist();
-	}
-
-	private void requestAcceptOrRefuse(Packets.OrderDecisionType decisionType) {
-		mMainViewModel.requestAcceptOrRefuse(decisionType);
-		if (decisionType == Packets.OrderDecisionType.Reject) {
-			mMainViewModel.clearTempCallInfo();
-			mMainViewModel.setWaitingZone(null, false);
-		}
-	}
-
 
 	@Override
 	public void onDismissPopupDialog(String tag, Intent intent) {
@@ -385,17 +424,13 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 		switch (view.getId()) {
 			//배차 거절
 			case R.id.btn_reject:
-				failedOrCanceledCall = true;
 				WavResourcePlayer.getInstance(this).play(R.raw.voice_126);
-				this.requestAcceptOrRefuse(Packets.OrderDecisionType.Reject);
-				this.refreshUiWithIfCallInfoExist();
-				this.finishActivity();
+				refuseCall();
 				break;
 
 			//배차 요청
 			case R.id.btn_request:
 				hasGotResponse = false;
-				failedOrCanceledCall = false;
 				super.startLoadingProgress();
 				setViewsAsWaitingResponse(null);
 				WavResourcePlayer.getInstance(this).play(R.raw.voice_124);
@@ -426,5 +461,4 @@ public class CallReceivingActivity extends BaseActivity implements View.OnClickL
 				.build();
 		showPopupDialog(popup);
 	}
-
 }

@@ -7,20 +7,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /><!-- 내 핸드폰 번호를 가져오기 위함 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <!--&lt;!&ndash; 대기모드로 들어가지 않기 위함 &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK"/>-->
-    <!--&lt;!&ndash; 화면 잠금 기능을 제어하기 위함  &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />-->
-    <!--&lt;!&ndash; sdcard에 저장하기 위한 권한 &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:name="com.kiev.driver.aos.MainApplication"
@@ -85,8 +79,8 @@
         <activity
             android:name="com.kiev.driver.aos.view.activity.PopupActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
-<!--            android:screenOrientation="portrait"-->
 
 
 

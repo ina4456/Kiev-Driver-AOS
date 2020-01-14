@@ -251,13 +251,13 @@ public class WaitingZoneListActivity extends BaseActivity implements View.OnClic
 						mViewModel.setWaitingZone(null, false);
 						liveData.removeObserver(this);
 						LogHelper.e("대기 취소 응답 :  " + response);
-						if (response.getWaitCancelType() == Packets.WaitCancelType.Success) {
+						if (response.getWaitCancelType() == Packets.WaitCancelType.Success
+								|| response.getWaitCancelType() == Packets.WaitCancelType.AlreadyCancel) {
 							mViewModel.setWaitingZone(item, false);
 							requestWaitZoneList(START_INDEX);
 						} else {
 							showFailurePopup(isRequest);
 						}
-
 					}
 				});
 			}

@@ -1009,7 +1009,7 @@ public class ScenarioService extends LifecycleService {
 					mServiceResultPacket.postValue(resPacket);
 					LogHelper.e("서비스 요청 응답 : " + resPacket);
 
-					// TODO: 2019-10-14 버전 차이 날 경우 시나리오 확인
+					// TODO: 2019-10-14 버전 차이 날 경우 플레이 스토어 안내 팝업 처리해야 할 듯.
 					/*if (resPacket.getProgramVersion() > getConfiguration.getAppVersion()) {
 						startService(new Intent("com.thinkware.florida.otaupdater.Updater"));
 						LogHelper.i("ota updater 실행");
@@ -1120,32 +1120,14 @@ public class ScenarioService extends LifecycleService {
 						requestMessage();
 					}
 
-					// 2017. 12. 19 - 권석범
 					// 배차상태 & 저장된 고객정보가 없을 경우 배차정보요청 패킷(GT-1A11) 전송
 					LogHelper.e("packet.hasOrder : " + packet.hasOrder());
 					if (packet.hasOrder()) {
 						OrderInfoPacket normal = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Normal);
 						OrderInfoPacket getOn = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.GetOnOrder);
-						//LogHelper.e("orderInfoPacket : " + normal);
-
 						if (normal == null && getOn == null) {
-							LogHelper.e("orderInfoPacket is n                                                                                                                ull");
+							LogHelper.e("orderInfoPacket is null");
 							requestCallInfo(packet.getCallNumber());
-//						} else {
-//							// FIXME: 2019-09-17 배차 정보가 있으나, 화면을 보여주지 못하는 경우에 대한 처리 필요..
-//							// 기존은 배차 정보가 없을 경우에만 서버에 다시 요청하여 응답 받아 화면을 표시함.
-//							LogHelper.e("orderInfoPacker not null : " + orderInfoPacket.toString());
-//							LogHelper.e("mCallInfo.getCallStatus() : " + mCallInfo.getCallStatus());
-//							if (orderInfoPacket.getOrderKind() == Packets.OrderKind.GetOnOrder
-//									&& mCallInfo.getCallStatus() != Constants.CALL_STATUS_ALLOCATED) {
-//								LogHelper.e("orderInfoPacket not null but not showing allocated fragment");
-//
-//								// FIXME: checkReservation 테스트 후 검증 필요
-//								mCallInfo.setCallStatus(Constants.CALL_STATUS_ALLOCATED);
-//								Call call = new Call(orderInfoPacket);
-//								call.setDistance(gpsHelper.getDistance((float) call.getDepartureLat(), (float) call.getDepartureLong()));
-//								mRepository.updateCallInfo(call);
-//							}
 						}
 					}
 				}
@@ -1462,6 +1444,18 @@ public class ScenarioService extends LifecycleService {
 					OrderInfoPacket tempPacket = new OrderInfoPacket(resPacket);
 					processCallInfo(context, messageType, tempPacket, tempPacket.getCallNumber(), !resPacket.isSuccess());
 
+					if (resPacket.isSuccess()) {
+						LogHelper.e("대기콜 배차 성공 - 대기 지역 대기 취소 처리");
+
+						WaitingZone waitingZone = mRepository.getWaitingZone();
+						if (waitingZone != null) {
+							requestWaitCancel(waitingZone.getWaitingZoneId());
+							mRepository.clearWaitingZone();
+							mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Wait);
+							mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.WaitOrder);
+							mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.WaitCall);
+						}
+					}
 				}
 				break;
 
@@ -1505,8 +1499,11 @@ public class ScenarioService extends LifecycleService {
 					ResponseWaitAreaCancelPacket resPacket = (ResponseWaitAreaCancelPacket) response;
 					LogHelper.e("RES_WAIT_AREA_CANCEL : " + resPacket);
 					mWaitCancel.postValue(resPacket);
-					if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Success) {
+					if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Success
+							|| resPacket.getWaitCancelType() == Packets.WaitCancelType.AlreadyCancel) {
 						mRepository.clearWaitingZone();
+					} else if (resPacket.getWaitCancelType() == Packets.WaitCancelType.Exist) {
+						requestWaitPassengerInfo();
 					}
 				}
 				break;
@@ -1569,7 +1566,6 @@ public class ScenarioService extends LifecycleService {
 
 			// 승차 중이라면, 배차 완료 여부를 음성으로만 알려줌.
 			// 승차 중이 아니라면 화면으로 알려줌.
-			LogHelper.i("boadrType : " + boardType);
 			if (boardType != Packets.BoardType.Boarding) {
 				// 주행 중이 아닐 때는 고객 정보 창에서 음성이 나온다.
 				updateCallInfo(tempPacket, status);

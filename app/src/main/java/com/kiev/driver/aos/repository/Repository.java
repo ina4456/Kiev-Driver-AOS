@@ -184,12 +184,11 @@ public class Repository {
 	}
 
 
-	//UI 업데이트용 REQ_LIVE DATA 콜정보
+	//UI 업데이트용 LIVE DATA 콜정보
 	public LiveData<Call> getCallInfoLive() {
 		LogHelper.e("getCallInfoLive()");
 		return mDatabase.callDao().getCallInfoForUiLive();
 	}
-
 
 	public Call getCallInfo() {
 		try {
@@ -213,7 +212,6 @@ public class Repository {
 
 		mAppExecutors.diskIO().execute(() -> {
 			if (savedCall != null) {
-				LogHelper.e("savedCall : " + savedCall.toString());
 				call.setId(savedCall.getId());
 				mDatabase.callDao().update(call);
 			} else {

@@ -264,16 +264,11 @@ public class Packets {
 	}
 
 	// 대기취소처리 구분
-
-	// TODO: 2020-01-09 3번 4번 해당 시나리오 맞는 처리 필요
-	// exist 받으면 배차 완료 처리
-	// already cancel 취소 성공 처리
-
 	public enum WaitCancelType {
 		Success(0x01), // 대기취소 성공
 		Fail(0x02), // 대기취소 실패
-        Exist(0x03), // 대기배차 있음 (사용 하지 않는다고 함)
-        AlreadyCancel(0x04); // 이미 취소 처리됨 (사용 하지 않는다고 함)
+        Exist(0x03), // 대기배차 있음
+        AlreadyCancel(0x04); // 이미 취소 처리됨
 
 		public int value;
 

@@ -83,7 +83,6 @@ import com.kiev.driver.aos.view.activity.PopupActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -1258,6 +1257,17 @@ public class ScenarioService extends LifecycleService {
 					LogHelper.e("getOnCall : " + (getOnCall == null));
 
 
+					//LogHelper.e("주기 전송 중지... : " + periodTerm * 1000);
+					pollingHandler.removeMessages(MSG_PERIOD);
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							//LogHelper.e("주기 전송 재개...");
+							pollingPeriod(periodTerm);
+						}
+					}, periodTerm * 1000);
+
+
 					if ((waitCall != null || normalCall != null)
 							&& getOnCall != null) {
 						// - 0x14 : 배차가 2개 이상인지 (일반배차가 있는 상태에서 또 일반배차가 내려 올 경우)
@@ -1605,13 +1615,6 @@ public class ScenarioService extends LifecycleService {
 	//----------------------------------------------------------------------------------------
 	// polling & timer
 	//----------------------------------------------------------------------------------------
-	private void cancelTimer(Timer t) {
-		if (t != null) {
-			t.cancel();
-			t = null;
-		}
-	}
-
 	/**
 	 * 주기 전송 패킷을 일정 간격마다 요청 한다.
 	 */

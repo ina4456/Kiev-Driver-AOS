@@ -295,11 +295,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 					if (cancelReason != null) {
 						if (cancelReason.equals(getString(R.string.alloc_cancel_reason_passenger))) {
 							reason = Packets.ReportKind.FailedPassengerCancel;
-						} else if (reason.equals(getString(R.string.alloc_cancel_reason_no_show))) {
+						} else if (cancelReason.equals(getString(R.string.alloc_cancel_reason_no_show))) {
 							reason = Packets.ReportKind.FailedNoShow;
-						} else if (reason.equals(getString(R.string.alloc_cancel_reason_using_other_car))) {
+						} else if (cancelReason.equals(getString(R.string.alloc_cancel_reason_using_other_car))) {
 							reason = Packets.ReportKind.FailedUseAnotherTaxi;
-						} else if (reason.equals(getString(R.string.alloc_cancel_reason_etc))) {
+						} else if (cancelReason.equals(getString(R.string.alloc_cancel_reason_etc))) {
 							reason = Packets.ReportKind.FailedEtc;
 						}
 

@@ -371,7 +371,7 @@ public class Packets {
 			case RES_CONFIG: // 환경설정
 				return 40;
 			case RES_PERIOD: // 주기응답
-				return 10;
+				return 11;
 			case RES_ORDER_INFO_BROADCAST: // 배차데이터 (목적지 추가)
 				return 359;
 			case RES_ORDER_INFO_PROC: // 배차데이터 처리

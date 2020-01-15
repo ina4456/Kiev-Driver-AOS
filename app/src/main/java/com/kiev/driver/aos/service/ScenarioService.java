@@ -1129,6 +1129,17 @@ public class ScenarioService extends LifecycleService {
 							requestCallInfo(packet.getCallNumber());
 						}
 					}
+
+					LogHelper.e("current boardType : " + boardType + " / packet boarded : " + packet.boarded());
+					if (boardType == Packets.BoardType.Empty && packet.boarded()) {
+						boardType = Packets.BoardType.Boarding;
+						mCallInfo.setCallStatus(Constants.CALL_STATUS_BOARDED);
+						mRepository.updateCallInfo(mCallInfo);
+					} else if (boardType == Packets.BoardType.Boarding && !packet.boarded()) {
+						boardType = Packets.BoardType.Empty;
+						mCallInfo.setCallStatus(Constants.CALL_STATUS_VACANCY);
+						mRepository.updateCallInfo(mCallInfo);
+					}
 				}
 				break;
 
@@ -1184,6 +1195,7 @@ public class ScenarioService extends LifecycleService {
 
 						//하차 응답 수신
 						LogHelper.e("하차 응답 수신");
+						boardType = Packets.BoardType.Empty;
 						mCallInfo.setCallStatus(Constants.CALL_STATUS_ALIGHTED);
 						mRepository.updateCallInfo(mCallInfo);
 
@@ -1192,6 +1204,7 @@ public class ScenarioService extends LifecycleService {
 						checkReservation();
 					} else if (reportKind == Packets.ReportKind.GetOn) {
 						LogHelper.e("승차 응답 수신");
+						boardType = Packets.BoardType.Boarding;
 						mCallInfo.setCallStatus(Constants.CALL_STATUS_BOARDED);
 						mRepository.updateCallInfo(mCallInfo);
 					}

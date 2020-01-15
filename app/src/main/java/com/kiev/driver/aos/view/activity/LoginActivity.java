@@ -269,7 +269,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 		String phoneNumber = mBinding.etPhoneNumber.getText().toString().trim();
 		phoneNumber = phoneNumber.replaceAll("-", "");
 		String vehicleNumber = mBinding.etVehicleNumber.getText().toString().trim();
+
 		final String convertedVehicleNumber = CarNumberConverter.getCarIdFromCarNum(vehicleNumber);
+		try {
+			Integer.valueOf(convertedVehicleNumber);
+		} catch (NumberFormatException e) {
+			showAndPlayLoginErrorMsg(Packets.CertificationResult.InvalidCar
+					, Packets.CertificationResult.InvalidCar.value);
+			return;
+		}
 
 		if (!phoneNumber.isEmpty() && !vehicleNumber.isEmpty()) {
 			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + vehicleNumber);

@@ -12,6 +12,7 @@ public class ResponsePeriodSendingPacket extends ResponsePacket {
     private boolean hasOrder; // 배차상태 (1)
     private int callNumber; // 콜번호 (2)
     private boolean hasMessage; // 메시지 유무 (1)
+	private boolean boarded; // 승차 유무 (1)
 
     public ResponsePeriodSendingPacket(byte[] bytes) {
         super(bytes);
@@ -33,7 +34,11 @@ public class ResponsePeriodSendingPacket extends ResponsePacket {
         return hasMessage;
     }
 
-    @Override
+	public boolean boarded() {
+		return boarded;
+	}
+
+	@Override
     public void parse(byte[] buffers) {
         super.parse(buffers);
         carId = readInt(4);
@@ -42,6 +47,8 @@ public class ResponsePeriodSendingPacket extends ResponsePacket {
         callNumber = readInt(2);
         int message = readInt(1);
         hasMessage = message == 0x01;
+	    int boardedStatus = readInt(1);
+		boarded = boardedStatus == 0x01;
     }
 
     @Override
@@ -50,6 +57,7 @@ public class ResponsePeriodSendingPacket extends ResponsePacket {
                 "carId=" + carId +
                 ", hasOrder=" + hasOrder +
                 ", callNumber=" + callNumber +
-                ", hasMessage=" + hasMessage;
+		        ", hasMessage=" + hasMessage +
+                ", boarded=" + boarded;
     }
 }

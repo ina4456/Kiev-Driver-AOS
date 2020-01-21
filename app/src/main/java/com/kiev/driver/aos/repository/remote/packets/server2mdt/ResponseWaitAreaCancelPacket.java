@@ -33,12 +33,11 @@ public class ResponseWaitAreaCancelPacket extends ResponsePacket {
             waitCancelType = Packets.WaitCancelType.Success;
         } else if (type == Packets.WaitCancelType.Fail.value) {
             waitCancelType = Packets.WaitCancelType.Fail;
+        } else if (type == Packets.WaitCancelType.Exist.value) {
+            waitCancelType = Packets.WaitCancelType.Exist;
+        } else if (type == Packets.WaitCancelType.AlreadyCancel.value) {
+            waitCancelType = Packets.WaitCancelType.AlreadyCancel;
         }
-//        else if (type == Packets.WaitCancelType.Exist.value) {
-//            waitCancelType = Packets.WaitCancelType.Exist;
-//        } else if (type == Packets.WaitCancelType.AlreadyCancel.value) {
-//            waitCancelType = Packets.WaitCancelType.AlreadyCancel;
-//        }
     }
 
     @Override

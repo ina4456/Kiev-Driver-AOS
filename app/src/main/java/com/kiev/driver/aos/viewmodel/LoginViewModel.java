@@ -6,6 +6,7 @@ import android.content.Context;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
@@ -62,17 +63,23 @@ public class LoginViewModel extends AndroidViewModel {
 
 
 	public boolean checkValidate(String phoneNumber, String vehicleNumber) {
+		boolean result = false;
+
 		if (phoneNumber != null && !phoneNumber.isEmpty()
 			&& vehicleNumber != null && !vehicleNumber.isEmpty()) {
+			int vnLength = vehicleNumber.length();
 
-			if (vehicleNumber.length() == 9) {
-				return true;
+			if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
+				if (vnLength == SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
+					result = true;
+				}
 			} else {
-				return false;
+				if (vnLength >= 4 && vnLength <= SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
+					result = true;
+				}
 			}
-		} else {
-			return false;
 		}
+		return result;
 	}
 
 	public void makePhoneCallToCallCenter(Context context) {

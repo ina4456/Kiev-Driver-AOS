@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.text.InputType"/>
+        <variable
+            name="siteConstants"
+            type="com.kiev.driver.aos.SiteConstants"/>
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -125,6 +133,7 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/login_hint_phone_number"
                     android:inputType="phone"
+                    android:maxLength="13"
                     android:textColor="@color/selector_tc_common_yel_yel02"
                     app:layout_constraintBottom_toTopOf="@+id/et_vehicle_number"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -137,8 +146,10 @@
                     android:layout_width="0dp"
                     android:layout_height="52dp"
                     android:layout_marginTop="8dp"
-                    android:hint="@string/login_hint_vehicle_number"
-                    android:inputType="text"
+                    android:hint="@{siteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? @string/login_hint_vehicle_number : @string/login_hint_vehicle_number_s}"
+                    tools:hint="@string/login_hint_vehicle_number_s"
+                    android:inputType='@{siteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_NUMBER}'
+                    android:maxLength="@{siteConstants.LIMIT_LENGTH_CAR_NUMBER}"
                     android:textColor="@color/selector_tc_common_yel_yel02"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

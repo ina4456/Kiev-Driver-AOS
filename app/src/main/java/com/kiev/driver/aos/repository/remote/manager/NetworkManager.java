@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.repository.remote.packets.Packets;
 import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.MainApplication;
@@ -29,7 +30,7 @@ public class NetworkManager {
     //---------------------------------------------------------------------------------
 //    public static final String IP_COMMER = "58.180.28.213";
 //    public static final String IP_DEV = "192.168.0.34";
-    public static final String IP_DEV = "183.99.72.173";
+    public static final String IP_DEV = SiteConstants.SERVER_IP; //"183.99.72.173";
     public static final String IP_LIVE_PACKET = "58.180.28.212";
     public static final int PORT_DEV = 3000;
 

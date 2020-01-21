@@ -122,6 +122,7 @@ public class ScenarioService extends LifecycleService {
 	// 모바일 배차 승차보고 후 주기 시간을 정상적으로 되돌리기 위해 사용 한다
 	private int periodTerm;
 	private boolean isUsedDestination; // 목적지 정보 사용여부
+	private Packets.OrderDecisionType lastOrderDecisionType = Packets.OrderDecisionType.Reject;
 
 
 	private MainApplication mMainApplication;
@@ -754,8 +755,10 @@ public class ScenarioService extends LifecycleService {
 		request(packet);
 	}
 
+
 	public void requestOrderRealtime(Packets.OrderDecisionType type, Call call) {
 		LogHelper.e("requestOrderRealtime : " + type);
+		lastOrderDecisionType = type;
 		if (call != null && call.getCallNumber() > 0) {
 			RequestOrderRealtimePacket packet = new RequestOrderRealtimePacket();
 			packet.setServiceNumber(mConfiguration.getServiceNumber());
@@ -1418,11 +1421,14 @@ public class ScenarioService extends LifecycleService {
 
 				case Packets.RES_ORDER_INFO_PROC: { // 배차데이터 처리
 					OrderInfoPacket tempPacket = mRepository.loadCallInfoWithOrderKind(Packets.OrderKind.Temp);
+					LogHelper.e("RES_ORDER_INFO_PROC : " + (tempPacket == null));
 					OrderInfoProcPacket p = (OrderInfoProcPacket) response;
 					boolean isFailed;
 					if (tempPacket == null || p.getOrderProcType() != Packets.OrderProcType.Display) {
+						LogHelper.e("RES_ORDER_INFO_PROC if");
 						isFailed = true;
 					} else {
+						LogHelper.e("RES_ORDER_INFO_PROC else ");
 						isFailed = checkCallValidation(messageType, tempPacket, p.getCallNumber(), p.getCarId());
 					}
 
@@ -1535,6 +1541,7 @@ public class ScenarioService extends LifecycleService {
 	};
 
 	private boolean checkCallValidation(int messageType, OrderInfoPacket tempPacket, int callNumber, int carId) {
+		LogHelper.e("checkCallValidation() tempPacket : " + tempPacket);
 		boolean isFailed;
 		if (tempPacket.getCallNumber() != callNumber) {
 			// 실시간 위치 및 배차요청으로 올린 콜넘버와 응답의 콜넘버가 다른 겨우 서비스 넘버 97로 REQ_ACK
@@ -1557,8 +1564,27 @@ public class ScenarioService extends LifecycleService {
 
 	private void processCallInfo(Context context, int messageType, OrderInfoPacket tempPacket, int callNumber, boolean isFailed) {
 		if (isFailed) {
-			LogHelper.e("processCallInfo - Failed.....");
-			WavResourcePlayer.getInstance(context).play(R.raw.voice_122);
+			LogHelper.e("processCallInfo - Failed..... lastOrderDecisionType : " + lastOrderDecisionType);
+			//PND와 동시 사용하는 경우에, PND에서 배차 요청(수락)을 한 경우, SP는 해당 결과를 같이 통보(배차데이터 처리(5314)) 받는다.
+			//하지만 그 사이에 SP는 배차 방송에 대한 응답 시간이 만료되어 거절을 전송하면서, TEMP 콜정보를 삭제한다.
+			//그 이후에 서버로 부터 배차데이터 처리(5314)를 수신할 경우, 갖고 있는 콜정보가 없으므로, 단말에서 배차 실패로 판단한다.
+			//따라서 1차적으로 lastOrderDecisionType 값이 요청인 경우에는 요청에 대한 실패로 판단하며,
+			//lastOrderDecisionType 값이 거절이며 tempPacket이 없을 경우 서버로 고객정보 재전송을 요청한다.
+			//하지만 이 경우 서버가 아직 PND에서 ACK를 수신하기 전 일 수 있으므로, 3초 정도의 딜레이를 주고 요청하며,
+			//그 이후에는 주기전송에서 배차정보를 요청하여 스마트폰에서 배차정보를 표시하는 딜레이를 줄인다.
+
+			if (lastOrderDecisionType == Packets.OrderDecisionType.Request) {
+				WavResourcePlayer.getInstance(context).play(R.raw.voice_122);
+			} else if (lastOrderDecisionType == Packets.OrderDecisionType.Reject && tempPacket == null && callNumber > 0){
+				LogHelper.e("고객정보 재전송 요청 : " + callNumber);
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						requestCallInfo(callNumber);
+					}
+				}, 2000);
+			}
+
 			mRepository.clearCallInfoWithOrderKind(Packets.OrderKind.Temp);
 			this.changeCallStatus(Constants.CALL_STATUS_ALLOCATION_FAILED);
 

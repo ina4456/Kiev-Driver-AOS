@@ -15,6 +15,7 @@ import android.widget.CheckedTextView;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.databinding.ActivityLoginBinding;
 import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.SelectionItem;
@@ -268,19 +269,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 	private void login() {
 		String phoneNumber = mBinding.etPhoneNumber.getText().toString().trim();
 		phoneNumber = phoneNumber.replaceAll("-", "");
-		String vehicleNumber = mBinding.etVehicleNumber.getText().toString().trim();
 
-		final String convertedVehicleNumber = CarNumberConverter.getCarIdFromCarNum(vehicleNumber);
+		String vehicleNumber = mBinding.etVehicleNumber.getText().toString().trim();
+		if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
+			vehicleNumber = CarNumberConverter.getCarIdFromCarNum(vehicleNumber);
+		} else {
+			vehicleNumber = "3" + vehicleNumber;
+		}
+		final String convertedVehicleNumber = vehicleNumber;
+
 		try {
 			Integer.valueOf(convertedVehicleNumber);
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
 			showAndPlayLoginErrorMsg(Packets.CertificationResult.InvalidCar
 					, Packets.CertificationResult.InvalidCar.value);
 			return;
 		}
 
-		if (!phoneNumber.isEmpty() && !vehicleNumber.isEmpty()) {
-			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + vehicleNumber);
+		if (!phoneNumber.isEmpty() && !convertedVehicleNumber.isEmpty()) {
+			LogHelper.e("REQ-LOGIN phoneNumber : " + phoneNumber + " / vehicleNumber : " + convertedVehicleNumber);
 			//final String vehicleNumForMobile = "3" + vehicleNumber;
 			super.startLoadingProgress();
 			mLoginViewModel.login(phoneNumber, convertedVehicleNumber).observe(LoginActivity.this, new Observer<ServiceRequestResultPacket>() {

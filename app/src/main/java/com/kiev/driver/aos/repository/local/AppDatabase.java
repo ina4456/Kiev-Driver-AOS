@@ -20,6 +20,7 @@ import android.content.Context;
 
 import com.kiev.driver.aos.AppExecutors;
 import com.kiev.driver.aos.Constants;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Notice;
 import com.kiev.driver.aos.model.entity.Taxi;
@@ -132,10 +133,9 @@ public abstract class AppDatabase extends RoomDatabase {
 		    configuration.setConfigurationVersion(0);
 		    configuration.setEmergencyPeriodTime(10);
 
-		    configuration.setCallServerIp(NetworkManager.IP_DEV);
+		    configuration.setCallServerIp(SiteConstants.SERVER_IP);
 		    configuration.setCallServerPort(NetworkManager.PORT_DEV);
-		    // FIXME: 2019-09-20 테스트 데이터
-		    configuration.setServiceNumber(5);
+		    configuration.setServiceNumber(SiteConstants.SERVICE_NUMBER);
 		    configuration.setCorporation(false);
 		    configuration.setCorporationCode(1);
 
@@ -145,17 +145,6 @@ public abstract class AppDatabase extends RoomDatabase {
 		    //콜 기본값
 		    call.setCallStatus(Constants.CALL_STATUS_VACANCY);
 		    appDatabase.callDao().insert(call);
-
-		    //택시/기사 기본값
-		    // FIXME: 2019-09-03 테스트 데이터
-//		    taxi.setDriverName("권석범");
-//		    taxi.setDriverPhoneNumber("010-5055-6980");
-//		    taxi.setCompanyName("팅크웨어");
-//		    taxi.setTaxiPlateNumber("37소3150");
-//		    taxi.setTaxiModel("기아 셀토스");
-//		    taxi.setTaxiColor("회색");
-		    appDatabase.taxiDao().upsert(taxi);
-
 	    });
     }
 

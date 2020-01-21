@@ -299,7 +299,7 @@ public class MainApplication extends MultiDexApplication implements Application.
 				//mTMapTapi.setSKTMapAuthentication("8a071793-4686-3167-8bb1-8bed20a70788");
 				//개인
 				TMapTapi tmapApi = new TMapTapi(getApplicationContext());
-				tmapApi.setSKTMapAuthentication(Constants.TMAP_API_KEY);
+				tmapApi.setSKTMapAuthentication(SiteConstants.TMAP_API_KEY);
 				tmapApi.setOnAuthenticationListener(new TMapTapi.OnAuthenticationListenerCallback() {
 					@Override
 					public void SKTMapApikeySucceed() {

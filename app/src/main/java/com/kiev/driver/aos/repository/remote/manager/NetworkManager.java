@@ -6,12 +6,12 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 
-import com.kiev.driver.aos.SiteConstants;
-import com.kiev.driver.aos.repository.remote.packets.Packets;
-import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.MainApplication;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.repository.remote.SocketRequestCallback;
+import com.kiev.driver.aos.repository.remote.packets.Packets;
+import com.kiev.driver.aos.repository.remote.packets.RequestPacket;
 import com.kiev.driver.aos.repository.remote.packets.ResponsePacket;
 import com.kiev.driver.aos.repository.remote.packets.mdt2server.LivePacket;
 import com.kiev.driver.aos.util.LogHelper;
@@ -165,6 +165,7 @@ public class NetworkManager {
 			    port = PORT_DEV;
 //			    ip = mConfiguration.getCallServerIp();
 //			    port = mConfiguration.getCallServerPort();
+			    LogHelper.e("IP : " + ip + " / PORT : " + port );
 			    connect(ip, port);
 		    }
 		    if (connector != null) {

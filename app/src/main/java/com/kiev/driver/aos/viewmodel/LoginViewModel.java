@@ -69,15 +69,15 @@ public class LoginViewModel extends AndroidViewModel {
 			&& vehicleNumber != null && !vehicleNumber.isEmpty()) {
 			int vnLength = vehicleNumber.length();
 
-			if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
+//			if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
 				if (vnLength == SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
 					result = true;
 				}
-			} else {
-				if (vnLength >= 4 && vnLength <= SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
-					result = true;
-				}
-			}
+//			} else {
+//				if (vnLength >= 4 && vnLength <= SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
+//					result = true;
+//				}
+//			}
 		}
 		return result;
 	}
@@ -86,7 +86,7 @@ public class LoginViewModel extends AndroidViewModel {
 		LogHelper.e("makePhoneCallToCallCenter()");
 		Configuration configuration = mRepository.getConfig();
 		if (configuration != null) {
-			String callCenterPhoneNumber = configuration.getCallCenterNumber();
+			String callCenterPhoneNumber = SiteConstants.CALL_CENTER_PHONE_NUMBER;
 			if (callCenterPhoneNumber != null && !callCenterPhoneNumber.isEmpty()) {
 				CallManager.getInstance(context)
 						.call(context, callCenterPhoneNumber, configuration.isUseSpeakerPhone());
@@ -121,7 +121,12 @@ public class LoginViewModel extends AndroidViewModel {
 			LogHelper.e("save Vehicle Number origin Vehicle Num : " + vehicleNum + " / inputVehicleNumInt : " + inputVehicleNumInt);
 			if (vehicleNum == 0 || vehicleNum != inputVehicleNumInt) {
 				configuration.setCarId(inputVehicleNumInt);
-				configuration.setCarNumber(CarNumberConverter.getCarNumFromCarId(inputVehicleNumInt));
+				if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
+					configuration.setCarNumber(CarNumberConverter.getCarNumFromCarId(inputVehicleNumInt));
+				} else {
+					String number = String.valueOf(inputVehicleNumInt > 30000 ? (inputVehicleNumInt - 30000) : inputVehicleNumInt);
+					configuration.setCarNumber(number);
+				}
 			}
 
 			LogHelper.e("configuration : " + configuration.toString());

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.databinding.FragmentMainBinding;
 import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.WaitingZone;
@@ -109,7 +110,7 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 			public void onChanged(Configuration configuration) {
 				LogHelper.e("mainNormal : config : " + configuration.toString());
 				String carNumber = configuration.getCarNumber();
-				mBinding.tvNumberPlate.setText(carNumber.substring(2));
+				mBinding.tvNumberPlate.setText(carNumber.substring(SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? 2 : 0));
 
 				float vacancyTextSize = getResources().getDimension(R.dimen.main_status_vacancy_text_size);
 				float boardingRestingTextSize = getResources().getDimension(R.dimen.main_status_boarding_resting_text_size);

@@ -7,6 +7,7 @@ import android.os.Handler;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.model.SelectionItem;
 import com.kiev.driver.aos.model.WaitingZone;
 import com.kiev.driver.aos.model.entity.Call;
@@ -107,7 +108,7 @@ public class MainViewModel extends AndroidViewModel {
 		LogHelper.e("makePhoneCallToCallCenter()");
 		Configuration configuration = mRepository.getConfig();
 		if (configuration != null) {
-			String callCenterPhoneNumber = configuration.getCallCenterNumber();
+			String callCenterPhoneNumber = SiteConstants.CALL_CENTER_PHONE_NUMBER;
 			if (callCenterPhoneNumber != null && !callCenterPhoneNumber.isEmpty()) {
 				CallManager.getInstance(context)
 						.call(context, callCenterPhoneNumber, configuration.isUseSpeakerPhone());
@@ -177,7 +178,7 @@ public class MainViewModel extends AndroidViewModel {
 
 	private ArrayList<SelectionItem> loadMessageList() {
 		Context context = getApplication();
-		String carNumber = mRepository.getConfig().getCarNumber().substring(2);
+		String carNumber = mRepository.getConfig().getCarNumber().substring(SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? 0 : 2);
 		ArrayList<SelectionItem> messagesItems = new ArrayList<>();
 		List<String> messageList = Arrays.asList(context.getResources().getStringArray(R.array.msg_static_list));
 

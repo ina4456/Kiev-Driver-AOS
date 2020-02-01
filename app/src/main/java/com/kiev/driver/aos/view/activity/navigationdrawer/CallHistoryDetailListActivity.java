@@ -201,17 +201,13 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 							for (int i = 0; i < callNumbers.length; i++) {
 								CallHistory history = new CallHistory();
 								history.setCallId(Integer.parseInt(callNumbers[i]));
-								history.setCallTypeStr(callTypes[i]);
-								history.setDate(callReceiptDates[i]);
-								history.setDeparture(departures[i]);
-								history.setDestination(destinations[i]);
-								history.setStartTime(boardedTimes[i]);
-								history.setEndTime(alightedTimes[i]);
-								try {
-									history.setPassengerPhoneNumber(phoneNumbers[i]);
-								} catch (ArrayIndexOutOfBoundsException e) {
-									history.setPassengerPhoneNumber("");
-								}
+								history.setCallTypeStr(getStringFromArray(callTypes, i));
+								history.setDate(getStringFromArray(callReceiptDates, i));
+								history.setDeparture(getStringFromArray(departures, i));
+								history.setDestination(getStringFromArray(destinations, i));
+								history.setStartTime(getStringFromArray(boardedTimes, i));
+								history.setEndTime(getStringFromArray(alightedTimes, i));
+								history.setPassengerPhoneNumber(getStringFromArray(phoneNumbers, i));
 
 								historyList.add(history);
 							}
@@ -232,6 +228,16 @@ public class CallHistoryDetailListActivity extends BaseActivity implements View.
 				}
 			}
 		});
+	}
+
+	private String getStringFromArray(String[] array, int index) {
+		String result = "";
+		try {
+			result = array[index];
+			return result;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return result;
+		}
 	}
 
 	@Override

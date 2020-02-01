@@ -47,6 +47,8 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 		mBinding.setLifecycleOwner(this);
 		mBinding.setViewModel(mMainViewModel);
 
+		mBinding.btnBoarding.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
+		mBinding.btnResting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 
 		subscribeMainViewModel(mMainViewModel);
 		setListeners();
@@ -80,9 +82,15 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 					switch (callStatus) {
 						case Constants.CALL_STATUS_WORKING:
 						case Constants.CALL_STATUS_VACANCY:
-							mBinding.groupVacancy.setVisibility(View.VISIBLE);
-							//mBinding.groupBoarding.setVisibility(View.GONE);
+							//mBinding.groupVacancy.setVisibility(View.VISIBLE);
 							mBinding.groupResting.setVisibility(View.GONE);
+
+							mBinding.tvVacancy.setVisibility(View.VISIBLE);
+							mBinding.btnWaitingZone.setVisibility(View.VISIBLE);
+							mBinding.btnWaitingCallList.setVisibility(View.VISIBLE);
+							mBinding.tvNumberPlate.setVisibility(View.VISIBLE);
+							mBinding.btnBoarding.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
+							mBinding.btnResting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 
 							break;
 
@@ -93,9 +101,16 @@ public class MainNormalFragment extends BaseFragment implements View.OnClickList
 							break;*/
 
 						case Constants.CALL_STATUS_RESTING:
-							mBinding.groupVacancy.setVisibility(View.GONE);
-							//mBinding.groupBoarding.setVisibility(View.GONE);
+							//mBinding.groupVacancy.setVisibility(View.GONE);
 							mBinding.groupResting.setVisibility(View.VISIBLE);
+
+							mBinding.btnResting.setVisibility(View.GONE);
+							mBinding.tvVacancy.setVisibility(View.GONE);
+							mBinding.btnWaitingZone.setVisibility(View.GONE);
+							mBinding.btnWaitingCallList.setVisibility(View.GONE);
+							mBinding.tvNumberPlate.setVisibility(View.GONE);
+							mBinding.btnBoarding.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.GONE : View.VISIBLE);
+
 							break;
 
 						default:

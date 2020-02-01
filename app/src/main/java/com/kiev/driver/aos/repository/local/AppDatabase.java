@@ -137,7 +137,7 @@ public abstract class AppDatabase extends RoomDatabase {
 		    configuration.setCallServerPort(NetworkManager.PORT_DEV);
 		    configuration.setServiceNumber(SiteConstants.SERVICE_NUMBER);
 		    configuration.setCorporation(false);
-		    configuration.setCorporationCode(1);
+		    configuration.setCorporationCode(SiteConstants.CORPORATION_CODE);
 
 		    appDatabase.configDao().upsert(configuration);
 

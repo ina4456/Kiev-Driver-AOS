@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.databinding.FragmentMainAllocatedBinding;
 import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.SelectionItem;
@@ -71,7 +72,16 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 		groupDepartureAndDestination.add(mBinding.tvPrevNextTargetType);
 		groupDepartureAndDestination.add(mBinding.tvPrevOrNextTarget);
 
-		groupButtonsBeforeBoarding.add(mBinding.btnBoarding);
+		if (SiteConstants.USE_BOARDING_ALIGHTING_BTN) {
+			groupButtonsBeforeBoarding.add(mBinding.btnBoarding);
+			mBinding.btnBoarding.setVisibility(View.VISIBLE);
+			mBinding.btnAlighting.setVisibility(View.VISIBLE);
+		} else {
+			mBinding.btnBoarding.setVisibility(View.GONE);
+			mBinding.btnAlighting.setVisibility(View.GONE);
+		}
+
+
 		groupButtonsBeforeBoarding.add(mBinding.btnCancelBoarding);
 		groupButtonsBeforeBoarding.add(mBinding.btnCall);
 		groupButtonsBeforeBoarding.add(mBinding.btnMessage);
@@ -193,7 +203,7 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 				LogHelper.i("탑승 후");
 				setVisibilityGroup(groupButtonsBeforeBoarding, View.GONE);
 				mBinding.tvCallState.setText(getString(R.string.alloc_step_boarded));
-				mBinding.btnAlighting.setVisibility(View.VISIBLE);
+				mBinding.btnAlighting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 				mBinding.btnRouting.setBackgroundResource(R.drawable.selector_bg_route_destination_btn);
 
 				LogHelper.e("visibility : " + mBinding.btnMessage.getVisibility());
@@ -214,7 +224,7 @@ public class MainAllocatedFragment extends BaseFragment implements View.OnClickL
 			mBinding.tvCallState.setText(getString(R.string.alloc_step_boarded));
 			setVisibilityGroup(groupDepartureAndDestination, View.GONE);
 			setVisibilityGroup(groupButtonsBeforeBoarding, View.GONE);
-			mBinding.btnAlighting.setVisibility(View.VISIBLE);
+			mBinding.btnAlighting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 			mBinding.tvBoardingWithoutDestination.setVisibility(View.VISIBLE);
 			//mScenarioService.requestChangeStatus(Constants.INTENT_VALUE_CHANGE_STATUS_BOARDED);
 

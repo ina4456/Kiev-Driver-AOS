@@ -88,8 +88,9 @@ public class CallHistoryAdapter extends RecyclerView.Adapter<CallHistoryAdapter.
 			mBinding.tvDeparture.setText(item.getDeparture());
 
 			String destination = item.getDestination();
-			if (destination.isEmpty())
+			if (destination == null || destination.equals("null") || destination.isEmpty()) {
 				destination = mContext.getString(R.string.alloc_no_destination);
+			}
 			mBinding.tvDestination.setText(destination);
 
 			String startTime = item.getStartTime();

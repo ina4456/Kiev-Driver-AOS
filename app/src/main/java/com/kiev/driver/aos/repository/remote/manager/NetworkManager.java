@@ -165,7 +165,6 @@ public class NetworkManager {
 			    port = PORT_DEV;
 //			    ip = mConfiguration.getCallServerIp();
 //			    port = mConfiguration.getCallServerPort();
-			    LogHelper.e("IP : " + ip + " / PORT : " + port );
 			    connect(ip, port);
 		    }
 		    if (connector != null) {

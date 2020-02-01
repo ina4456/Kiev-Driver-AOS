@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.kiev.driver.aos.viewmodel.MainViewModel"/>
+        <variable
+            name="siteConstants"
+            type="com.kiev.driver.aos.SiteConstants"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,12 +54,12 @@
 
         <!--=================================================-->
         <!--빈차 상태-->
-        <androidx.constraintlayout.widget.Group
+ <!--       <androidx.constraintlayout.widget.Group
             android:id="@+id/group_vacancy"
             android:visibility="visible"
             app:constraint_referenced_ids="btn_boarding,btn_resting,tv_vacancy,btn_waiting_zone,btn_waiting_call_list,tv_number_plate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/>-->
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -134,6 +137,7 @@
             android:text="@string/main_btn_boarding"
             style="@style/MainBottomLeftButtonStyle"
             android:layout_marginEnd="4dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/gl_bottom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_resting"
@@ -142,6 +146,7 @@
             android:id="@+id/btn_resting"
             android:text="@string/main_btn_resting"
             style="@style/MainBottomRightButtonStyle"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/gl_bottom"
             app:layout_constraintStart_toEndOf="@+id/btn_boarding"
             app:layout_constraintEnd_toEndOf="parent"

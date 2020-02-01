@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.MainApplication;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.databinding.ViewFloatingBinding;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
@@ -131,7 +132,7 @@ public class FloatingViewService extends LifecycleService implements View.OnTouc
 		LogHelper.e("setVisibilityBoardingAlightingBtn() : " + status);
 		switch (status) {
 			case Constants.CALL_STATUS_ALLOCATED:
-				mBinding.btnBoardingOrAlighting.setVisibility(View.VISIBLE);
+				mBinding.btnBoardingOrAlighting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 				mBinding.btnBoardingOrAlighting.setText(getString(R.string.floating_btn_boarding));
 
 				break;
@@ -147,7 +148,7 @@ public class FloatingViewService extends LifecycleService implements View.OnTouc
 				}
 				mBinding.btnBoardingOrAlighting.setBackground(backgroundDrawable);
 				mBinding.btnBoardingOrAlighting.setTextColor(getResources().getColorStateList(R.color.selector_tc_floating_alight_btn));
-				mBinding.btnBoardingOrAlighting.setVisibility(View.VISIBLE);
+				mBinding.btnBoardingOrAlighting.setVisibility(SiteConstants.USE_BOARDING_ALIGHTING_BTN ? View.VISIBLE : View.GONE);
 				mBinding.btnCallPassenger.setVisibility(View.GONE);
 				break;
 

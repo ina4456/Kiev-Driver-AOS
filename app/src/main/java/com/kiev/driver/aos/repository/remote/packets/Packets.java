@@ -387,7 +387,7 @@ public class Packets {
 			case RES_MESSAGE: // 메시지 응답
 				return 209;
 			case RES_MESSAGE_NEW: // 메시지 응답
-				return 231;
+				return 233;
 			case REQ_MESSAGE_READ:
 				return 13;
 			case RES_ORDER_INFO: // 고객정보 재전송 (목적지 추가)

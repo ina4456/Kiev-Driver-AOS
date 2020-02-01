@@ -12,7 +12,7 @@ public class ResponseMessageNewPacket extends ResponsePacket {
     private int carId; // Car ID (4)
     private String message; // 메시지 본문 (201)
 	private String messageSentDate; // 메시지 전송일자 (20)
-	private String messageId; // 메시지 코드
+	private int messageId; // 메시지 코드
 
     public ResponseMessageNewPacket(byte[] bytes) {
         super(bytes);
@@ -34,7 +34,7 @@ public class ResponseMessageNewPacket extends ResponsePacket {
 		return messageSentDate;
 	}
 
-	public String getMessageId() {
+	public int getMessageId() {
 		return messageId;
 	}
 
@@ -45,7 +45,7 @@ public class ResponseMessageNewPacket extends ResponsePacket {
         carId = readInt(4);
         message = readString(201);
 		messageSentDate = readString(20);
-		messageId = readString(4);
+		messageId = readInt(4);
     }
 
     @Override

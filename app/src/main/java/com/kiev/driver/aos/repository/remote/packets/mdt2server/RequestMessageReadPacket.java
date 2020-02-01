@@ -12,7 +12,7 @@ public class RequestMessageReadPacket extends RequestPacket {
     private int serviceNumber; // 서비스번호 (1)
     private int corporationCode; // 법인코드 (2)
     private int carId; // Car ID (4)
-	private String messageId; // Message ID (4)
+	private int messageId; // Message ID (4)
 
     public RequestMessageReadPacket() {
         super(Packets.REQ_MESSAGE_READ);
@@ -42,11 +42,11 @@ public class RequestMessageReadPacket extends RequestPacket {
         this.carId = carId;
     }
 
-	public String getMessageId() {
+	public int getMessageId() {
 		return messageId;
 	}
 
-	public void setMessageId(String messageId) {
+	public void setMessageId(int messageId) {
 		this.messageId = messageId;
 	}
 
@@ -56,7 +56,7 @@ public class RequestMessageReadPacket extends RequestPacket {
         writeInt(serviceNumber, 1);
         writeInt(corporationCode, 2);
         writeInt(carId, 4);
-        writeString(messageId, 4);
+		writeInt(messageId, 4);
         return buffers;
     }
 

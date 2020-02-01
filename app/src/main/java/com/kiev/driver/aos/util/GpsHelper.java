@@ -19,7 +19,7 @@ import java.util.Locale;
 public class GpsHelper {
 
     private static final int MIN_TIME = 1 * 1000;
-    private static final int MIN_DISTANCE = 0;
+    private static final int MIN_DISTANCE = 10;
 
     private Context context;
     private LocationManager locationManager;

@@ -497,7 +497,7 @@ public class ScenarioService extends LifecycleService {
 		request(packetMsg);
 	}
 
-	private void requestMessageRead(String msgId) {
+	private void requestMessageRead(int msgId) {
 		RequestMessageReadPacket packetMsg = new RequestMessageReadPacket();
 		packetMsg.setServiceNumber(mConfiguration.getServiceNumber());
 		packetMsg.setCorporationCode(mConfiguration.getCorporationCode());

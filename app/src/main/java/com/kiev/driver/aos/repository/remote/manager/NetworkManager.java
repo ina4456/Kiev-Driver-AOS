@@ -161,10 +161,10 @@ public class NetworkManager {
 			    //|| !isAvailableNetwork(context)) {
 			    disconnect();
 			    // FIXME: 2019-11-15 test
-			    ip = IP_DEV;
-			    port = PORT_DEV;
-//			    ip = mConfiguration.getCallServerIp();
-//			    port = mConfiguration.getCallServerPort();
+//			    ip = IP_DEV;
+//			    port = PORT_DEV;
+			    ip = mConfiguration.getCallServerIp();
+			    port = mConfiguration.getCallServerPort();
 			    connect(ip, port);
 		    }
 		    if (connector != null) {

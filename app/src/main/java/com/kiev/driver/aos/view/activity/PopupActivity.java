@@ -39,6 +39,7 @@ public class PopupActivity extends BaseActivity implements PopupDialogFragment.P
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -73,6 +74,7 @@ public class PopupActivity extends BaseActivity implements PopupDialogFragment.P
 		super.onPause();
 		overridePendingTransition(0, 0);    //다이얼로그 종료시 전환 애니메이션 제거
 	}
+
 
 	@Override
 	public void onDismissPopupDialog(String tag, Intent intent) {

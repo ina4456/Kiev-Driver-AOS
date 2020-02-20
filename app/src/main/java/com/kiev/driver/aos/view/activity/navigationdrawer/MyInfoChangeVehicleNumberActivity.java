@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.kiev.driver.aos.Constants;
 import com.kiev.driver.aos.R;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.databinding.ActivityMyinfoChangeVehicleNumberBinding;
 import com.kiev.driver.aos.model.Popup;
 import com.kiev.driver.aos.model.entity.Configuration;
@@ -76,7 +77,7 @@ public class MyInfoChangeVehicleNumberActivity extends BaseActivity implements V
 	public void afterTextChanged(Editable s) {
 		LogHelper.e("s.toString : "  + s.toString());
 		LogHelper.e("s.length : "  + s.length());
-		if (s.length() != 0 && s.length() >= 4) {
+		if (s.length() != 0 && s.length() >= SiteConstants.LIMIT_LENGTH_CAR_NUMBER) {
 			mBinding.btnChange.setEnabled(true);
 		} else {
 			mBinding.btnChange.setEnabled(false);
@@ -120,6 +121,7 @@ public class MyInfoChangeVehicleNumberActivity extends BaseActivity implements V
 				case DIALOG_TAG_VEHICLE_NUMBER_CHANGE:
 					LoginActivity.startActivity(MyInfoChangeVehicleNumberActivity.this);
 					mViewModel.setNeedAutoLogin(false);
+					mViewModel.logout();
 					finish();
 					break;
 
@@ -140,7 +142,6 @@ public class MyInfoChangeVehicleNumberActivity extends BaseActivity implements V
 	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.btn_change) {
-			// TODO: 2019. 3. 4.  내부값 로그아웃 및 서버 로그아웃 전송 처리 추가 필요
 
 			String vehicleNumber = mBinding.etVehicleNumber.getText().toString().trim();
 			String originVehicleNumber = "";

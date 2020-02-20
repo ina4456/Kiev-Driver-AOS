@@ -3,6 +3,7 @@ package com.kiev.driver.aos.viewmodel;
 import android.app.Application;
 
 import com.kiev.driver.aos.MainApplication;
+import com.kiev.driver.aos.SiteConstants;
 import com.kiev.driver.aos.model.entity.Call;
 import com.kiev.driver.aos.model.entity.Configuration;
 import com.kiev.driver.aos.model.entity.Taxi;
@@ -52,11 +53,20 @@ public class MyInfoViewModel extends AndroidViewModel {
 	public void changeVehicleNumber(String vehicleNumber) {
 		Configuration configuration = mRepository.getConfig();
 		if (configuration != null) {
-			int vehicleNumberInt = Integer.valueOf(CarNumberConverter.getCarIdFromCarNum(vehicleNumber));
+			int vehicleNumberInt = 0;
+			if (SiteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN) {
+				vehicleNumberInt = Integer.parseInt(CarNumberConverter.getCarIdFromCarNum(vehicleNumber));
+			} else {
+				vehicleNumberInt = Integer.parseInt("3" + vehicleNumber);
+			}
 			configuration.setCarId(vehicleNumberInt);
 			configuration.setCarNumber(vehicleNumber);
 			mRepository.updateConfig(configuration);
 		}
+	}
+
+	public void logout() {
+		mRepository.logout();
 	}
 
 	public void setNeedAutoLogin(boolean needAutoLogin) {

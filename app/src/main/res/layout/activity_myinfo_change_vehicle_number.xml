@@ -5,6 +5,10 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="android.text.InputType"/>
+        <variable
+            name="siteConstants"
+            type="com.kiev.driver.aos.SiteConstants"/>
         <variable
             name="viewModel"
             type="com.kiev.driver.aos.viewmodel.MyInfoViewModel"/>
@@ -27,12 +31,15 @@
             android:id="@+id/et_vehicle_number"
             android:layout_marginTop="47dp"
             android:layout_marginBottom="16dp"
-            android:hint="@string/login_hint_vehicle_number"
             style="@style/EditTextStyle"
             android:singleLine="true"
             android:maxLines="1"
             android:text="@{viewModel.configuration.getCarNumber()}"
             android:selection="@{viewModel.configuration.getCarNumber().length()}"
+            android:hint="@{siteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? @string/login_hint_vehicle_number : @string/login_hint_vehicle_number_s}"
+            tools:hint="@string/login_hint_vehicle_number_s"
+            android:inputType='@{siteConstants.USE_CAR_PLATE_NUMBER_FOR_LOGIN ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_NUMBER}'
+            android:maxLength="@{siteConstants.LIMIT_LENGTH_CAR_NUMBER}"
             app:layout_constraintTop_toBottomOf="@+id/my_info_change_vehicle_number_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

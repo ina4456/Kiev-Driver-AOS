@@ -334,6 +334,7 @@ public class PopupDialogFragment extends DialogFragment implements View.OnClickL
 		noticeBinding = DataBindingUtil
 				.inflate(LayoutInflater.from(getContext()), R.layout.view_popup_notice, null, true);
 		noticeBinding.tvPopupNoticeBody.setText(popup.getContent());
+		noticeBinding.tvPopupNoticeBody.setOnClickListener(this);
 		noticeBinding.btnPopupNoticeNegative.setOnClickListener(this);
 		noticeBinding.btnPopupNoticePositive.setOnClickListener(this);
 

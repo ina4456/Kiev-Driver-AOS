@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">아이나비콜-하남신장</string>
-    <string name="main_title">아이나비콜-하남신장</string>
+    <string name="app_name">하남신장-아이나비콜</string>
+    <string name="main_title">하남신장-아이나비콜</string>
     <string name="kakao_app_key">483bf561b042fdd7b59254e22caa5aa9</string>
 
     <string-array name="sn_corporation_list">
